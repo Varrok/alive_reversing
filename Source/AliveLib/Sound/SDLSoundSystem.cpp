@@ -23,7 +23,7 @@ void SDLSoundSystem::Init(unsigned int /*sampleRate*/, int /*bitsPerSample*/, in
     mAudioDeviceSpec.format = AUDIO_S16;
     mAudioDeviceSpec.channels = 2;
     mAudioDeviceSpec.freq = 44100;
-    mAudioDeviceSpec.samples = 256;
+    mAudioDeviceSpec.samples = 2048;
     mAudioDeviceSpec.userdata = this;
 
     if (SDL_OpenAudio(&mAudioDeviceSpec, NULL) < 0)
@@ -35,13 +35,14 @@ void SDLSoundSystem::Init(unsigned int /*sampleRate*/, int /*bitsPerSample*/, in
     LOG_INFO("-----------------------------");
     LOG_INFO("Audio Device opened, got specs:");
     LOG_INFO(
-        "Channels: " << mAudioDeviceSpec.channels << " " <<
+        "Channels: " << static_cast<int>(mAudioDeviceSpec.channels) << " " <<
         "nFormat: " << mAudioDeviceSpec.format << " " <<
         "nFreq: " << mAudioDeviceSpec.freq << " " <<
         "nPadding: " << mAudioDeviceSpec.padding << " " <<
         "nSamples: " << mAudioDeviceSpec.samples << " " <<
         "nSize: " << mAudioDeviceSpec.size << " " <<
-        "nSilence: " << mAudioDeviceSpec.silence);
+        "nSilence: " << static_cast<int>(mAudioDeviceSpec.silence));
+    LOG_INFO("Driver: " << SDL_GetCurrentAudioDriver());
     LOG_INFO("-----------------------------");
 
     Reverb_Init(mAudioDeviceSpec.freq);
@@ -66,10 +67,9 @@ void SDLSoundSystem::Init(unsigned int /*sampleRate*/, int /*bitsPerSample*/, in
     mCreated = true;
 
     // Correctly size the lock free buffer on the main thread before any other threads start
-    mAudioRingBuffer.resize(mAudioDeviceSpec.samples * 6);
+    mAudioRingBuffer.resize(mAudioDeviceSpec.samples * 2);
 
     // TODO: Test just running this on the main thread
-    mRenderAudioThread.reset(new std::thread(std::bind(&SDLSoundSystem::RenderAudioThread, this)));
 
     SDL_PauseAudio(0);
 }
@@ -125,19 +125,9 @@ SDLSoundSystem::~SDLSoundSystem()
 void SDLSoundSystem::AudioCallBack(Uint8 *stream, int len)
 {
     memset(stream, 0, len);
-
     StereoSample_S16* pSampleBuffer = reinterpret_cast<StereoSample_S16*>(stream);
     const int bufferLenSamples = len / sizeof(StereoSample_S16);
-    const int readAvilSamples = static_cast<int>(mAudioRingBuffer.getAvailableRead());
-    if (readAvilSamples > 0 && readAvilSamples < bufferLenSamples)
-    {
-        LOG_WARNING("Audio buffer underflow!");
-    }
-
-    if (!mAudioRingBuffer.read(pSampleBuffer, bufferLenSamples))
-    {
-        LOG_ERROR("Ring buffer read failure!");
-    }
+    RenderAudio(pSampleBuffer, bufferLenSamples);
 }
 
 
