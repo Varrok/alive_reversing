@@ -190,6 +190,10 @@ public:
     bool IsHeld(u32 command);
     bool IsPressed(u32 command);
     bool IsReleased(u32 keys);
+
+    u32 GetHeld();
+    u32 GetPressed();
+    u32 GetReleased();
 };
 
 InputObject& Input();
