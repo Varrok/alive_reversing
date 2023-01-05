@@ -2711,7 +2711,7 @@ MainMenuNextCam MainMenuController::HandleGameSpeakInput(u32 input_held, std::fu
 
 void MainMenuController::HandleCreditsControllerUpdate()
 {
-    if (Input().isPressed(InputCommands::Enum::eBack))
+    if (Input().IsPressed(InputCommands::Enum::eBack))
     {
         gCreditsControllerExists = 0;
         gMap.SetActiveCam(EReliveLevelIds::eMenu, 1, 6, CameraSwapEffects::eInstantChange_0, 0, 0);

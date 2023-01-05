@@ -187,8 +187,8 @@ public:
     u16 field_3A_pad_idx = 0;
     u32 mCommand = 0;
     u32 mCommandDuration = 0;
-    bool isPressed(u32 command);
-    bool isHeld(u32 command);
+    bool IsPressed(u32 command);
+    bool IsHeld(u32 command);
     bool IsReleased(u32 keys);
 };
 
