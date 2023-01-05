@@ -1180,10 +1180,10 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
                 }
                 else if(isGameSpeakLeftPressed || isGameSpeakRightPressed)
                 {
-                    gamepadButtonsPressed.Clear(Flags_VKGamepad_Buttons_Pressed::eBit1_face_btn_left);
-                    gamepadButtonsPressed.Clear(Flags_VKGamepad_Buttons_Pressed::eBit2_face_btn_bottom);
-                    gamepadButtonsPressed.Clear(Flags_VKGamepad_Buttons_Pressed::eBit3_face_btn_right);
-                    gamepadButtonsPressed.Clear(Flags_VKGamepad_Buttons_Pressed::eBit4_face_btn_top);
+                    // gamepadButtonsPressed.Clear(Flags_VKGamepad_Buttons_Pressed::eBit1_face_btn_left);
+                    // gamepadButtonsPressed.Clear(Flags_VKGamepad_Buttons_Pressed::eBit2_face_btn_bottom);
+                    // gamepadButtonsPressed.Clear(Flags_VKGamepad_Buttons_Pressed::eBit3_face_btn_right);
+                    // gamepadButtonsPressed.Clear(Flags_VKGamepad_Buttons_Pressed::eBit4_face_btn_top);
                 }
             }
 
@@ -1245,68 +1245,67 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
     return converted_input;
 }
 
-// bool Input_IsGameSpeakPressed(InputCommands::Enum gameSpeakId)
-// {
-//     auto inputHeld = this->mPads[sCurrentControllerIndex].mHeld;
-//     bool correctSpeakBtnHeld = false;
-//     if (gameSpeakId >= InputCommands::Enum::eGameSpeak1 && gameSpeakId <= InputCommands::Enum::eGameSpeak4 )
-//     {
-//         correctSpeakBtnHeld = inputHeld & InputCommands::Enum::eSpeak1;
-//     }
-//     else if (gameSpeakId >= InputCommands::Enum::eGameSpeak5 && gameSpeakId <= InputCommands::Enum::eGameSpeak8 )
-//     {
-//         correctSpeakBtnHeld = inputHeld & InputCommands::Enum::eSpeak2;
-//     }
+bool Input_IsGameSpeakPressed(u32 inputHeld, InputCommands::Enum gameSpeakId)
+{
+    bool correctSpeakBtnHeld = false;
+    if (gameSpeakId >= InputCommands::Enum::eGameSpeak1 && gameSpeakId <= InputCommands::Enum::eGameSpeak4 )
+    {
+        correctSpeakBtnHeld = inputHeld & InputCommands::Enum::eSpeak1;
+    }
+    else if (gameSpeakId >= InputCommands::Enum::eGameSpeak5 && gameSpeakId <= InputCommands::Enum::eGameSpeak8 )
+    {
+        correctSpeakBtnHeld = inputHeld & InputCommands::Enum::eSpeak2;
+    }
 
-//     if(correctSpeakBtnHeld)
-//     {
-//         switch(gameSpeakId)
-//         {
-//             case InputCommands::Enum::eGameSpeak1:
-//             {
-//                 return inputHeld & InputCommands::Enum::eHop;
-//                 break;
-//             }
-//             case InputCommands::Enum::eGameSpeak2:
-//             {
-//                 return inputHeld & InputCommands::Enum::eDoAction;
-//                 break;
-//             }
-//             case InputCommands::Enum::eGameSpeak3:
-//             {
-//                 return inputHeld & InputCommands::Enum::eFartOrRoll;
-//                 break;
-//             }
-//             case InputCommands::Enum::eGameSpeak4:
-//             {
-//                 return inputHeld & InputCommands::Enum::eThrowItem;
-//                 break;
-//             }
-//             case InputCommands::Enum::eGameSpeak5:
-//             {
-//                 return inputHeld & InputCommands::Enum::eFartOrRoll;
-//                 break;
-//             }
-//             case InputCommands::Enum::eGameSpeak6:
-//             {
-//                 return inputHeld & InputCommands::Enum::eHop;
-//                 break;
-//             }
-//             case InputCommands::Enum::eGameSpeak7:
-//             {
-//                 return inputHeld & InputCommands::Enum::eThrowItem;
-//                 break;
-//             }
-//             case InputCommands::Enum::eGameSpeak8:
-//             {
-//                 return inputHeld & InputCommands::Enum::eDoAction;
-//                 break;
-//             }
-//             default: break;
-//         }
-//     }
-//     return false;
-// }
+    if(correctSpeakBtnHeld)
+    {
+        switch(gameSpeakId)
+        {
+            case InputCommands::Enum::eGameSpeak1:
+            {
+                return inputHeld & InputCommands::Enum::eHop;
+                break;
+            }
+            case InputCommands::Enum::eGameSpeak2:
+            {
+                return inputHeld & InputCommands::Enum::eDoAction;
+                break;
+            }
+            case InputCommands::Enum::eGameSpeak3:
+            {
+                return inputHeld & InputCommands::Enum::eFartOrRoll;
+                break;
+            }
+            case InputCommands::Enum::eGameSpeak4:
+            {
+                return inputHeld & InputCommands::Enum::eThrowItem;
+                break;
+            }
+            case InputCommands::Enum::eGameSpeak5:
+            {
+                return inputHeld & InputCommands::Enum::eFartOrRoll;
+                break;
+            }
+            case InputCommands::Enum::eGameSpeak6:
+            {
+                return inputHeld & InputCommands::Enum::eHop;
+                break;
+            }
+            case InputCommands::Enum::eGameSpeak7:
+            {
+                return inputHeld & InputCommands::Enum::eThrowItem;
+                break;
+            }
+            case InputCommands::Enum::eGameSpeak8:
+            {
+                return inputHeld & InputCommands::Enum::eDoAction;
+                break;
+            }
+            default: break;
+        }
+    }
+    return false;
+}
 
 void Input_SetCallback_4FA910(t_InputCallback pFunc)
 {
@@ -1958,12 +1957,32 @@ bool InputObject::IsPressed(u32 command)
     return (this->mPads[sCurrentControllerIndex].mPressed & command) != 0;
 }
 
-bool InputObject::IsHeld(u32 command)
+bool InputObject::IsHeld(InputCommands::Enum command)
 {
-    return (this->mPads[sCurrentControllerIndex].mHeld & command) != 0;
+    if(command >= InputCommands::Enum::eGameSpeak1 && command <= InputCommands::Enum::eGameSpeak8)
+    {
+        return Input_IsGameSpeakPressed(this->mPads[sCurrentControllerIndex].mHeld, command);
+    }
+    else
+    {
+        return (this->mPads[sCurrentControllerIndex].mHeld & command) != 0;
+    }
 }
 
 bool InputObject::IsReleased(u32 keys)
 {
     return (this->mPads[sCurrentControllerIndex].mReleased & keys) != 0;
+}
+
+u16 InputObject::Pressed() const
+{
+    return this->mPads[0].mPressed | this->mPads[sCurrentControllerIndex].mPressed;
+}
+u16 InputObject::Held() const
+{
+    return this->mPads[0].mHeld | this->mPads[sCurrentControllerIndex].mHeld;
+}
+u16 InputObject::Released() const
+{
+    return this->mPads[sCurrentControllerIndex].mReleased;
 }

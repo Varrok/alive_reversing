@@ -188,8 +188,12 @@ public:
     u32 mCommand = 0;
     u32 mCommandDuration = 0;
     bool IsPressed(u32 command);
-    bool IsHeld(u32 command);
+    bool IsHeld(InputCommands::Enum command);
     bool IsReleased(u32 keys);
+
+    u16 Pressed() const;
+    u16 Held() const;
+    u16 Released() const;
 };
 
 InputObject& Input();

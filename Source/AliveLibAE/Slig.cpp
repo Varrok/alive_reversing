@@ -5343,7 +5343,7 @@ s16 Slig::HandlePlayerControlled()
             return 1;
         }
     }
-    else if (Input().IsHeld(sInputKey_FartRoll | sInputKey_Hop))
+    else if (Input().IsHeld(static_cast<InputCommands::Enum>(sInputKey_FartRoll | sInputKey_Hop)))
     {
         Slig_GameSpeak_SFX(SligSpeak::eBlurgh_11, 0, field_11E_pitch_min, this);
         mCurrentMotion = eSligMotions::Motion_31_Blurgh;

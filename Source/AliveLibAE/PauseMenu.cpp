@@ -566,7 +566,7 @@ void PauseMenu::Page_ControlsActions_Update()
         SFX_Play_Pitch(relive::SoundEffects::PossessEffect, 40, 2400);
     }
 
-    if (Input().IsHeld(0x100000))
+    if (Input().IsHeld(InputCommands::Enum::eUnPause_OrConfirm))
     {
         const s32 prev = ++mControlActionPageIndex;
         if (prev < 6)
@@ -591,7 +591,7 @@ void PauseMenu::Page_QuitConfirmation_Update()
         SFX_Play_Pitch(relive::SoundEffects::PossessEffect, 40, 2400);
     }
 
-    if (Input().IsHeld(0x100000))
+    if (Input().IsHeld(InputCommands::Enum::eUnPause_OrConfirm))
     {
         mPauseRenderLoop = false;
         SFX_Play_Pitch(relive::SoundEffects::PossessEffect, 40, 2400);
@@ -788,7 +788,8 @@ void PauseMenu::Page_Save_Render(PrimHeader** ot, PauseMenuPage* pPage)
 
 void PauseMenu::Page_Status_Update()
 {
-    if (Input().IsHeld(0x300000))
+    if (Input().IsHeld(
+        static_cast<InputCommands::Enum>(InputCommands::Enum::eUnPause_OrConfirm | InputCommands::Enum::eBack)))
     {
         // Go back to the main page
         mActiveMenu = sMainMenuPage;
