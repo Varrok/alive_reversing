@@ -2372,10 +2372,10 @@ void Abe::Motion_0_Idle_44EEB0()
         return;
     }
 
-    if (Input().isPressed(sInputKey_Hop))
+    if (Input().IsPressed(sInputKey_Hop))
     {
         // Some strange alternative way of hoisting, hangover from PSX AO Demo?
-        if (Input().isPressed(sInputKey_Up))
+        if (Input().IsPressed(sInputKey_Up))
         {
             TryHoist_44ED30();
         }
@@ -2403,7 +2403,7 @@ void Abe::Motion_0_Idle_44EEB0()
         return;
     }
 
-    if (Input().isPressed(sInputKey_Down))
+    if (Input().IsPressed(sInputKey_Down))
     {
         // Check for a lift rope (going down)
         BaseGameObject* pLiftPoint = sObjectIds.Find_Impl(BaseAliveGameObject_PlatformId);
@@ -2465,7 +2465,7 @@ void Abe::Motion_0_Idle_44EEB0()
         return;
     }
 
-    if (Input().isHeld(sInputKey_FartRoll))
+    if (Input().IsHeld(sInputKey_FartRoll))
     {
         // Do the fart sound
         Mudokon_SFX(MudSounds::eFart_7, 0, 0, this);
@@ -2505,7 +2505,7 @@ void Abe::Motion_0_Idle_44EEB0()
     }
 
     bool handleDoActionOrThrow = false;
-    if (Input().isPressed(sInputKey_Up))
+    if (Input().IsPressed(sInputKey_Up))
     {
         // Check for lift rope.. (going up)
         BaseGameObject* pLiftPoint = sObjectIds.Find_Impl(BaseAliveGameObject_PlatformId);
@@ -2548,7 +2548,7 @@ void Abe::Motion_0_Idle_44EEB0()
                     {
                         // Check for pressed + held so that Abe does a dunno only once, otherwise he will
                         // loop the dunno while up button is down.
-                        if (Input().isHeld(sInputKey_Up))
+                        if (Input().IsHeld(sInputKey_Up))
                         {
                             mCurrentMotion = eAbeMotions::Motion_34_DunnoBegin_44ECF0;
                         }
@@ -2695,7 +2695,7 @@ void Abe::Motion_0_Idle_44EEB0()
         }
     }
 
-    if (!Input().isPressed(sInputKey_Up) || handleDoActionOrThrow)
+    if (!Input().IsPressed(sInputKey_Up) || handleDoActionOrThrow)
     {
         if ((sInputKey_ThrowItem & held) && mCurrentMotion == eAbeMotions::Motion_0_Idle_44EEB0)
         {
@@ -2733,7 +2733,7 @@ void Abe::Motion_0_Idle_44EEB0()
         }
         else
         {
-            if (Input().isHeld(sInputKey_DoAction)) // not throwing, maybe pressing up and pressing action, so do action
+            if (Input().IsHeld(sInputKey_DoAction)) // not throwing, maybe pressing up and pressing action, so do action
             {
                 mCurrentMotion = HandleDoAction_455BD0();
             }
@@ -3723,8 +3723,8 @@ void Abe::Motion_23_RollLoop_453A90()
         {
             if (GetAnimation().GetCurrentFrame() == 1 || GetAnimation().GetCurrentFrame() == 5 || GetAnimation().GetCurrentFrame() == 9)
             {
-                if (!Input().isPressed(sInputKey_Run)
-                    || Input().isPressed(sInputKey_FartRoll)
+                if (!Input().IsPressed(sInputKey_Run)
+                    || Input().IsPressed(sInputKey_FartRoll)
                     || Is_Celling_Above_44E8D0()
                     || field_128.mRollingMotionTimer + 9 >= static_cast<s32>(sGnFrame))
                 {
@@ -3747,7 +3747,7 @@ void Abe::Motion_23_RollLoop_453A90()
             {
                 MapFollowMe(true);
 
-                if ((mVelX > FP_FromInteger(0) && !Input().isPressed(sInputKey_Right)) || (mVelX < FP_FromInteger(0) && !Input().isPressed(sInputKey_Left)))
+                if ((mVelX > FP_FromInteger(0) && !Input().IsPressed(sInputKey_Right)) || (mVelX < FP_FromInteger(0) && !Input().IsPressed(sInputKey_Left)))
                 {
                     mCurrentMotion = eAbeMotions::Motion_17_CrouchIdle_456BC0;
                     mVelX = FP_FromInteger(0);
@@ -4459,7 +4459,7 @@ void Abe::Motion_33_RunLoop_4508E0()
         MapFollowMe(true);
 
         // Turning around?
-        if ((mVelX > FP_FromInteger(0) && Input().isPressed(sInputKey_Left)) || (mVelX < FP_FromInteger(0) && Input().isPressed(sInputKey_Right)))
+        if ((mVelX > FP_FromInteger(0) && Input().IsPressed(sInputKey_Left)) || (mVelX < FP_FromInteger(0) && Input().IsPressed(sInputKey_Right)))
         {
             mCurrentMotion = eAbeMotions::Motion_26_RunTurn_451500;
             Environment_SFX_457A40(EnvironmentSfx::eRunSlide_4, 0, 32767, this);
@@ -4482,9 +4482,9 @@ void Abe::Motion_33_RunLoop_4508E0()
             return;
         }
 
-        if (Input().isPressed(sInputKey_Left) || Input().isPressed(sInputKey_Right))
+        if (Input().IsPressed(sInputKey_Left) || Input().IsPressed(sInputKey_Right))
         {
-            if (Input().isPressed(sInputKey_Run))
+            if (Input().IsPressed(sInputKey_Run))
             {
                 mPrevHeld = 0;
                 return;
@@ -6543,9 +6543,9 @@ void Abe::Motion_104_RockThrowStandingHold()
     auto pRock = static_cast<BaseThrowable*>(sObjectIds.Find_Impl(mThrowableId));
     if (GetAnimation().GetCurrentFrame() >= 4)
     {
-        if (Input().isPressed(sInputKey_Left | sInputKey_Right | sInputKey_Up | sInputKey_Down))
+        if (Input().IsPressed(sInputKey_Left | sInputKey_Right | sInputKey_Up | sInputKey_Down))
         {
-            if (Input().isPressed(sInputKey_Right))
+            if (Input().IsPressed(sInputKey_Right))
             {
                 if (GetAnimation().GetFlipX())
                 {
@@ -6556,7 +6556,7 @@ void Abe::Motion_104_RockThrowStandingHold()
                     mThrowDirection = 2;
                 }
             }
-            else if (Input().isPressed(sInputKey_Left))
+            else if (Input().IsPressed(sInputKey_Left))
             {
                 if (GetAnimation().GetFlipX())
                 {
@@ -6567,7 +6567,7 @@ void Abe::Motion_104_RockThrowStandingHold()
                     mThrowDirection = 0;
                 }
             }
-            else if (Input().isPressed(sInputKey_Up))
+            else if (Input().IsPressed(sInputKey_Up))
             {
                 mThrowDirection = 1;
             }
@@ -6580,7 +6580,7 @@ void Abe::Motion_104_RockThrowStandingHold()
         }
     }
 
-    if (!Input().isPressed(sInputKey_ThrowItem)) // ?? isn't released like in the crouching motion ??
+    if (!Input().IsPressed(sInputKey_ThrowItem)) // ?? isn't released like in the crouching motion ??
     {
         pRock->VToDead();
         mThrowableId = Guid{};
@@ -6618,7 +6618,7 @@ void Abe::Motion_107_RockThrowCrouchingHold()
     auto pRock = static_cast<BaseThrowable*>(sObjectIds.Find_Impl(mThrowableId));
     if (GetAnimation().GetCurrentFrame() >= 4)
     {
-        if (Input().isPressed(sInputKey_Left | sInputKey_Right | sInputKey_Up | sInputKey_Down))
+        if (Input().IsPressed(sInputKey_Left | sInputKey_Right | sInputKey_Up | sInputKey_Down))
         {
             mThrowDirection = 4;
             mCurrentMotion = eAbeMotions::Motion_108_RockThrowCrouchingThrow;
@@ -7355,7 +7355,7 @@ void Abe::Motion_116_MineCarEnter()
 
 void Abe::Motion_117_InMineCar()
 {
-    if (Input().isPressed(sInputKey_DoAction))
+    if (Input().IsPressed(sInputKey_DoAction))
     {
         auto pMineCar = static_cast<MineCar*>(sControlledCharacter);
         if (pMineCar->field_11C_state == MineCarStates::eParkedWithAbe_1 && pMineCar->field_1BC_turn_direction == MineCarDirs::eUp_3)
@@ -8211,7 +8211,7 @@ void Abe::MoveWithVelocity_450FA0(FP velocityX)
 s16 Abe::RunTryEnterDoor_451220()
 {
     // Can't be entering a door if we're not pressing up.
-    if (!Input().isPressed(sInputKey_Up))
+    if (!Input().IsPressed(sInputKey_Up))
     {
         return 0;
     }
@@ -8254,7 +8254,7 @@ s16 Abe::RunTryEnterDoor_451220()
 
 s16 Abe::RunTryEnterWell_451060()
 {
-    if (!Input().isPressed(sInputKey_Up) || GetElectrocuted() || GetAnimation().GetCurrentFrame() < 4)
+    if (!Input().IsPressed(sInputKey_Up) || GetElectrocuted() || GetAnimation().GetCurrentFrame() < 4)
     {
         return 0;
     }
@@ -8986,12 +8986,12 @@ s16 Abe::MoveLiftUpOrDown_45A7E0(FP yVelocity)
             return eAbeMotions::Motion_123_LiftGrabIdle;
         }
 
-        if (Input().isPressed(sInputKey_Up))
+        if (Input().IsPressed(sInputKey_Up))
         {
             return eAbeMotions::Motion_124_LiftUseUp;
         }
 
-        if (Input().isPressed(sInputKey_Down))
+        if (Input().IsPressed(sInputKey_Down))
         {
             return eAbeMotions::Motion_125_LiftUseDown;
         }

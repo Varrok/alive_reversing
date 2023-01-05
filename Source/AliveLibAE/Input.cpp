@@ -1245,68 +1245,68 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
     return converted_input;
 }
 
-bool InputObject::Input_IsGameSpeakPressed(InputCommands::Enum gameSpeakId)
-{
-    auto inputHeld = this->mPads[sCurrentControllerIndex].mHeld;
-    bool correctSpeakBtnHeld = false;
-    if (gameSpeakId >= InputCommands::Enum::eGameSpeak1 && gameSpeakId <= InputCommands::Enum::eGameSpeak4 )
-    {
-        correctSpeakBtnHeld = inputHeld & InputCommands::Enum::eSpeak1;
-    }
-    else if (gameSpeakId >= InputCommands::Enum::eGameSpeak5 && gameSpeakId <= InputCommands::Enum::eGameSpeak8 )
-    {
-        correctSpeakBtnHeld = inputHeld & InputCommands::Enum::eSpeak2;
-    }
+// bool Input_IsGameSpeakPressed(InputCommands::Enum gameSpeakId)
+// {
+//     auto inputHeld = this->mPads[sCurrentControllerIndex].mHeld;
+//     bool correctSpeakBtnHeld = false;
+//     if (gameSpeakId >= InputCommands::Enum::eGameSpeak1 && gameSpeakId <= InputCommands::Enum::eGameSpeak4 )
+//     {
+//         correctSpeakBtnHeld = inputHeld & InputCommands::Enum::eSpeak1;
+//     }
+//     else if (gameSpeakId >= InputCommands::Enum::eGameSpeak5 && gameSpeakId <= InputCommands::Enum::eGameSpeak8 )
+//     {
+//         correctSpeakBtnHeld = inputHeld & InputCommands::Enum::eSpeak2;
+//     }
 
-    if(correctSpeakBtnHeld)
-    {
-        switch(gameSpeakId)
-        {
-            case InputCommands::Enum::eGameSpeak1:
-            {
-                return inputHeld & InputCommands::Enum::eHop;
-                break;
-            }
-            case InputCommands::Enum::eGameSpeak2:
-            {
-                return inputHeld & InputCommands::Enum::eDoAction;
-                break;
-            }
-            case InputCommands::Enum::eGameSpeak3:
-            {
-                return inputHeld & InputCommands::Enum::eFartOrRoll;
-                break;
-            }
-            case InputCommands::Enum::eGameSpeak4:
-            {
-                return inputHeld & InputCommands::Enum::eThrowItem;
-                break;
-            }
-            case InputCommands::Enum::eGameSpeak5:
-            {
-                return inputHeld & InputCommands::Enum::eFartOrRoll;
-                break;
-            }
-            case InputCommands::Enum::eGameSpeak6:
-            {
-                return inputHeld & InputCommands::Enum::eHop;
-                break;
-            }
-            case InputCommands::Enum::eGameSpeak7:
-            {
-                return inputHeld & InputCommands::Enum::eThrowItem;
-                break;
-            }
-            case InputCommands::Enum::eGameSpeak8:
-            {
-                return inputHeld & InputCommands::Enum::eDoAction;
-                break;
-            }
-            default: break;
-        }
-    }
-    return false;
-}
+//     if(correctSpeakBtnHeld)
+//     {
+//         switch(gameSpeakId)
+//         {
+//             case InputCommands::Enum::eGameSpeak1:
+//             {
+//                 return inputHeld & InputCommands::Enum::eHop;
+//                 break;
+//             }
+//             case InputCommands::Enum::eGameSpeak2:
+//             {
+//                 return inputHeld & InputCommands::Enum::eDoAction;
+//                 break;
+//             }
+//             case InputCommands::Enum::eGameSpeak3:
+//             {
+//                 return inputHeld & InputCommands::Enum::eFartOrRoll;
+//                 break;
+//             }
+//             case InputCommands::Enum::eGameSpeak4:
+//             {
+//                 return inputHeld & InputCommands::Enum::eThrowItem;
+//                 break;
+//             }
+//             case InputCommands::Enum::eGameSpeak5:
+//             {
+//                 return inputHeld & InputCommands::Enum::eFartOrRoll;
+//                 break;
+//             }
+//             case InputCommands::Enum::eGameSpeak6:
+//             {
+//                 return inputHeld & InputCommands::Enum::eHop;
+//                 break;
+//             }
+//             case InputCommands::Enum::eGameSpeak7:
+//             {
+//                 return inputHeld & InputCommands::Enum::eThrowItem;
+//                 break;
+//             }
+//             case InputCommands::Enum::eGameSpeak8:
+//             {
+//                 return inputHeld & InputCommands::Enum::eDoAction;
+//                 break;
+//             }
+//             default: break;
+//         }
+//     }
+//     return false;
+// }
 
 void Input_SetCallback_4FA910(t_InputCallback pFunc)
 {
@@ -1953,12 +1953,12 @@ void InputObject::ShutDown_45F020()
 #endif
 }
 
-bool InputObject::isPressed(u32 command)
+bool InputObject::IsPressed(u32 command)
 {
     return (this->mPads[sCurrentControllerIndex].mPressed & command) != 0;
 }
 
-bool InputObject::isHeld(u32 command)
+bool InputObject::IsHeld(u32 command)
 {
     return (this->mPads[sCurrentControllerIndex].mHeld & command) != 0;
 }
