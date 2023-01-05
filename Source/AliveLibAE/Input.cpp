@@ -1958,7 +1958,7 @@ bool InputObject::IsReleased(u32 keys)
 
 u32 InputObject::GetHeld()
 {
-    return this->mPads[sCurrentControllerIndex].mRawInput;
+    return this->mPads[sCurrentControllerIndex].mRawInput; //functionally identical to GetRaw()
 }
 u32 InputObject::GetPressed()
 {

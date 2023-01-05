@@ -69,7 +69,7 @@ enum Enum : u32
     // 0x2000000    = nothing
     // 0x4000000    = nothing
     // 0x8000000    = nothing
-    // 0x10000000   = nothing
+    eDelete = 1u << 28,    // 0x10000000
     ePageUp = 1u << 29,    // 0x20000000
     ePageDown = 1u << 30,  // 0x40000000
     eConfigure = 1u << 31, // 0x80000000

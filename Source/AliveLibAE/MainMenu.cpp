@@ -2711,7 +2711,7 @@ MainMenuNextCam MainMenuController::HandleGameSpeakInput(u32 input_held, std::fu
 
 void MainMenuController::HandleCreditsControllerUpdate()
 {
-    if (Input().IsHeld(InputCommands::Enum::eBack))
+    if (Input().IsPressed(InputCommands::Enum::eBack))
     {
         gCreditsControllerExists = 0;
         gMap.SetActiveCam(EReliveLevelIds::eMenu, 1, 6, CameraSwapEffects::eInstantChange_0, 0, 0);
@@ -2794,13 +2794,13 @@ void MainMenuController::HandleMainMenuUpdate()
     if (pPage->field_4_time_out <= 0 || pPage->field_8_next_idx <= 0 || field_1F8_page_timeout <= pPage->field_4_time_out)
     {
         const MainMenuButton* btnArray = pPage->field_18_buttons;
-        const u32 inputHeld = Input().mPads[0].mPressed;
+        const u32 pressed = Input().mPads[0].mPressed;
 
         if (btnArray)
         {
             if (field_1FC_button_index != NO_SELECTABLE_BUTTONS)
             {
-                if (inputHeld & (InputCommands::Enum::eLeft | InputCommands::Enum::eUp))
+                if (pressed & (InputCommands::Enum::eLeft | InputCommands::Enum::eUp))
                 {
                     if (pPage->field_0_cam_id != MainMenuCams::eLoadGameMenuCam)
                     {
@@ -2828,7 +2828,7 @@ void MainMenuController::HandleMainMenuUpdate()
                     SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 35, 400);
                 }
 
-                if (inputHeld & (InputCommands::Enum::eRight | InputCommands::Enum::eDown))
+                if (pressed & (InputCommands::Enum::eRight | InputCommands::Enum::eDown))
                 {
                     if (pPage->field_0_cam_id != MainMenuCams::eLoadGameMenuCam)
                     {
@@ -2868,7 +2868,7 @@ void MainMenuController::HandleMainMenuUpdate()
             return;
         }
 
-        const MainMenuNextCam pageUpdateReturnedCam = (this->*(pPage->field_10_fn_update))(inputHeld);
+        const MainMenuNextCam pageUpdateReturnedCam = (this->*(pPage->field_10_fn_update))(pressed);
 
         if (pageUpdateReturnedCam.page_update_camera == MainMenuCams::eNoChange || pageUpdateReturnedCam.page_update_camera == gMap.mCurrentCamera)
         {

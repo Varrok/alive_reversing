@@ -5075,7 +5075,7 @@ void Paramite::HandleDDCheat()
     }
 
     // TODO: InputCommand constants
-    if (Input().mPads[sCurrentControllerIndex].mRawInput & 0xF)
+    if (Input().IsHeld(0xF))
     {
         mVelX = FP_FromInteger(sArray1_5C929C[Input().mPads[sCurrentControllerIndex].mDir >> 5]);
         mVelY = FP_FromInteger(sArray2_5C92BC[Input().mPads[sCurrentControllerIndex].mDir >> 5]);
