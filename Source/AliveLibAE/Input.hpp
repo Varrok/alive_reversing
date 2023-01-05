@@ -199,4 +199,4 @@ extern u16 sCurrentControllerIndex;
 extern u32 sLastPressedKey;
 extern s32 sIsAKeyDown;
 extern s16 bLongerTimeoutToNextDemo;
-extern s32 sJoystickEnabled;
+

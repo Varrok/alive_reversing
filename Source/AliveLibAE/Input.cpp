@@ -11,6 +11,7 @@
 #include "../relive_lib/data_conversion/string_util.hpp"
 #include <sstream>
 #include <algorithm>
+#include "../relive_lib/BitField.hpp"
 #include <SDL_gamecontroller.h>
 
 static SDL_GameController* pSDLController = nullptr;
@@ -45,7 +46,7 @@ const u32 AllMenuCommandsMask = (InputCommands::Enum::ePause | InputCommands::En
 bool sJoystickAvailable = false;
 
 // Is the joystick selected as the active controller device (instead of keyboard)?
-s32 sJoystickEnabled = 0;
+bool sJoystickEnabled = false;
 
 s32 sJoystickNumButtons_5C2EFC = 0;
 s32 sJoystickID_5C2F00 = 0;
@@ -65,8 +66,7 @@ s32 sIsAKeyDown = 0;
 s8 sAllowedGameKeys_5C9D30[256] = {};
 const char_type* sKeyNames_5C9394[256] = {};
 const char_type* sJoyButtonNames_5C9908[10] = {};
-u32 sKeyboardBindings_5C9930[256] = {};
-s32 sGamePadBindings_5C98E0[10] = {};
+
 t_InputCallback sInputCallbackFunc_BD1870 = 0;
 
 char_type sGamePadStr_555708[32] = {"Game Pad"};
@@ -80,7 +80,7 @@ s32 bAutoY_5C2EF0 = 0;
 u32 sLastPad_Input_BD1878 = 0;
 bool sReadPadEnable_BD1874 = false;
 
-InputBinding sDefaultKeyboardBindings_55EAD8[36] = {
+const InputBinding sDefaultKeyboardBindings_55EAD8[36] = {
     {VK_LEFT, InputCommands::Enum::eLeft},
     {VK_RIGHT, InputCommands::Enum::eRight},
     {VK_UP, InputCommands::Enum::eUp},
@@ -116,20 +116,50 @@ InputBinding sDefaultKeyboardBindings_55EAD8[36] = {
     {VK_PRIOR, static_cast<InputCommands::Enum>(0x20000000)},
     {VK_NEXT, static_cast<InputCommands::Enum>(0x40000000)},
     {VK_DELETE, static_cast<InputCommands::Enum>(0x10000000)},
-    {0, static_cast<InputCommands::Enum>(0)}};
-
-const u32 sDefaultGamepadBindings_55EA2C[10] = {
-    InputCommands::Enum::eDoAction,                                             // Square / X
-    InputCommands::Enum::eFartOrRoll | InputCommands::Enum::eUnPause_OrConfirm, // Cross / A
-    InputCommands::Enum::eThrowItem,                                            // Circle / B
-    InputCommands::Enum::eHop | InputCommands::Enum::eBack,                     // Triangle / Y
-    InputCommands::Enum::eSpeak1,                                               // L1 / LB
-    InputCommands::Enum::eRun,                                                  // R1 / RB
-    InputCommands::Enum::eSpeak2,                                               // L2 / LT
-    InputCommands::Enum::eSneak,                                                // R2 / RT
-    0,
-    InputCommands::Enum::ePause | InputCommands::Enum::eUnPause_OrConfirm // Start / Menu
+    {0, static_cast<InputCommands::Enum>(0)}
 };
+
+#define GAME_PAD_VK_BIT_FACE_BTN_LEFT 0
+#define GAME_PAD_VK_BIT_FACE_BTN_BOTTOM 1
+#define GAME_PAD_VK_BIT_FACE_BTN_RIGHT 2
+#define GAME_PAD_VK_BIT_FACE_BTN_TOP 3
+#define GAME_PAD_VK_BIT_LEFT_SHOULDER 4
+#define GAME_PAD_VK_BIT_RIGHT_SHOULDER 5
+#define GAME_PAD_VK_BIT_LEFT_TRIGGER 6
+#define GAME_PAD_VK_BIT_RIGHT_TRIGGER 7
+#define GAME_PAD_VK_BIT_BACK 8
+#define GAME_PAD_VK_BIT_START 9
+enum Flags_VKGamepad_Buttons_Pressed
+{
+    eBit1_face_btn_left = 0x1,
+    eBit2_face_btn_bottom = 0x2,
+    eBit3_face_btn_right = 0x4,
+    eBit4_face_btn_top = 0x8,
+    eBit5_left_shoulder = 0x10,
+    eBit6_right_shoulder = 0x20,
+    eBit7_left_trigger = 0x40,
+    eBit8_right_trigger = 0x80,
+    eBit9_back = 0x100,
+    eBit10_start = 0x200
+};
+
+const s16 gamePadBindingsSize = 10;
+const InputBinding sDefaultGamepadBindings_55EA2C[gamePadBindingsSize] = {
+    {GAME_PAD_VK_BIT_FACE_BTN_LEFT, InputCommands::Enum::eDoAction},                                             // Square / X
+    {GAME_PAD_VK_BIT_FACE_BTN_BOTTOM, static_cast<InputCommands::Enum>(InputCommands::Enum::eFartOrRoll | InputCommands::Enum::eUnPause_OrConfirm)}, // Cross / A
+    {GAME_PAD_VK_BIT_FACE_BTN_RIGHT, InputCommands::Enum::eThrowItem},                                            // Circle / B
+    {GAME_PAD_VK_BIT_FACE_BTN_TOP, static_cast<InputCommands::Enum>(InputCommands::Enum::eHop | InputCommands::Enum::eBack)},                     // Triangle / Y
+    {GAME_PAD_VK_BIT_LEFT_SHOULDER, InputCommands::Enum::eSpeak1},                                               // L1 / LB
+    {GAME_PAD_VK_BIT_RIGHT_SHOULDER, InputCommands::Enum::eRun},                                                  // R1 / RB
+    {GAME_PAD_VK_BIT_LEFT_TRIGGER, InputCommands::Enum::eSpeak2},                                               // L2 / LT
+    {GAME_PAD_VK_BIT_RIGHT_TRIGGER, InputCommands::Enum::eSneak},                                                // R2 / RT
+    {GAME_PAD_VK_BIT_BACK, InputCommands::Enum::eBack},
+    {GAME_PAD_VK_BIT_START, static_cast<InputCommands::Enum>(InputCommands::Enum::ePause | InputCommands::Enum::eUnPause_OrConfirm)} // Start / Menu
+};
+
+u32 sKeyboardBindings_5C9930[256] = {};
+u32 sGamePadBindings_5C98E0[gamePadBindingsSize] = {};
+
 
 // For joysticks with very little buttons, depending on strength of joystick, will make abe
 // automatically run/sneak.
@@ -197,11 +227,10 @@ void Input_StickControl_45FF60(f32 x, f32 y, u32* buttons)
     }
 }
 
-void Input_GetJoyState_SDL(f32* pX1, f32* pY1, f32* pX2, f32* pY2, u32* pButtons)
+void Input_GetJoyState_SDL(f32* pX1, f32* pY1, f32* pX2, f32* pY2, BitField16<Flags_VKGamepad_Buttons_Pressed>& pButtons)
 {
     f32 deadzone = 0.2f;
 
-    *pButtons = 0;
     *pX1 = 0;
     *pY1 = 0;
     *pX2 = 0;
@@ -239,40 +268,25 @@ void Input_GetJoyState_SDL(f32* pX1, f32* pY1, f32* pX2, f32* pY2, u32* pButtons
         else if (SDL_GameControllerGetButton(pSDLController, SDL_CONTROLLER_BUTTON_DPAD_DOWN))
             *pY1 = 1;
 
+        const auto isButtonPressed = [&](SDL_GameControllerButton button) -> bool
+        {
+            return SDL_GameControllerGetButton(pSDLController, button) == 1;
+        };
+        const auto isAxisPressed = [&](SDL_GameControllerAxis axis) -> bool
+        {
+            return SDL_GameControllerGetAxis(pSDLController, axis) > 32;
+        };
 
-    #define M_SDLGAMEPAD_BIND(BIT, PAD_BUTTON)                                \
-        {                                                                     \
-            if (SDL_GameControllerGetButton(pSDLController, PAD_BUTTON) == 1) \
-            {                                                                 \
-                *pButtons |= (1 << BIT);                                      \
-            }                                                                 \
-        }
-
-
-        M_SDLGAMEPAD_BIND(0, SDL_CONTROLLER_BUTTON_X);
-        M_SDLGAMEPAD_BIND(1, SDL_CONTROLLER_BUTTON_A);
-        M_SDLGAMEPAD_BIND(2, SDL_CONTROLLER_BUTTON_B);
-        M_SDLGAMEPAD_BIND(3, SDL_CONTROLLER_BUTTON_Y);
-        M_SDLGAMEPAD_BIND(4, SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
-        M_SDLGAMEPAD_BIND(5, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
-        M_SDLGAMEPAD_BIND(8, SDL_CONTROLLER_BUTTON_BACK);
-        M_SDLGAMEPAD_BIND(9, SDL_CONTROLLER_BUTTON_START);
-
-        if (SDL_GameControllerGetAxis(pSDLController, SDL_CONTROLLER_AXIS_TRIGGERLEFT) > 32)
-            *pButtons |= (1 << 6);
-        if (SDL_GameControllerGetAxis(pSDLController, SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > 32)
-            *pButtons |= (1 << 7);
-
-        // 0 Square
-        // 1 Cross
-        // 2 Circle
-        // 3 Triangle
-        // 4 L1
-        // 5 R1
-        // 6 L2
-        // 7 R2
-        // 8 Back
-        // 9 Start
+        pButtons.Set(Flags_VKGamepad_Buttons_Pressed::eBit1_face_btn_left, isButtonPressed(SDL_CONTROLLER_BUTTON_X) );
+        pButtons.Set(Flags_VKGamepad_Buttons_Pressed::eBit2_face_btn_bottom, isButtonPressed(SDL_CONTROLLER_BUTTON_A) );
+        pButtons.Set(Flags_VKGamepad_Buttons_Pressed::eBit3_face_btn_right, isButtonPressed(SDL_CONTROLLER_BUTTON_B) );
+        pButtons.Set(Flags_VKGamepad_Buttons_Pressed::eBit4_face_btn_top, isButtonPressed(SDL_CONTROLLER_BUTTON_Y) );
+        pButtons.Set(Flags_VKGamepad_Buttons_Pressed::eBit5_left_shoulder, isButtonPressed(SDL_CONTROLLER_BUTTON_LEFTSHOULDER) );
+        pButtons.Set(Flags_VKGamepad_Buttons_Pressed::eBit6_right_shoulder, isButtonPressed(SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) );
+        pButtons.Set(Flags_VKGamepad_Buttons_Pressed::eBit7_left_trigger, isAxisPressed(SDL_CONTROLLER_AXIS_TRIGGERLEFT) );
+        pButtons.Set(Flags_VKGamepad_Buttons_Pressed::eBit8_right_trigger, isAxisPressed(SDL_CONTROLLER_AXIS_TRIGGERRIGHT) );
+        pButtons.Set(Flags_VKGamepad_Buttons_Pressed::eBit9_back, isButtonPressed(SDL_CONTROLLER_BUTTON_BACK) );
+        pButtons.Set(Flags_VKGamepad_Buttons_Pressed::eBit10_start, isButtonPressed(SDL_CONTROLLER_BUTTON_START) );
 
         static f32 vibrationAmount = 0.0f;
         s32 screenShake = std::max(abs(gScreenXOffset), abs(gScreenYOffset));
@@ -286,8 +300,6 @@ void Input_GetJoyState_SDL(f32* pX1, f32* pY1, f32* pX2, f32* pY2, u32* pButtons
             vibrationAmount = 1.0f;
         }
 
-
-
         if (pSDLController)
         {
             const u16 amount = static_cast<u16>(vibrationAmount * 0xFFFF);
@@ -299,7 +311,7 @@ void Input_GetJoyState_SDL(f32* pX1, f32* pY1, f32* pX2, f32* pY2, u32* pButtons
     }
 }
 
-void Input_GetJoyState_460280(f32* pX1, f32* pY1, f32* pX2, f32* pY2, u32* pButtons)
+void Input_GetJoyState_460280(f32* pX1, f32* pY1, f32* pX2, f32* pY2, BitField16<Flags_VKGamepad_Buttons_Pressed>& pButtons)
 {
     Input_GetJoyState_SDL(pX1, pY1, pX2, pY2, pButtons);
 }
@@ -368,7 +380,7 @@ void Input_Init_Names_491870()
 
     sGamepadDisplayKeyNames_5C9798 = {};
 
-    for (s32 i = 0; i < 10; i++)
+    for (s32 i = 0; i < gamePadBindingsSize; i++)
     {
         if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eSpeak1)
         {
@@ -441,7 +453,7 @@ const char_type* Input_GetButtonString_492530(const char_type* idx, s32 controll
 
 bool Input_JoyStickEnabled()
 {
-    return sJoystickEnabled ? true : false;
+    return sJoystickEnabled;
 }
 
 bool Input_JoyStickAvailable()
@@ -467,21 +479,21 @@ s32 Input_Remap_492680(InputCommands::Enum inputCmd)
         f32 x2 = 0.0f;
         f32 y1 = 0.0f;
         f32 x1 = 0.0f;
-        u32 buttons = 0;
-        Input_GetJoyState_460280(&x1, &y1, &x2, &y2, &buttons);
+        BitField16<Flags_VKGamepad_Buttons_Pressed> buttonsPressed;
+        Input_GetJoyState_460280(&x1, &y1, &x2, &y2, buttonsPressed);
 
         // Mask of buttons that exist for this controller
         const s32 allButtonsMask = (1 << sJoystickNumButtons_5C2EFC) - 1;
 
-        const s32 buttonsToRebind = allButtonsMask & buttons;
+        const s32 buttonsToRebind = allButtonsMask & buttonsPressed.Raw().all;
 
-        buttons &= allButtonsMask;
-        if (buttons)
+        buttonsPressed.Raw().all &= allButtonsMask;
+        if (buttonsPressed.Raw().all)
         {
             s32 bindIdx = 0;
 
             // get bindIdx from the mask
-            for (bindIdx = 0; bindIdx < 10; bindIdx++)
+            for (bindIdx = 0; bindIdx < gamePadBindingsSize; bindIdx++)
             {
                 if ((1 << bindIdx) & buttonsToRebind)
                 {
@@ -561,7 +573,7 @@ void Input_ResetBinding_4925A0(s32 input_command, s32 bIsGamePad)
 {
     if (bIsGamePad)
     {
-        for (s32 i = 0; i < 10; i++)
+        for (s32 i = 0; i < gamePadBindingsSize; i++)
         {
             sGamePadBindings_5C98E0[i] &= ~input_command;
         }
@@ -623,7 +635,7 @@ s32 Input_GetKeyboardKeyCode_492CA0(const char_type* keyName)
 
 s32 Input_GetGamePadCode_492CF0(const char_type* buttonName)
 {
-    for (s32 i = 0; i < 10; i++)
+    for (s32 i = 0; i < gamePadBindingsSize; i++)
     {
         if (sJoyButtonNames_5C9908[i] && !strcmpi(buttonName, sJoyButtonNames_5C9908[i]))
         {
@@ -701,8 +713,8 @@ bool canOverwriteIni = true;
 bool gLatencyHack = true;
 
 const std::vector<IniCustomSaveEntry> gCustomSaveEntries = {
-//    {"keep_aspect", {&s_VGA_KeepAspectRatio}, true},
-//    {"filter_screen", {&s_VGA_FilterScreen}, true},
+//    {"keep_aspect", {&s_VGA_KeepAspectRatio}, true}, todo
+//    {"filter_screen", {&s_VGA_FilterScreen}, true}, todo
 #if USE_SDL2_SOUND
     {"reverb", {&gReverbEnabled}, true},
     {"audio_stereo", {&gAudioStereo}, true},
@@ -720,14 +732,12 @@ enum class IniCategory
     eAlive
 };
 
-
 const char_type* iniCategories[4] = {
     "Control",
     "Keyboard",
     "Gamepad",
-    "Alive"};
-
-
+    "Alive"
+};
 
 void NewParseSettingsIni()
 {
@@ -811,11 +821,11 @@ void NewParseSettingsIni()
                 {
                     if (param[0] == "controller" && param[1] == "Gamepad")
                     {
-                        sJoystickEnabled = 1;
+                        sJoystickEnabled = true;
                     }
                     else if (param[0] == "controller" && param[1] == "Keyboard")
                     {
-                        sJoystickEnabled = 0;
+                        sJoystickEnabled = false;
                     }
                 }
                 else if (currentCategory == IniCategory::eKeyboard)
@@ -869,7 +879,7 @@ void Input_SaveSettingsIni_Common()
 
     if (sJoystickEnabled)
     {
-        if (sJoystickEnabled == 1)
+        if (sJoystickEnabled)
         {
             output << "controller = Gamepad\n";
         }
@@ -881,7 +891,7 @@ void Input_SaveSettingsIni_Common()
 
     output << "\n";
 
-    sJoystickEnabled = 0;
+    sJoystickEnabled = false;
 
     // Keyboard remap
     output << "[" << iniCategories[1] << "]"
@@ -920,7 +930,7 @@ void Input_SaveSettingsIni_Common()
         output << "fart = " << btnString << "\n";
     }
 
-    sJoystickEnabled = 1;
+    sJoystickEnabled = true;
 
     output << "\n";
 
@@ -1020,13 +1030,11 @@ void Input_LoadSettingsIni_492D40()
     NewParseSettingsIni();
 }
 
-u32 dword_55EBF8 = 0;
 u8 sFlags_5C9390 = 0;
 u32 sPrevTimeStamp_5C98D8 = 0;
 u32 dword_5C98DC = 0;
 u32 sPrevious_down_keyboard_keys_5C9F74 = 0;
 u32 dword_5C9F78 = 0;
-s32 sKeyboardBindings_5C9794 = 0;
 
 #if ORIGINAL_PS1_BEHAVIOR // OG Change - chant with any shoulder button combo
 static bool IsChantingAnyShoulderButton(s32 shoulderButtonsPressedCount)
@@ -1044,12 +1052,7 @@ static bool IsChanting(s8 input_command_c_pressed, s8 input_command_delete_press
 s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
 {
     u32 timeStamp;                   // eax
-    u32 buttons;                     // edx
     u32 currentTime;                 // eax
-    s8 input_command_delete_pressed; // [esp+2h] [ebp-1Ah]
-    s8 input_command_c_pressed;      // [esp+3h] [ebp-19h]
-    s32 keys_down;                   // [esp+4h] [ebp-18h]
-    u32 pButtons;                    // [esp+8h] [ebp-14h]
 
     if (!Input_GetInputEnabled_4EDDE0())
     {
@@ -1057,7 +1060,7 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
     }
 
     s32 converted_input = 0;
-    s32 pressed_keyboard_keys = 0;
+    s32 pressedInputCommands = 0;
 
     if (sFlags_5C9390 & 1)
     {
@@ -1089,219 +1092,220 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
             {
                 if (Input_IsVKPressed_4EDD40(i))
                 {
-                    pressed_keyboard_keys |= sKeyboardBindings_5C9930[i];
+                    pressedInputCommands |= sKeyboardBindings_5C9930[i];
                 }
             }
         }
 
-        keys_down = pressed_keyboard_keys;
-        if (!sJoystickEnabled)
+        if (sJoystickEnabled)
         {
-            goto no_joystick;
-        }
+            BitField16<Flags_VKGamepad_Buttons_Pressed> gamepadButtonsPressed;
+            Input_GetJoyState_460280(&pX1, &pY1, &pX2, &pY2, gamepadButtonsPressed);
 
-        Input_GetJoyState_460280(&pX1, &pY1, &pX2, &pY2, &pButtons);
-
-        if ((sGamepadCapFlags_5C2EF8 & eDisableAutoRun) == 1 && sJoystickNumButtons_5C2EFC <= 4 && fabs(pX1) >= 0.75f) // Auto sprint
-        {
-            pressed_keyboard_keys |= InputCommands::Enum::eRun;
-            keys_down = pressed_keyboard_keys;
-        }
-
-        if (pX1 >= -0.050000001f)
-        {
-            if (pX1 <= 0.050000001f)
+            if ((sGamepadCapFlags_5C2EF8 & eDisableAutoRun) == 1 && sJoystickNumButtons_5C2EFC <= 4 && fabs(pX1) >= 0.75f) // Auto sprint
             {
-                goto LABEL_24;
+                pressedInputCommands |= InputCommands::Enum::eRun;
             }
-            pressed_keyboard_keys |= InputCommands::Enum::eRight;
-        }
-        else
-        {
-            pressed_keyboard_keys |= InputCommands::Enum::eLeft;
-        }
 
-        keys_down = pressed_keyboard_keys;
-    LABEL_24:
-        if (pY1 >= -0.050000001f)
-        {
-            if (pY1 <= 0.050000001f)
+            float axisDeadZoneThreshold = 0.050000001f;
+            if (pX1 > axisDeadZoneThreshold)
             {
-            LABEL_29:
-                input_command_c_pressed = 0;
-                input_command_delete_pressed = 0;
-                if (pressed_keyboard_keys & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft | InputCommands::Enum::eDown | InputCommands::Enum::eUp))
-                {
-                    buttons = pButtons;
-                }
-                else
-                {
-                    buttons = pButtons;
-
-                    s32 shoulderButtonsPressedCount = 0;
-
-                    for (s32 i = 0; i < 10; i++)
-                    {
-                        if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eSpeak1)
-                        {
-                            if ((1 << i) & pButtons)
-                            {
-                                pressed_keyboard_keys = keys_down;
-                                input_command_c_pressed = 1;
-                                ++shoulderButtonsPressedCount;
-                            }
-                        }
-
-                        if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eSpeak2)
-                        {
-                            if ((1 << i) & pButtons)
-                            {
-                                pressed_keyboard_keys = keys_down;
-                                input_command_delete_pressed = 1;
-                                ++shoulderButtonsPressedCount;
-                            }
-                        }
-
-                        if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eRun)
-                        {
-                            if ((1 << i) & pButtons)
-                            {
-                                ++shoulderButtonsPressedCount;
-                            }
-                        }
-
-                        if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eSneak)
-                        {
-                            if ((1 << i) & pButtons)
-                            {
-                                ++shoulderButtonsPressedCount;
-                            }
-                        }
-                    }
-
-#if ORIGINAL_PS1_BEHAVIOR // OG Change - chant with any shoulder button combo
-                    const bool isChanting = IsChantingAnyShoulderButton(shoulderButtonsPressedCount);
-#else
-                    const bool isChanting = IsChanting(input_command_c_pressed, input_command_delete_pressed);
-#endif
-
-                    if (isChanting)
-                    {
-                        pressed_keyboard_keys |= InputCommands::Enum::eChant;
-                    }
-                    else if (input_command_c_pressed)
-                    {
-                        if (pButtons & InputCommands::Enum::eUp)
-                        {
-                            pressed_keyboard_keys |= InputCommands::Enum::eGameSpeak2;
-                        }
-                        if (pButtons & InputCommands::Enum::eDown)
-                        {
-                            pressed_keyboard_keys |= InputCommands::Enum::eGameSpeak3;
-                        }
-                        if (pButtons & InputCommands::Enum::eLeft)
-                        {
-                            pressed_keyboard_keys |= InputCommands::Enum::eGameSpeak4;
-                        }
-                        if (pButtons & InputCommands::Enum::eRight)
-                        {
-                            pressed_keyboard_keys |= InputCommands::Enum::eGameSpeak1;
-                        }
-                        buttons = pButtons & ~(InputCommands::Enum::eRight | InputCommands::Enum::eLeft | InputCommands::Enum::eDown | InputCommands::Enum::eUp);
-                        pButtons &= ~(InputCommands::Enum::eRight | InputCommands::Enum::eLeft | InputCommands::Enum::eDown | InputCommands::Enum::eUp);
-                    }
-                    else if (input_command_delete_pressed)
-                    {
-                        if (pButtons & InputCommands::Enum::eUp)
-                        {
-                            pressed_keyboard_keys |= InputCommands::Enum::eGameSpeak8;
-                        }
-                        if (pButtons & InputCommands::Enum::eDown)
-                        {
-                            pressed_keyboard_keys |= InputCommands::Enum::eGameSpeak5;
-                        }
-                        if (pButtons & InputCommands::Enum::eLeft)
-                        {
-                            pressed_keyboard_keys |= InputCommands::Enum::eGameSpeak7;
-                        }
-                        if (pButtons & InputCommands::Enum::eRight)
-                        {
-                            pressed_keyboard_keys |= InputCommands::Enum::eGameSpeak6;
-                        }
-                        buttons = pButtons & ~(InputCommands::Enum::eRight | InputCommands::Enum::eLeft | InputCommands::Enum::eDown | InputCommands::Enum::eUp);
-                        pButtons &= ~(InputCommands::Enum::eRight | InputCommands::Enum::eLeft | InputCommands::Enum::eDown | InputCommands::Enum::eUp);
-                    }
-                }
-
-                for (s32 i = 0; i < 10; i++)
-                {
-                    if (sGamePadBindings_5C98E0[i])
-                    {
-                        if ((1 << i) & buttons)
-                        {
-                            pressed_keyboard_keys |= sGamePadBindings_5C98E0[i];
-                        }
-                    }
-                }
-
-                if (sJoystickNumButtons_5C2EFC <= 6)
-                {
-                    if (!(sGamepadCapFlags_5C2EF8 & eDisableAutoRun))
-                    {
-                        if ((pressed_keyboard_keys ^ sPrevious_down_keyboard_keys_5C9F74) & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft))
-                        {
-                            dword_5C9F78 = sGamepadCapFlags_5C2EF8 & eDisableAutoRun;
-                            if (!(sPrevious_down_keyboard_keys_5C9F74 & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft)))
-                            {
-                                currentTime = SYS_GetTicks();
-                                if ((u32)(sPrevTimeStamp_5C98D8 - dword_5C98DC) <= 220 && currentTime - sPrevTimeStamp_5C98D8 <= 220)
-                                {
-                                    dword_5C9F78 = 1;
-                                }
-                                dword_5C98DC = currentTime;
-                            }
-                            if (!(pressed_keyboard_keys & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft)))
-                            {
-                                sPrevTimeStamp_5C98D8 = SYS_GetTicks();
-                            }
-                        }
-                    }
-                    if (dword_5C9F78)
-                    {
-                        pressed_keyboard_keys |= InputCommands::Enum::eRun;
-                    }
-                }
-            no_joystick:
-
-                // If pressing up and down at same time turn off
-                if ((pressed_keyboard_keys & (InputCommands::Enum::eDown | InputCommands::Enum::eUp)) == (InputCommands::Enum::eDown | InputCommands::Enum::eUp))
-                {
-                    pressed_keyboard_keys &= ~(InputCommands::Enum::eDown | InputCommands::Enum::eUp);
-                }
-
-                // If pressing left and right at same time turn off
-                if ((pressed_keyboard_keys & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft)) == (InputCommands::Enum::eRight | InputCommands::Enum::eLeft))
-                {
-                    pressed_keyboard_keys &= ~(InputCommands::Enum::eRight | InputCommands::Enum::eLeft);
-                }
-
-                converted_input = pressed_keyboard_keys;
-                goto exit_func;
+                pressedInputCommands |= InputCommands::Enum::eRight;
             }
-            pressed_keyboard_keys |= InputCommands::Enum::eDown;
+            else if(pX1 < -axisDeadZoneThreshold)
+            {
+                pressedInputCommands |= InputCommands::Enum::eLeft;
+            }
+            if (pY1 > axisDeadZoneThreshold)
+            {
+                pressedInputCommands |= InputCommands::Enum::eDown;
+            }
+            else if(pY1 < -axisDeadZoneThreshold)
+            {
+                pressedInputCommands |= InputCommands::Enum::eUp;
+            }
+
+            if (!(pressedInputCommands & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft | InputCommands::Enum::eDown | InputCommands::Enum::eUp)))
+            {
+                s32 shoulderButtonsPressedCount = 0;
+
+                bool isGameSpeakLeftPressed = false;
+                bool isGameSpeakRightPressed = false;
+                for (s32 i = 0; i < gamePadBindingsSize; i++)
+                {
+                    if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eSpeak1)
+                    {
+                        if (gamepadButtonsPressed.Get(static_cast<Flags_VKGamepad_Buttons_Pressed>( 1 << i )))
+                        {
+                            isGameSpeakLeftPressed = true;
+                            ++shoulderButtonsPressedCount;
+                        }
+                    }
+
+                    if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eSpeak2)
+                    {
+                        if (gamepadButtonsPressed.Get(static_cast<Flags_VKGamepad_Buttons_Pressed>( 1 << i )))
+                        {
+                            isGameSpeakRightPressed = true;
+                            ++shoulderButtonsPressedCount;
+                        }
+                    }
+
+                    if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eRun)
+                    {
+                        if (gamepadButtonsPressed.Get(static_cast<Flags_VKGamepad_Buttons_Pressed>( 1 << i )))
+                        {
+                            ++shoulderButtonsPressedCount;
+                        }
+                    }
+
+                    if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eSneak)
+                    {
+                        if (gamepadButtonsPressed.Get(static_cast<Flags_VKGamepad_Buttons_Pressed>( 1 << i )))
+                        {
+                            ++shoulderButtonsPressedCount;
+                        }
+                    }
+                }
+
+    #if ORIGINAL_PS1_BEHAVIOR // OG Change - chant with any shoulder button combo
+                const bool isChanting = IsChantingAnyShoulderButton(shoulderButtonsPressedCount);
+    #else
+                const bool isChanting = IsChanting(isGameSpeakLeftPressed, isGameSpeakRightPressed);
+    #endif
+
+                if (isChanting)
+                {
+                    pressedInputCommands |= InputCommands::Enum::eChant;
+                }
+                else if(isGameSpeakLeftPressed || isGameSpeakRightPressed)
+                {
+                    gamepadButtonsPressed.Clear(Flags_VKGamepad_Buttons_Pressed::eBit1_face_btn_left);
+                    gamepadButtonsPressed.Clear(Flags_VKGamepad_Buttons_Pressed::eBit2_face_btn_bottom);
+                    gamepadButtonsPressed.Clear(Flags_VKGamepad_Buttons_Pressed::eBit3_face_btn_right);
+                    gamepadButtonsPressed.Clear(Flags_VKGamepad_Buttons_Pressed::eBit4_face_btn_top);
+                }
+            }
+
+            for (int i = 0; i < gamePadBindingsSize; i++)
+            {
+                if (sGamePadBindings_5C98E0[i])
+                {
+                    if (gamepadButtonsPressed.Get(static_cast<Flags_VKGamepad_Buttons_Pressed>( 1 << i )))
+                    {
+                        pressedInputCommands |= sGamePadBindings_5C98E0[i];
+                    }
+                }
+            }
+
+            if (sJoystickNumButtons_5C2EFC <= 6)
+            {
+                if (!(sGamepadCapFlags_5C2EF8 & eDisableAutoRun))
+                {
+                    if ((pressedInputCommands ^ sPrevious_down_keyboard_keys_5C9F74) & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft))
+                    {
+                        dword_5C9F78 = sGamepadCapFlags_5C2EF8 & eDisableAutoRun;
+                        if (!(sPrevious_down_keyboard_keys_5C9F74 & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft)))
+                        {
+                            currentTime = SYS_GetTicks();
+                            if ((u32)(sPrevTimeStamp_5C98D8 - dword_5C98DC) <= 220 && currentTime - sPrevTimeStamp_5C98D8 <= 220)
+                            {
+                                dword_5C9F78 = 1;
+                            }
+                            dword_5C98DC = currentTime;
+                        }
+                        if (!(pressedInputCommands & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft)))
+                        {
+                            sPrevTimeStamp_5C98D8 = SYS_GetTicks();
+                        }
+                    }
+                }
+                if (dword_5C9F78)
+                {
+                    pressedInputCommands |= InputCommands::Enum::eRun;
+                }
+            }
         }
-        else
+
+        // If pressing up and down at same time turn off
+        if ((pressedInputCommands & (InputCommands::Enum::eDown | InputCommands::Enum::eUp)) == (InputCommands::Enum::eDown | InputCommands::Enum::eUp))
         {
-            pressed_keyboard_keys |= InputCommands::Enum::eUp;
+            pressedInputCommands &= ~(InputCommands::Enum::eDown | InputCommands::Enum::eUp);
         }
-        keys_down = pressed_keyboard_keys;
-        goto LABEL_29;
+
+        // If pressing left and right at same time turn off
+        if ((pressedInputCommands & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft)) == (InputCommands::Enum::eRight | InputCommands::Enum::eLeft))
+        {
+            pressedInputCommands &= ~(InputCommands::Enum::eRight | InputCommands::Enum::eLeft);
+        }
+
+        converted_input = pressedInputCommands;
     }
-exit_func:
-    dword_55EBF8 = converted_input; // never read ?
-    sKeyboardBindings_5C9794 = converted_input;
-    sPrevious_down_keyboard_keys_5C9F74 = pressed_keyboard_keys;
+    sPrevious_down_keyboard_keys_5C9F74 = pressedInputCommands;
     return converted_input;
+}
+
+bool InputObject::Input_IsGameSpeakPressed(InputCommands::Enum gameSpeakId)
+{
+    auto inputHeld = this->mPads[sCurrentControllerIndex].mHeld;
+    bool correctSpeakBtnHeld = false;
+    if (gameSpeakId >= InputCommands::Enum::eGameSpeak1 && gameSpeakId <= InputCommands::Enum::eGameSpeak4 )
+    {
+        correctSpeakBtnHeld = inputHeld & InputCommands::Enum::eSpeak1;
+    }
+    else if (gameSpeakId >= InputCommands::Enum::eGameSpeak5 && gameSpeakId <= InputCommands::Enum::eGameSpeak8 )
+    {
+        correctSpeakBtnHeld = inputHeld & InputCommands::Enum::eSpeak2;
+    }
+
+    if(correctSpeakBtnHeld)
+    {
+        switch(gameSpeakId)
+        {
+            case InputCommands::Enum::eGameSpeak1:
+            {
+                return inputHeld & InputCommands::Enum::eHop;
+                break;
+            }
+            case InputCommands::Enum::eGameSpeak2:
+            {
+                return inputHeld & InputCommands::Enum::eDoAction;
+                break;
+            }
+            case InputCommands::Enum::eGameSpeak3:
+            {
+                return inputHeld & InputCommands::Enum::eFartOrRoll;
+                break;
+            }
+            case InputCommands::Enum::eGameSpeak4:
+            {
+                return inputHeld & InputCommands::Enum::eThrowItem;
+                break;
+            }
+            case InputCommands::Enum::eGameSpeak5:
+            {
+                return inputHeld & InputCommands::Enum::eFartOrRoll;
+                break;
+            }
+            case InputCommands::Enum::eGameSpeak6:
+            {
+                return inputHeld & InputCommands::Enum::eHop;
+                break;
+            }
+            case InputCommands::Enum::eGameSpeak7:
+            {
+                return inputHeld & InputCommands::Enum::eThrowItem;
+                break;
+            }
+            case InputCommands::Enum::eGameSpeak8:
+            {
+                return inputHeld & InputCommands::Enum::eDoAction;
+                break;
+            }
+            default: break;
+        }
+    }
+    return false;
 }
 
 void Input_SetCallback_4FA910(t_InputCallback pFunc)
@@ -1518,7 +1522,7 @@ void Input_Init()
     sKeyNames_5C9394[VK_NUMPAD6] = "6";
     sKeyNames_5C9394[VK_NUMPAD7] = "7";
     sKeyNames_5C9394[VK_NUMPAD8] = "8";
-    // Og game is missing vk_numpad 9 ? :s
+    sKeyNames_5C9394[VK_NUMPAD9] = "9";
 
 //TODO Mlg hax
     sJoyButtonNames_5C9908[0] = "X";
@@ -1529,19 +1533,24 @@ void Input_Init()
     sJoyButtonNames_5C9908[5] = "RB";
     sJoyButtonNames_5C9908[6] = "LT";
     sJoyButtonNames_5C9908[7] = "RT";
-    sJoyButtonNames_5C9908[8] = "";
-    sJoyButtonNames_5C9908[9] = "";
+    sJoyButtonNames_5C9908[8] = "BACK";
+    sJoyButtonNames_5C9908[9] = "START";
 
 
     Input_InitJoyStick_460080();
     memset(sKeyboardBindings_5C9930, 0, sizeof(*sKeyboardBindings_5C9930) * 256);
 
-    for (InputBinding* kb = sDefaultKeyboardBindings_55EAD8; kb->key; kb++)
+    for (const auto* kb = sDefaultKeyboardBindings_55EAD8; kb->key; kb++)
     {
         sKeyboardBindings_5C9930[kb->key] = kb->command;
     }
 
-    memcpy(sGamePadBindings_5C98E0, sDefaultGamepadBindings_55EA2C, ALIVE_ARY_SIZEOF(sDefaultGamepadBindings_55EA2C));
+    for (int i = 0; i < gamePadBindingsSize; i++)
+    {
+        const auto kb = sDefaultGamepadBindings_55EA2C[i];
+        sGamePadBindings_5C98E0[kb.key] = kb.command;
+    }
+
     Input_LoadSettingsIni_492D40();
     Input_Init_Names_491870();
     Input_SetCallback_4FA910(Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150);
@@ -1786,6 +1795,8 @@ u32 InputObject::PsxButtonsToKeyboardInput_45EE40(u32 cmd)
 
     if (cmd & PsxButtonBits::eL1)
     {
+        rawInput |= InputCommands::Enum::eSpeak1;
+
         if (cmd & PsxButtonBits::eTriangle)
         {
             rawInput |= InputCommands::Enum::eGameSpeak1;
@@ -1808,6 +1819,8 @@ u32 InputObject::PsxButtonsToKeyboardInput_45EE40(u32 cmd)
     }
     else if (cmd & PsxButtonBits::eL2)
     {
+        rawInput |= InputCommands::Enum::eSpeak2;
+
         if (cmd & PsxButtonBits::eTriangle)
         {
             rawInput |= InputCommands::Enum::eGameSpeak6;

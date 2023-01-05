@@ -52,57 +52,60 @@ void InputObject::InitPad(u32 /*padCount*/)
 u8 sPad1Buffer_507778[64] = {};
 u8 sPad2Buffer_507738[64] = {};
 
-static void ConvertAEGamespeakAEtoAOGamespeak(BitField32<AO::InputCommands>& value, const BitField32<::InputCommands::Enum>& aeInput)
-{
-    if (aeInput.Get(::InputCommands::Enum::eGameSpeak1))
-    {
-        value.Set(AO::InputCommands::eLeftGamespeak);
-        value.Set(AO::InputCommands::eHop);
-    }
-    else if (aeInput.Get(::InputCommands::Enum::eGameSpeak2))
-    {
-        value.Set(AO::InputCommands::eLeftGamespeak);
-        value.Set(AO::InputCommands::eDoAction);
-    }
-    else if (aeInput.Get(::InputCommands::Enum::eGameSpeak3))
-    {
-        value.Set(AO::InputCommands::eLeftGamespeak);
-        value.Set(AO::InputCommands::eCrouchOrRoll);
-    }
-    else if (aeInput.Get(::InputCommands::Enum::eGameSpeak4))
-    {
-        value.Set(AO::InputCommands::eLeftGamespeak);
-        value.Set(AO::InputCommands::eThrowItem);
-    }
-    else if (aeInput.Get(::InputCommands::Enum::eGameSpeak5))
-    {
-        value.Set(AO::InputCommands::eRightGameSpeak);
-        value.Set(AO::InputCommands::eCrouchOrRoll);
-    }
-    else if (aeInput.Get(::InputCommands::Enum::eGameSpeak6))
-    {
-        value.Set(AO::InputCommands::eRightGameSpeak);
-        value.Set(AO::InputCommands::eHop);
-    }
-    else if (aeInput.Get(::InputCommands::Enum::eGameSpeak7))
-    {
-        value.Set(AO::InputCommands::eRightGameSpeak);
-        value.Set(AO::InputCommands::eThrowItem);
-    }
-    else if (aeInput.Get(::InputCommands::Enum::eGameSpeak8))
-    {
-        value.Set(AO::InputCommands::eRightGameSpeak);
-        value.Set(AO::InputCommands::eDoAction);
-    }
-    else if (aeInput.Get(::InputCommands::Enum::eBack))
-    {
-        value.Set(AO::InputCommands::eBack);
-    }
-    else if (aeInput.Get(::InputCommands::Enum::eCheatMode))
-    {
-        value.Set(AO::InputCommands::eCheatMode);
-    }
-}
+//TODO NUKE
+// static void ConvertAEGamespeakAEtoAOGamespeak(BitField32<AO::InputCommands>& value, const BitField32<::InputCommands::Enum>& aeInput)
+// {
+//     if (aeInput.Get(::InputCommands::Enum::eGameSpeak1))
+//     {
+//         value.Set(AO::InputCommands::eLeftGamespeak);
+//         value.Set(AO::InputCommands::eHop);
+//     }
+//     else if (aeInput.Get(::InputCommands::Enum::eGameSpeak2))
+//     {
+//         value.Set(AO::InputCommands::eLeftGamespeak);
+//         value.Set(AO::InputCommands::eDoAction);
+//     }
+//     else if (aeInput.Get(::InputCommands::Enum::eGameSpeak3))
+//     {
+//         value.Set(AO::InputCommands::eLeftGamespeak);
+//         value.Set(AO::InputCommands::eCrouchOrRoll);
+//     }
+//     else if (aeInput.Get(::InputCommands::Enum::eGameSpeak4))
+//     {
+//         value.Set(AO::InputCommands::eLeftGamespeak);
+//         value.Set(AO::InputCommands::eThrowItem);
+//     }
+//     else if (aeInput.Get(::InputCommands::Enum::eGameSpeak5))
+//     {
+//         value.Set(AO::InputCommands::eRightGameSpeak);
+//         //value.Set(AO::InputCommands::eDoAction);
+//         value.Set(AO::InputCommands::eCrouchOrRoll);
+//     }
+//     else if (aeInput.Get(::InputCommands::Enum::eGameSpeak6))
+//     {
+//         value.Set(AO::InputCommands::eRightGameSpeak);
+//         value.Set(AO::InputCommands::eHop);
+//     }
+//     else if (aeInput.Get(::InputCommands::Enum::eGameSpeak7))
+//     {
+//         value.Set(AO::InputCommands::eRightGameSpeak);
+//         value.Set(AO::InputCommands::eThrowItem);
+//     }
+//     else if (aeInput.Get(::InputCommands::Enum::eGameSpeak8))
+//     {
+//         value.Set(AO::InputCommands::eRightGameSpeak);
+//         // value.Set(AO::InputCommands::eCrouchOrRoll);
+//         value.Set(AO::InputCommands::eDoAction);
+//     }
+//     else if (aeInput.Get(::InputCommands::Enum::eBack))
+//     {
+//         value.Set(AO::InputCommands::eBack);
+//     }
+//     else if (aeInput.Get(::InputCommands::Enum::eCheatMode))
+//     {
+//         value.Set(AO::InputCommands::eCheatMode);
+//     }
+// }
 
 static BitField32<AO::InputCommands> AEInputCommandsToAOInputCommands(const BitField32<::InputCommands::Enum>& aeInput)
 {
@@ -120,7 +123,16 @@ static BitField32<AO::InputCommands> AEInputCommandsToAOInputCommands(const BitF
     r.Set(AO::InputCommands::eBack, aeInput.Get(::InputCommands::Enum::eBack));
     r.Set(AO::InputCommands::eUnPause_OrConfirm, aeInput.Get(::InputCommands::Enum::eUnPause_OrConfirm));
     r.Set(AO::InputCommands::ePause, aeInput.Get(::InputCommands::Enum::ePause));
-    ConvertAEGamespeakAEtoAOGamespeak(r, aeInput);
+    r.Set(AO::InputCommands::eLeftGamespeak, aeInput.Get(::InputCommands::Enum::eSpeak1));
+    r.Set(AO::InputCommands::eRightGameSpeak, aeInput.Get(::InputCommands::Enum::eSpeak2));
+    r.Set(AO::InputCommands::eGameSpeak1, aeInput.Get(::InputCommands::Enum::eGameSpeak1));
+    r.Set(AO::InputCommands::eGameSpeak2, aeInput.Get(::InputCommands::Enum::eGameSpeak2));
+    r.Set(AO::InputCommands::eGameSpeak3, aeInput.Get(::InputCommands::Enum::eGameSpeak3));
+    r.Set(AO::InputCommands::eGameSpeak4, aeInput.Get(::InputCommands::Enum::eGameSpeak4));
+    r.Set(AO::InputCommands::eGameSpeak5, aeInput.Get(::InputCommands::Enum::eGameSpeak5));
+    r.Set(AO::InputCommands::eGameSpeak6, aeInput.Get(::InputCommands::Enum::eGameSpeak6));
+    r.Set(AO::InputCommands::eGameSpeak7, aeInput.Get(::InputCommands::Enum::eGameSpeak7));
+    r.Set(AO::InputCommands::eGameSpeak8, aeInput.Get(::InputCommands::Enum::eGameSpeak8));
     return r;
 }
 
@@ -390,7 +402,7 @@ void InputObject::SetCurrentController(PadIndex padIdx)
 
 bool InputObject::JoyStickEnabled() const
 {
-    return Input_JoyStickEnabled();
+    return ::Input_JoyStickEnabled();
 }
 
 bool InputObject::IsAnyPressed(u32 command) const
@@ -526,7 +538,7 @@ const char_type* Input_GetButtonString(InputCommands inputCommand, bool forceKey
 
     return ::Input_GetButtonString_492530(
         AEInputCommandToAEInputString(aeBits),
-        Input_JoyStickEnabled() ? controller_type : 0);
+        ::Input_JoyStickEnabled() ? controller_type : 0);
 }
 
 const char_type* Input_GetButtonString_44F1C0(InputCommands inputCommand)
@@ -572,16 +584,6 @@ void Input_Reset()
     // Funcs below call AE impls in standalone
     Input_Enable_48E6A0();
     Input_InitKeyStateArray();
-}
-
-
-bool Input_JoyStickEnabled()
-{
-    // Use AE var
-    return ::Input_JoyStickEnabled();
-
-    // Use AO var
-    //return sJoystickEnabled ? true : false;
 }
 
 bool Input_JoyStickAvailable()
