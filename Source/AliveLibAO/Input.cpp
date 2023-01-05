@@ -288,13 +288,13 @@ void InputObject::Update(BaseGameAutoPlayer& gameAutoPlayer)
     ::Input().Update(gameAutoPlayer);
 
     // Convert from AE bit flags to AO bit flags
-    mPads[0].mPressed = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mPressed)).Raw().all);
+    mPads[0].mPressed = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mRawInput)).Raw().all);
 
     // TODO: This one probably needs its own conversion
     mPads[0].mDir = ::Input().mPads[0].mDir;
 
     mPads[0].mPreviousInput = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mPreviousInput)).Raw().all);
-    mPads[0].mHeld = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mHeld)).Raw().all);
+    mPads[0].mHeld = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mPressed)).Raw().all);
     mPads[0].mReleased = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mReleased)).Raw().all);
 
     // Handle demo input (AO impl)

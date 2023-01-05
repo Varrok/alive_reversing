@@ -182,7 +182,7 @@ s32 EvilFart::VGetSaveState(u8* pSaveBuffer)
 void EvilFart::InputControlFart()
 {
     const FP kFartSpeed = FP_FromDouble(0.2);
-    const u32 pressedKeys = Input().mPads[sCurrentControllerIndex].mPressed;
+    const u32 pressedKeys = Input().mPads[sCurrentControllerIndex].mRawInput;
 
     if (sInputKey_Right & pressedKeys)
     {

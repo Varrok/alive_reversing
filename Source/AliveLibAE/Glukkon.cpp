@@ -378,7 +378,7 @@ void Glukkon::Motion_1_Walk()
                         SetAnim(eGlukkonMotions::Motion_18_WalkToJump);
                     }
                 }
-                else if (Input().mPads[sCurrentControllerIndex].mPressed & InputCommands::Enum::eRun)
+                else if (Input().mPads[sCurrentControllerIndex].mRawInput & InputCommands::Enum::eRun)
                 {
                     SetAnim(eGlukkonMotions::Motion_18_WalkToJump, true);
                 }
@@ -412,7 +412,7 @@ void Glukkon::Motion_1_Walk()
                 }
                 else
                 {
-                    if ((mVelX > FP_FromInteger(0) && (Input().mPads[sCurrentControllerIndex].mPressed & InputCommands::Enum::eLeft)) || (mVelX < FP_FromInteger(0) && (Input().mPads[sCurrentControllerIndex].mPressed & InputCommands::Enum::eRight)) || !(Input().mPads[sCurrentControllerIndex].mPressed & (InputCommands::Enum::eLeft | InputCommands::Enum::eRight)))
+                    if ((mVelX > FP_FromInteger(0) && (Input().mPads[sCurrentControllerIndex].mRawInput & InputCommands::Enum::eLeft)) || (mVelX < FP_FromInteger(0) && (Input().mPads[sCurrentControllerIndex].mRawInput & InputCommands::Enum::eRight)) || !(Input().mPads[sCurrentControllerIndex].mRawInput & (InputCommands::Enum::eLeft | InputCommands::Enum::eRight)))
                     {
                         if (GetAnimation().GetCurrentFrame() == 8)
                         {
@@ -608,7 +608,7 @@ void Glukkon::JumpHelper()
 
     if (sControlledCharacter == this && mHealth > FP_FromInteger(0))
     {
-        const auto input_pressed = Input().mPads[sCurrentControllerIndex].mPressed;
+        const auto input_pressed = Input().mPads[sCurrentControllerIndex].mRawInput;
 
         if ((mVelX > FP_FromInteger(0) && (input_pressed & InputCommands::Enum::eLeft)) || (mVelX < FP_FromInteger(0) && (input_pressed & InputCommands::Enum::eRight)))
         {
@@ -2180,7 +2180,7 @@ void Glukkon::HandleInput()
 
     if (BrainIs(&Glukkon::Brain_3_PlayerControlled) && mBrainSubState == 1 && !(GetTeleporting()))
     {
-        const auto inputHeld = Input().mPads[sCurrentControllerIndex].mHeld;
+        const auto inputHeld = Input().mPads[sCurrentControllerIndex].mPressed;
         const auto matchButtons = InputCommands::Enum::eGameSpeak1 | InputCommands::Enum::eGameSpeak2 | InputCommands::Enum::eGameSpeak3 | InputCommands::Enum::eGameSpeak4 | InputCommands::Enum::eGameSpeak5 | InputCommands::Enum::eGameSpeak6 | InputCommands::Enum::eGameSpeak7 | InputCommands::Enum::eGameSpeak8 | InputCommands::Enum::eChant;
 
         if (inputHeld & matchButtons)
@@ -2227,7 +2227,7 @@ void Glukkon::HandleInput()
         }
         else
         {
-            const auto inputPressed = Input().mPads[sCurrentControllerIndex].mPressed;
+            const auto inputPressed = Input().mPads[sCurrentControllerIndex].mRawInput;
             if (inputPressed & InputCommands::Enum::eRight)
             {
                 if (GetAnimation().GetFlipX())

@@ -2378,12 +2378,12 @@ void FlyingSlig::HandlePlayerControls()
     field_184_xSpeed = FP_FromInteger(0);
     field_188_ySpeed = FP_FromInteger(0);
 
-    if (Input().IsHeld(InputCommands::Enum::eThrowItem))
+    if (Input().IsPressed(InputCommands::Enum::eThrowItem))
     {
         mThrowGrenade = true;
     }
 
-    if (Input().IsHeld(InputCommands::Enum::eDoAction))
+    if (Input().IsPressed(InputCommands::Enum::eDoAction))
     {
         mDoAction = true;
     }
@@ -2395,35 +2395,35 @@ void FlyingSlig::HandlePlayerControls()
 
         field_160_voice_pitch_min = 0;
 
-        if (Input().IsHeld(sInputKey_GameSpeak1))
+        if (Input().IsPressed(sInputKey_GameSpeak1))
         {
             field_17D_next_speak = SligSpeak::eHi_0;
         }
-        else if (Input().IsHeld(sInputKey_GameSpeak3))
+        else if (Input().IsPressed(sInputKey_GameSpeak3))
         {
             field_17D_next_speak = Input().Is_Demo_Playing_45F220() != 0 ? SligSpeak::eGetHim_2 : SligSpeak::eFreeze_8;
         }
-        else if (Input().IsHeld(sInputKey_GameSpeak4))
+        else if (Input().IsPressed(sInputKey_GameSpeak4))
         {
             field_17D_next_speak = Input().Is_Demo_Playing_45F220() != 0 ? SligSpeak::eFreeze_8 : SligSpeak::eGetHim_2;
         }
-        else if (Input().IsHeld(sInputKey_GameSpeak2))
+        else if (Input().IsPressed(sInputKey_GameSpeak2))
         {
             field_17D_next_speak = SligSpeak::eHereBoy_1;
         }
-        else if (Input().IsHeld(sInputKey_GameSpeak6))
+        else if (Input().IsPressed(sInputKey_GameSpeak6))
         {
             field_17D_next_speak = SligSpeak::eBullshit_5;
         }
-        else if (Input().IsHeld(sInputKey_GameSpeak7))
+        else if (Input().IsPressed(sInputKey_GameSpeak7))
         {
             field_17D_next_speak = SligSpeak::eLookOut_6;
         }
-        else if (Input().IsHeld(sInputKey_GameSpeak5))
+        else if (Input().IsPressed(sInputKey_GameSpeak5))
         {
             field_17D_next_speak = SligSpeak::eBullshit2_7;
         }
-        else if (Input().IsHeld(sInputKey_GameSpeak8))
+        else if (Input().IsPressed(sInputKey_GameSpeak8))
         {
             field_17D_next_speak = SligSpeak::eLaugh_3;
         }
@@ -2434,15 +2434,15 @@ void FlyingSlig::HandlePlayerControls()
         }
     }
 
-    if (Input().IsPressed(InputCommands::Enum::eUp))
+    if (Input().IsHeld(InputCommands::Enum::eUp))
     {
-        if (Input().IsPressed(InputCommands::Enum::eLeft))
+        if (Input().IsHeld(InputCommands::Enum::eLeft))
         {
             field_184_xSpeed = (-field_2B8_max_speed_up * FP_FromDouble(0.707));
             field_188_ySpeed = (-field_2B8_max_speed_up * FP_FromDouble(0.707));
             return;
         }
-        if (Input().IsPressed(InputCommands::Enum::eRight))
+        if (Input().IsHeld(InputCommands::Enum::eRight))
         {
             field_184_xSpeed = (field_2B8_max_speed_up * FP_FromDouble(0.707));
             field_188_ySpeed = (-field_2B8_max_speed_up * FP_FromDouble(0.707));
@@ -2451,14 +2451,14 @@ void FlyingSlig::HandlePlayerControls()
         field_184_xSpeed = FP_FromInteger(0);
         field_188_ySpeed = -field_2B8_max_speed_up;
     }
-    else if (Input().IsPressed(InputCommands::Enum::eDown))
+    else if (Input().IsHeld(InputCommands::Enum::eDown))
     {
-        if (Input().IsPressed(InputCommands::Enum::eLeft))
+        if (Input().IsHeld(InputCommands::Enum::eLeft))
         {
             field_184_xSpeed = (-field_2B8_max_speed_up * FP_FromDouble(0.707));
             field_188_ySpeed = (field_2B8_max_speed_up * FP_FromDouble(0.707));
         }
-        else if (Input().IsPressed(InputCommands::Enum::eRight))
+        else if (Input().IsHeld(InputCommands::Enum::eRight))
         {
             field_184_xSpeed = (field_2B8_max_speed_up * FP_FromDouble(0.707));
             field_188_ySpeed = (field_2B8_max_speed_up * FP_FromDouble(0.707));
@@ -2469,12 +2469,12 @@ void FlyingSlig::HandlePlayerControls()
             field_188_ySpeed = field_2B8_max_speed_up;
         }
     }
-    else if (Input().IsPressed(InputCommands::Enum::eLeft))
+    else if (Input().IsHeld(InputCommands::Enum::eLeft))
     {
         field_188_ySpeed = FP_FromInteger(0);
         field_184_xSpeed = -field_2B8_max_speed_up;
     }
-    else if (Input().IsPressed(InputCommands::Enum::eRight))
+    else if (Input().IsHeld(InputCommands::Enum::eRight))
     {
         field_188_ySpeed = FP_FromInteger(0);
         field_184_xSpeed = field_2B8_max_speed_up;

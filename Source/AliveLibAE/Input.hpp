@@ -26,12 +26,12 @@ bool Input_JoyStickAvailable();
 
 struct PSX_Pad final
 {
-    u32 mPressed;
+    u32 mRawInput;
     u8 mDir;
     u8 field_5;
     u16 field_6_padding; // Not confirmed
     u32 mPreviousInput;
-    u32 mHeld;
+    u32 mPressed;
     u32 mReleased;
     u32 field_14_padding; // Not confirmed
 };
@@ -187,8 +187,8 @@ public:
     u16 field_3A_pad_idx = 0;
     u32 mCommand = 0;
     u32 mCommandDuration = 0;
-    bool IsPressed(u32 command);
     bool IsHeld(u32 command);
+    bool IsPressed(u32 command);
     bool IsReleased(u32 keys);
 };
 
