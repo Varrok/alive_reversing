@@ -140,11 +140,6 @@ static BitField32<AO::InputCommands> AEInputCommandsToAOInputCommands(const BitF
     r.Set(AO::InputCommands::eLeftGameSpeak, aeInput.Get(::InputCommands::Enum::eLeftGameSpeak));
     r.Set(AO::InputCommands::eRightGameSpeak, aeInput.Get(::InputCommands::Enum::eRightGameSpeak));
     r.Set(AO::InputCommands::eGameSpeak1, aeInput.Get(::InputCommands::Enum::eGameSpeak1));
-    if(aeInput.Get(::InputCommands::Enum::eGameSpeak1))
-    {
-        LOG_INFO("GS1 pressed");
-        LOG_INFO("AO Gamespeak 1 is now: %d", r.Get(InputCommands::eGameSpeak1));
-    }
     r.Set(AO::InputCommands::eGameSpeak2, aeInput.Get(::InputCommands::Enum::eGameSpeak2));
     r.Set(AO::InputCommands::eGameSpeak3, aeInput.Get(::InputCommands::Enum::eGameSpeak3));
     r.Set(AO::InputCommands::eGameSpeak4, aeInput.Get(::InputCommands::Enum::eGameSpeak4));
@@ -327,10 +322,7 @@ void InputObject::Update(BaseGameAutoPlayer& gameAutoPlayer)
         mPads[controllerId].mDir = ::Input().mPads[controllerId].mDir;
 
         mPads[controllerId].mPreviousInput = static_cast<u32>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[controllerId].mPreviousInput)).Raw().all);
-        LOG_INFO("presseed AE %d", ::Input().mPads[controllerId].mPressed);
         mPads[controllerId].mPressed = static_cast<u32>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[controllerId].mPressed)).Raw().all);
-        LOG_INFO("presseed AO %d", Input().GetPressed());
-
         mPads[controllerId].mReleased = static_cast<u32>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[controllerId].mReleased)).Raw().all);
     }
 
