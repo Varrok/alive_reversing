@@ -204,3 +204,4 @@ extern u32 sLastPressedKey;
 extern s32 sIsAKeyDown;
 extern s16 bLongerTimeoutToNextDemo;
 
+bool Input_IsGameSpeakPressed(InputCommands::Enum gameSpeakId);

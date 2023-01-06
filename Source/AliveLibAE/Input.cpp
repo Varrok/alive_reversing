@@ -1245,16 +1245,18 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
     return converted_input;
 }
 
-bool Input_IsGameSpeakPressed(u32 inputHeld, InputCommands::Enum gameSpeakId)
+bool Input_IsGameSpeakPressed(InputCommands::Enum gameSpeakId)
 {
+    auto held = Input().GetHeld();
+    auto pressed = Input().GetPressed();
     bool correctSpeakBtnHeld = false;
     if (gameSpeakId >= InputCommands::Enum::eGameSpeak1 && gameSpeakId <= InputCommands::Enum::eGameSpeak4 )
     {
-        correctSpeakBtnHeld = inputHeld & InputCommands::Enum::eSpeak1;
+        correctSpeakBtnHeld = held & InputCommands::Enum::eSpeak1;
     }
     else if (gameSpeakId >= InputCommands::Enum::eGameSpeak5 && gameSpeakId <= InputCommands::Enum::eGameSpeak8 )
     {
-        correctSpeakBtnHeld = inputHeld & InputCommands::Enum::eSpeak2;
+        correctSpeakBtnHeld = held & InputCommands::Enum::eSpeak2;
     }
 
     if(correctSpeakBtnHeld)
@@ -1263,42 +1265,42 @@ bool Input_IsGameSpeakPressed(u32 inputHeld, InputCommands::Enum gameSpeakId)
         {
             case InputCommands::Enum::eGameSpeak1:
             {
-                return inputHeld & InputCommands::Enum::eHop;
+                return pressed & InputCommands::Enum::eHop;
                 break;
             }
             case InputCommands::Enum::eGameSpeak2:
             {
-                return inputHeld & InputCommands::Enum::eDoAction;
+                return pressed & InputCommands::Enum::eDoAction;
                 break;
             }
             case InputCommands::Enum::eGameSpeak3:
             {
-                return inputHeld & InputCommands::Enum::eFartOrRoll;
+                return pressed & InputCommands::Enum::eFartOrRoll;
                 break;
             }
             case InputCommands::Enum::eGameSpeak4:
             {
-                return inputHeld & InputCommands::Enum::eThrowItem;
+                return pressed & InputCommands::Enum::eThrowItem;
                 break;
             }
             case InputCommands::Enum::eGameSpeak5:
             {
-                return inputHeld & InputCommands::Enum::eFartOrRoll;
+                return pressed & InputCommands::Enum::eFartOrRoll;
                 break;
             }
             case InputCommands::Enum::eGameSpeak6:
             {
-                return inputHeld & InputCommands::Enum::eHop;
+                return pressed & InputCommands::Enum::eHop;
                 break;
             }
             case InputCommands::Enum::eGameSpeak7:
             {
-                return inputHeld & InputCommands::Enum::eThrowItem;
+                return pressed & InputCommands::Enum::eThrowItem;
                 break;
             }
             case InputCommands::Enum::eGameSpeak8:
             {
-                return inputHeld & InputCommands::Enum::eDoAction;
+                return pressed & InputCommands::Enum::eDoAction;
                 break;
             }
             default: break;

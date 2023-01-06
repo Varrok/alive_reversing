@@ -2646,27 +2646,26 @@ MainMenuNextCam MainMenuController::HandleGameSpeakInput(u32 input_held, std::fu
         field_230_target_entry_index = 1;
         return fnOnGameSpeak(InputCommands::Enum::eChant);
     }
-    else if (Input().IsHeld(InputCommands::Enum::eBack))
+
+    for(u32 currGameSpeakId = InputCommands::Enum::eGameSpeak1; currGameSpeakId <= InputCommands::Enum::eGameSpeak8; currGameSpeakId++)
+    {
+        auto currGameSpeak = static_cast<InputCommands::Enum>(currGameSpeakId);
+        if(Input_IsGameSpeakPressed(currGameSpeak))
+        {
+            field_230_target_entry_index = currGameSpeak - InputCommands::Enum::eGameSpeak1;
+            return fnOnGameSpeak(currGameSpeak);
+        }
+    }
+
+    if (Input().IsPressed(InputCommands::Enum::eBack))
     {
         field_230_target_entry_index = 8;
         field_1FC_button_index = NO_SELECTABLE_BUTTONS;
 
         return fnOnGameSpeak(InputCommands::Enum::eBack);
     }
-    else
-    {
-        for(u32 currGameSpeakId = InputCommands::Enum::eGameSpeak1; currGameSpeakId <= InputCommands::Enum::eGameSpeak8; currGameSpeakId++)
-        {
-            auto currGameSpeak = static_cast<InputCommands::Enum>(currGameSpeakId);
-            if(Input().IsHeld(currGameSpeak))
-            {
-                field_230_target_entry_index = currGameSpeak - InputCommands::Enum::eGameSpeak1;
-                return fnOnGameSpeak(currGameSpeak);
-            }
-        }
 
-        return MainMenuNextCam(MainMenuCams::eNoChange);
-    }
+    return MainMenuNextCam(MainMenuCams::eNoChange);
 }
 
 void MainMenuController::HandleCreditsControllerUpdate()
