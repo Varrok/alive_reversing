@@ -613,7 +613,7 @@ private:
     s16 GetEvilFart_4585F0(s16 bDontLoad);
     void HandleDDCheat();
 
-    s32 mPrevHeld = 0;
+    s32 mPrevInput = 0;
     s32 mReleasedButtons = 0;
     AllInternalStates field_120_state = {};
     s16 mKnockdownMotion = 0;

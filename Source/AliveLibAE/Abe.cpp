@@ -624,7 +624,7 @@ Abe::Abe()
     GetAnimation().SetSemiTrans(true);
     GetAnimation().SetRenderMode(TPageAbr::eBlend_0);
 
-    mPrevHeld = 0;
+    mPrevInput = 0;
     mBaseAliveGameObjectLastAnimFrame = 0;
     field_120_state.raw = 0;
     mRingPulseTimer = 0;
@@ -815,7 +815,7 @@ s32 Abe::CreateFromSaveState(const u8* pData)
     sActiveHero->mHaveInvisibility = pSaveState->bHaveInvisiblity;
     sActiveHero->BaseAliveGameObjectCollisionLineType = pSaveState->mCollisionLineType;
 
-    sActiveHero->mPrevHeld = InputObject::PsxButtonsToKeyboardInput_45EE40(pSaveState->mPrevHeld);
+    sActiveHero->mPrevInput = InputObject::PsxButtonsToKeyboardInput_45EE40(pSaveState->mPrevHeld);
     sActiveHero->mReleasedButtons = InputObject::PsxButtonsToKeyboardInput_45EE40(pSaveState->mReleasedButtons);
     sActiveHero->mKnockdownMotion = pSaveState->mKnockdownMotion;
     sActiveHero->field_128.mRollingMotionTimer = sGnFrame - pSaveState->mRollingMotionTimer;
@@ -1574,7 +1574,7 @@ s32 Abe::VGetSaveState(u8* pSaveBuffer)
     pSaveState->mHaveShrykull = static_cast<s8>(mHaveShrykull);
     pSaveState->bHaveInvisiblity = static_cast<s8>(mHaveInvisibility);
 
-    pSaveState->mPrevHeld = InputObject::KeyboardInputToPsxButtons_45EF70(mPrevHeld);
+    pSaveState->mPrevHeld = InputObject::KeyboardInputToPsxButtons_45EF70(mPrevInput);
     pSaveState->mReleasedButtons = InputObject::KeyboardInputToPsxButtons_45EF70(mReleasedButtons);
 
     pSaveState->mKnockdownMotion = mKnockdownMotion;
@@ -2367,7 +2367,7 @@ void Abe::Motion_0_Idle_44EEB0()
     const u32 pressed = Input().GetPressed();
     if (pressed & (InputCommands::Enum::eChant | InputCommands::Enum::eGameSpeak8 | InputCommands::Enum::eGameSpeak7 | InputCommands::Enum::eGameSpeak6 | InputCommands::Enum::eGameSpeak5 | InputCommands::Enum::eGameSpeak4 | InputCommands::Enum::eGameSpeak3 | InputCommands::Enum::eGameSpeak2 | InputCommands::Enum::eGameSpeak1))
     {
-        mPrevHeld = pressed;
+        mPrevInput = pressed;
         mCurrentMotion = eAbeMotions::Motion_11_Speak_45B0A0;
         return;
     }
@@ -2743,7 +2743,7 @@ void Abe::Motion_0_Idle_44EEB0()
 
 void Abe::Motion_1_WalkLoop_44FBA0()
 {
-    mPrevHeld |= Input().GetHeld();
+    mPrevInput |= Input().GetHeld();
 
     EventBroadcast(kEventNoise, this);
     EventBroadcast(kEventSuspiciousNoise, this);
@@ -2812,7 +2812,7 @@ void Abe::Motion_1_WalkLoop_44FBA0()
     }
 
     // Hopping
-    if (sInputKey_Hop & mPrevHeld)
+    if (sInputKey_Hop & mPrevInput)
     {
         mNextMotion = eAbeMotions::Motion_28_HopMid_451C50;
         bEndWalking = true;
@@ -2856,7 +2856,7 @@ void Abe::Motion_1_WalkLoop_44FBA0()
         {
             mCurrentMotion = eAbeMotions::Motion_4_WalkToIdle_44FFC0;
         }
-        mPrevHeld = 0;
+        mPrevInput = 0;
     }
 }
 
@@ -3166,7 +3166,7 @@ void Abe::Motion_5_MidWalkToIdle_450080()
 
 void Abe::Motion_6_WalkBegin_44FEE0()
 {
-    mPrevHeld |= Input().GetHeld();
+    mPrevInput |= Input().GetHeld();
 
     // They hear me walking, they hating
     EventBroadcast(kEventNoise, this);
@@ -3213,10 +3213,10 @@ void Abe::Motion_10_Fart_45B1A0()
 
 void Abe::Motion_11_ToSpeak_45B0A0()
 {
-    mPrevHeld |= Input().GetPressed();
+    mPrevInput |= Input().GetPressed();
     if (GetAnimation().GetIsLastFrame())
     {
-        mCurrentMotion = DoGameSpeak_45AB70(mPrevHeld);
+        mCurrentMotion = DoGameSpeak_45AB70(mPrevInput);
         if (mCurrentMotion == -1)
         {
             ToIdle_44E6B0();
@@ -3229,7 +3229,7 @@ void Abe::Motion_11_ToSpeak_45B0A0()
             }
             mbMotionChanged = true;
         }
-        mPrevHeld = 0;
+        mPrevInput = 0;
     }
 }
 
@@ -3492,13 +3492,13 @@ void Abe::Motion_17_CrouchIdle_456BC0()
         return;
     }
 
-    mPrevHeld = 0;
+    mPrevInput = 0;
     mReleasedButtons = 0;
 
     // Crouching game speak
     if (CrouchingGameSpeak_453E10())
     {
-        mPrevHeld = 0;
+        mPrevInput = 0;
         EventBroadcast(kEventSpeaking, this);
         return;
     }
@@ -3638,7 +3638,7 @@ void Abe::Motion_18_CrouchToStand_454600()
     if (GetAnimation().GetIsLastFrame())
     {
         ToIdle_44E6B0();
-        mPrevHeld = 0;
+        mPrevInput = 0;
     }
 }
 
@@ -3654,7 +3654,7 @@ void Abe::Motion_19_StandToCrouch_453DC0()
 // TODO: End crouching game speak/fart?
 void Abe::Motion_20_CrouchSpeak_454550()
 {
-    mPrevHeld |= Input().GetPressed();
+    mPrevInput |= Input().GetPressed();
 
     if (GetAnimation().GetIsLastFrame())
     {
@@ -3666,7 +3666,7 @@ void Abe::Motion_20_CrouchSpeak_454550()
         {
             EventBroadcast(kEventSpeaking, this);
         }
-        mPrevHeld = 0;
+        mPrevInput = 0;
     }
 }
 
@@ -3740,7 +3740,7 @@ void Abe::Motion_23_RollLoop_453A90()
                 else
                 {
                     ToLeftRightMovement_44E340();
-                    mPrevHeld = 0;
+                    mPrevInput = 0;
                 }
             }
             else if (GetAnimation().GetCurrentFrame() == 0 || GetAnimation().GetCurrentFrame() == 4 || GetAnimation().GetCurrentFrame() == 8)
@@ -4290,7 +4290,7 @@ void Abe::Motion_32_RunJumpLand_453460()
         const u32 held = Input().GetHeld();
         if (sInputKey_Left & held)
         {
-            if (sInputKey_Hop & mPrevHeld)
+            if (sInputKey_Hop & mPrevInput)
             {
                 BaseGameObject* pPortal = VIntoBirdPortal(3);
                 if (pPortal)
@@ -4298,11 +4298,11 @@ void Abe::Motion_32_RunJumpLand_453460()
                     mBirdPortalSubState = PortalSubStates::eJumpingInsidePortal_0;
                     mBirdPortalId = pPortal->mBaseGameObjectId;
                     mCurrentMotion = eAbeMotions::Motion_30_RunJumpBegin_4532E0;
-                    mPrevHeld = 0;
+                    mPrevInput = 0;
                     return;
                 }
                 mCurrentMotion = eAbeMotions::Motion_30_RunJumpBegin_4532E0;
-                mPrevHeld = 0;
+                mPrevInput = 0;
                 return;
             }
 
@@ -4336,7 +4336,7 @@ void Abe::Motion_32_RunJumpLand_453460()
         }
         else if (held & sInputKey_Right)
         {
-            if (sInputKey_Hop & mPrevHeld)
+            if (sInputKey_Hop & mPrevInput)
             {
                 BaseGameObject* pPortal = VIntoBirdPortal(3);
                 if (pPortal)
@@ -4345,7 +4345,7 @@ void Abe::Motion_32_RunJumpLand_453460()
                     mBirdPortalId = pPortal->mBaseGameObjectId;
                 }
                 mCurrentMotion = eAbeMotions::Motion_30_RunJumpBegin_4532E0;
-                mPrevHeld = 0;
+                mPrevInput = 0;
                 return;
             }
 
@@ -4374,7 +4374,7 @@ void Abe::Motion_32_RunJumpLand_453460()
                 }
             }
         }
-        else if (sInputKey_Hop & mPrevHeld)
+        else if (sInputKey_Hop & mPrevInput)
         {
             BaseGameObject* pPortal = VIntoBirdPortal(2);
             if (pPortal)
@@ -4383,7 +4383,7 @@ void Abe::Motion_32_RunJumpLand_453460()
                 mBirdPortalId = pPortal->mBaseGameObjectId;
             }
             mCurrentMotion = eAbeMotions::Motion_27_HopBegin_4521C0;
-            mPrevHeld = 0;
+            mPrevInput = 0;
         }
         else
         {
@@ -4411,12 +4411,12 @@ void Abe::DoRunJump()
     }
 
     mCurrentMotion = eAbeMotions::Motion_30_RunJumpBegin_4532E0;
-    mPrevHeld = 0;
+    mPrevInput = 0;
 }
 
 void Abe::Motion_33_RunLoop_4508E0()
 {
-    mPrevHeld |= Input().GetHeld();
+    mPrevInput |= Input().GetHeld();
 
     EventBroadcast(kEventNoise, this);
     EventBroadcast(kEventSuspiciousNoise, this);
@@ -4447,7 +4447,7 @@ void Abe::Motion_33_RunLoop_4508E0()
     if (GetAnimation().GetCurrentFrame() == 0 || GetAnimation().GetCurrentFrame() == 8)
     {
         MapFollowMe(true);
-        if (mPrevHeld & sInputKey_Hop)
+        if (mPrevInput & sInputKey_Hop)
         {
             DoRunJump();
         }
@@ -4463,22 +4463,22 @@ void Abe::Motion_33_RunLoop_4508E0()
         {
             mCurrentMotion = eAbeMotions::Motion_26_RunTurn_451500;
             Environment_SFX_457A40(EnvironmentSfx::eRunSlide_4, 0, 32767, this);
-            mPrevHeld = 0;
+            mPrevInput = 0;
             return;
         }
 
-        if (mPrevHeld & sInputKey_Hop)
+        if (mPrevInput & sInputKey_Hop)
         {
             DoRunJump();
             return;
         }
 
         // Run to roll
-        if (mPrevHeld & sInputKey_FartRoll)
+        if (mPrevInput & sInputKey_FartRoll)
         {
             mCurrentMotion = eAbeMotions::jMotion_38_RunToRoll_453A70;
             mReleasedButtons = 0;
-            mPrevHeld = 0;
+            mPrevInput = 0;
             return;
         }
 
@@ -4486,7 +4486,7 @@ void Abe::Motion_33_RunLoop_4508E0()
         {
             if (Input().IsAnyHeld(sInputKey_Run))
             {
-                mPrevHeld = 0;
+                mPrevInput = 0;
                 return;
             }
 
@@ -4525,7 +4525,7 @@ void Abe::Motion_33_RunLoop_4508E0()
             Environment_SFX_457A40(EnvironmentSfx::eRunSlide_4, 0, 32767, this);
         }
 
-        mPrevHeld = 0;
+        mPrevInput = 0;
     }
 }
 
@@ -4589,7 +4589,7 @@ void Abe::Motion_39_StandingToRun_450D40()
     EventBroadcast(kEventNoise, this);
     EventBroadcast(kEventSuspiciousNoise, this);
 
-    mPrevHeld |= Input().GetHeld();
+    mPrevInput |= Input().GetHeld();
 
     if (WallHit(GetSpriteScale() * FP_FromInteger(50), mVelX) || WallHit(GetSpriteScale() * FP_FromInteger(20), mVelX))
     {
@@ -4663,7 +4663,7 @@ void Abe::Motion_40_SneakLoop_450550()
                         }
                     }
                 }
-                mPrevHeld = 0;
+                mPrevInput = 0;
             }
         }
     }
@@ -4671,7 +4671,7 @@ void Abe::Motion_40_SneakLoop_450550()
 
 void Abe::Motion_41_WalkToSneak_450250()
 {
-    mPrevHeld |= Input().GetHeld();
+    mPrevInput |= Input().GetHeld();
 
     if (GetAnimation().GetFlipX())
     {
@@ -4700,7 +4700,7 @@ void Abe::Motion_41_WalkToSneak_450250()
 
 void Abe::Motion_42_SneakToWalk_4503D0()
 {
-    mPrevHeld |= Input().GetHeld();
+    mPrevInput |= Input().GetHeld();
 
     if (GetAnimation().GetFlipX())
     {
@@ -4755,7 +4755,7 @@ void Abe::Motion_44_MidSneakToWalk_450500()
 
 void Abe::Motion_45_SneakBegin_4507A0()
 {
-    mPrevHeld |= Input().GetHeld();
+    mPrevInput |= Input().GetHeld();
 
     if (GetAnimation().GetIsLastFrame())
     {
@@ -4797,7 +4797,7 @@ void Abe::jMotion_47_MidSneakToIdle_4508C0()
 
 void Abe::Motion_48_WalkToRun_4500A0()
 {
-    mPrevHeld |= Input().GetHeld();
+    mPrevInput |= Input().GetHeld();
 
     EventBroadcast(kEventNoise, this);
     EventBroadcast(kEventSuspiciousNoise, this);
@@ -4814,7 +4814,7 @@ void Abe::Motion_48_WalkToRun_4500A0()
     if (GetAnimation().GetIsLastFrame())
     {
         mCurrentMotion = eAbeMotions::Motion_33_RunLoop_4508E0;
-        mPrevHeld = 0;
+        mPrevInput = 0;
     }
 
     if (WallHit(GetSpriteScale() * FP_FromInteger(50), mVelX) || WallHit(GetSpriteScale() * FP_FromInteger(20), mVelX))
@@ -4843,7 +4843,7 @@ void Abe::Motion_49_MidWalkToRun_450200()
 
 void Abe::Motion_50_RunToWalk_450E20()
 {
-    mPrevHeld |= Input().GetHeld();
+    mPrevInput |= Input().GetHeld();
 
     EventBroadcast(kEventNoise, this);
     EventBroadcast(kEventSuspiciousNoise, this);
@@ -4887,7 +4887,7 @@ void Abe::Motion_51_MidRunToWalk_450F50()
 
 void Abe::Motion_52_RunTurnToRun_451710()
 {
-    mPrevHeld |= Input().GetHeld();
+    mPrevInput |= Input().GetHeld();
 
     EventBroadcast(kEventNoise, this);
     EventBroadcast(kEventSuspiciousNoise, this);
@@ -5006,7 +5006,7 @@ void Abe::Motion_57_Dead_4589A0()
             field_128.field_C_unused = 0;
             mVelX = FP_FromInteger(0);
             mVelY = FP_FromInteger(0);
-            mPrevHeld = 0;
+            mPrevInput = 0;
             field_124_timer++;
             field_128.field_0_abe_timer = sGnFrame + 30;
             if (BaseAliveGameObjectPathTLV && BaseAliveGameObjectPathTLV->mTlvType == ReliveTypes::eDeathDrop)
@@ -7662,7 +7662,7 @@ void Abe::ToIdle_44E6B0()
     mVelY = FP_FromInteger(0);
     field_124_timer = sGnFrame;
     mCurrentMotion = eAbeMotions::Motion_0_Idle_44EEB0;
-    mPrevHeld = 0;
+    mPrevInput = 0;
     mReleasedButtons = 0;
     MapFollowMe(true);
 }
@@ -8042,7 +8042,7 @@ void Abe::MoveForward_44E9A0()
             BaseAliveGameObject_PlatformId = Guid{};
         }
 
-        mPrevHeld = 0;
+        mPrevInput = 0;
 
         switch (mCurrentMotion)
         {
@@ -8084,23 +8084,23 @@ void Abe::MoveForward_44E9A0()
 
 s16 Abe::CrouchingGameSpeak_453E10()
 {
-    mPrevHeld |= Input().GetPressed();
+    mPrevInput |= Input().GetPressed();
 
-    if (sInputKey_GameSpeak2 & mPrevHeld)
+    if (sInputKey_GameSpeak2 & mPrevInput)
     {
         gEventSystem->PushEvent(GameSpeakEvents::eAbe_FollowMe_10);
         Mudokon_SFX(MudSounds::eFollowMe_4, 0, 0, this);
         mCurrentMotion = eAbeMotions::Motion_20_CrouchSpeak_454550;
         return true;
     }
-    else if (sInputKey_GameSpeak3 & mPrevHeld)
+    else if (sInputKey_GameSpeak3 & mPrevInput)
     {
         gEventSystem->PushEvent(GameSpeakEvents::eAbe_Wait_12);
         Mudokon_SFX(MudSounds::eWait_6, 0, 0, this);
         mCurrentMotion = eAbeMotions::jMotion_21_ToCrouchSpeak_4545E0;
         return true;
     }
-    else if (mPrevHeld & sInputKey_GameSpeak1)
+    else if (mPrevInput & sInputKey_GameSpeak1)
     {
         gEventSystem->PushEvent(GameSpeakEvents::eAbe_Hello_9);
 
@@ -8123,35 +8123,35 @@ s16 Abe::CrouchingGameSpeak_453E10()
         }
         return true;
     }
-    else if (mPrevHeld & sInputKey_GameSpeak4)
+    else if (mPrevInput & sInputKey_GameSpeak4)
     {
         gEventSystem->PushEvent(GameSpeakEvents::eAbe_Work_21);
         Mudokon_SFX(MudSounds::eWork_25, 0, 0, this);
         mCurrentMotion = eAbeMotions::jMotion_21_ToCrouchSpeak_4545E0;
         return true;
     }
-    else if (mPrevHeld & sInputKey_GameSpeak6)
+    else if (mPrevInput & sInputKey_GameSpeak6)
     {
         Mudokon_SFX(MudSounds::eAllOYa_17, 0, 0, this);
         gEventSystem->PushEvent(GameSpeakEvents::eAbe_AllYa_23);
         mCurrentMotion = eAbeMotions::jMotion_21_ToCrouchSpeak_4545E0;
         return true;
     }
-    else if (mPrevHeld & sInputKey_GameSpeak5)
+    else if (mPrevInput & sInputKey_GameSpeak5)
     {
         Mudokon_SFX(MudSounds::eAnger_5, 0, 0, this);
         gEventSystem->PushEvent(GameSpeakEvents::eAbe_Anger_11);
         mCurrentMotion = eAbeMotions::Motion_20_CrouchSpeak_454550;
         return true;
     }
-    else if (mPrevHeld & sInputKey_GameSpeak8)
+    else if (mPrevInput & sInputKey_GameSpeak8)
     {
         Mudokon_SFX(MudSounds::eStopIt_26, 0, 0, this);
         gEventSystem->PushEvent(GameSpeakEvents::eAbe_StopIt_22);
         mCurrentMotion = eAbeMotions::jMotion_21_ToCrouchSpeak_4545E0;
         return true;
     }
-    else if (mPrevHeld & sInputKey_GameSpeak7)
+    else if (mPrevInput & sInputKey_GameSpeak7)
     {
         Mudokon_SFX(MudSounds::eSadUgh_28, 0, 0, this);
         gEventSystem->PushEvent(GameSpeakEvents::eAbe_Sorry_24);
