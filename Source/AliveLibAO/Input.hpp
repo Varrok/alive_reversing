@@ -24,7 +24,7 @@ enum InputCommands : u32
 {
     eRightGameSpeak = 1u << 0,    // 0x1
     eSneak = 1u << 1,             // 0x2
-    eLeftGamespeak = 1u << 2,     // 0x4
+    eLeftGameSpeak = 1u << 2,     // 0x4
     eRun = 1u << 3,               // 0x8
     eHop = 1u << 4,               // 0x10
     eThrowItem = 1u << 5,         // 0x20
@@ -59,19 +59,7 @@ extern const InputCommands sInputKey_Sneak;
 extern const InputCommands sInputKey_FartRoll;
 extern const InputCommands sInputKey_ThrowItem;
 
-extern const InputCommands sInputKey_LeftGameSpeakEnabler;
-extern const InputCommands sInputKey_GameSpeak1;
-extern const InputCommands sInputKey_GameSpeak2;
-extern const InputCommands sInputKey_GameSpeak3;
-extern const InputCommands sInputKey_GameSpeak4;
-
-extern const InputCommands sInputKey_RightGameSpeakEnabler;
-extern const InputCommands sInputKey_GameSpeak5;
-extern const InputCommands sInputKey_GameSpeak6;
-extern const InputCommands sInputKey_GameSpeak7;
-extern const InputCommands sInputKey_GameSpeak8;
-
-const InputCommands sInputKey_Chant = static_cast<InputCommands>(eRightGameSpeak | eLeftGamespeak);
+const InputCommands sInputKey_Chant = static_cast<InputCommands>(eRightGameSpeak | eLeftGameSpeak);
 
 #define kAO_Esc "\x06"
 
@@ -186,5 +174,7 @@ public:
 ALIVE_ASSERT_SIZEOF(InputObject, 0x30);
 
 InputObject& Input();
+
+bool Input_IsGameSpeakPressed(InputCommands gameSpeakId);
 
 } // namespace AO

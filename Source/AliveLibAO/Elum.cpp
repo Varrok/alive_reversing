@@ -592,7 +592,7 @@ bool Elum::ToNextMotionAbeControlled()
     }
     else
     {
-        if (Input().IsAnyPressed(sInputKey_LeftGameSpeakEnabler | sInputKey_RightGameSpeakEnabler)
+        if (Input().IsAnyPressed(InputCommands::eLeftGameSpeak | InputCommands::eRightGameSpeak)
             || !(Input().IsAnyPressed(sInputKey_Hop)))
         {
             return false;

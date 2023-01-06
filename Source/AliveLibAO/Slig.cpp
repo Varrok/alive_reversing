@@ -1489,29 +1489,29 @@ s16 Slig::GetNextMotionIncGameSpeak(u16 input)
         return eSligMotions::Motion_37_Depossessing;
     }
 
-    if (Input().IsAnyPressed(sInputKey_LeftGameSpeakEnabler))
+    if (Input().IsAnyPressed(InputCommands::eLeftGameSpeak))
     {
-        if (input & sInputKey_GameSpeak2)
+        if (input & InputCommands::eGameSpeak2)
         {
             gEventSystem->VPushEvent(GameSpeakEvents::Slig_HereBoy_24);
             Slig_GameSpeak_SFX(SligSpeak::eHereBoy_1, 0, mGameSpeakPitchMin, this);
             return eSligMotions::Motion_21_SpeakHereBoy;
         }
-        if (input & sInputKey_GameSpeak1)
+        if (input & InputCommands::eGameSpeak1)
         {
             gEventSystem->VPushEvent(GameSpeakEvents::Slig_Hi_23);
             Slig_GameSpeak_SFX(SligSpeak::eHi_0, 0, mGameSpeakPitchMin, this);
             return eSligMotions::Motion_22_SpeakHi;
         }
 
-        if (input & sInputKey_GameSpeak3)
+        if (input & InputCommands::eGameSpeak3)
         {
             gEventSystem->VPushEvent(GameSpeakEvents::eSlig_Freeze_27);
             Slig_GameSpeak_SFX(SligSpeak::eFreeze_8, 0, mGameSpeakPitchMin, this);
             return eSligMotions::Motion_23_SpeakFreeze;
         }
 
-        if (input & sInputKey_GameSpeak4)
+        if (input & InputCommands::eGameSpeak4)
         {
             gEventSystem->VPushEvent(GameSpeakEvents::eSlig_GetHim_25);
             Slig_GameSpeak_SFX(SligSpeak::eGetHim_2, 0, mGameSpeakPitchMin, this);
@@ -1519,30 +1519,30 @@ s16 Slig::GetNextMotionIncGameSpeak(u16 input)
         }
         return -1;
     }
-    else if (Input().IsAnyPressed(sInputKey_RightGameSpeakEnabler))
+    else if (Input().IsAnyPressed(InputCommands::eRightGameSpeak))
     {
-        if (input & sInputKey_GameSpeak8)
+        if (input & InputCommands::eGameSpeak8)
         {
             gEventSystem->VPushEvent(GameSpeakEvents::eSlig_Laugh_8);
             Slig_GameSpeak_SFX(SligSpeak::eLaugh_7, 0, mGameSpeakPitchMin, this);
             return eSligMotions::Motion_25_SpeakLaugh;
         }
 
-        if (input & sInputKey_GameSpeak6)
+        if (input & InputCommands::eGameSpeak6)
         {
             gEventSystem->VPushEvent(GameSpeakEvents::eSlig_Bullshit1_5);
             Slig_GameSpeak_SFX(SligSpeak::eBullshit_4, 0, mGameSpeakPitchMin, this);
             return eSligMotions::Motion_26_SpeakBullshit1;
         }
 
-        if (input & sInputKey_GameSpeak7)
+        if (input & InputCommands::eGameSpeak7)
         {
             gEventSystem->VPushEvent(GameSpeakEvents::Slig_LookOut_6);
             Slig_GameSpeak_SFX(SligSpeak::eLookOut_5, 0, mGameSpeakPitchMin, this);
             return eSligMotions::Motion_27_SpeakLookOut;
         }
 
-        if (input & sInputKey_GameSpeak5)
+        if (input & InputCommands::eGameSpeak5)
         {
             gEventSystem->VPushEvent(GameSpeakEvents::eSlig_Bullshit2_7);
             Slig_GameSpeak_SFX(SligSpeak::eBullshit2_6, 0, mGameSpeakPitchMin, this);
@@ -1983,7 +1983,7 @@ s16 Slig::HandlePlayerControlled()
     }
 
     if (Input().IsAnyHeld(sInputKey_DoAction)
-        && !(pressed & (sInputKey_LeftGameSpeakEnabler | sInputKey_RightGameSpeakEnabler)))
+        && !(pressed & (InputCommands::eLeftGameSpeak | InputCommands::eRightGameSpeak)))
     {
         if (!Input_IsChanting())
         {
@@ -2046,7 +2046,7 @@ s16 Slig::HandlePlayerControlled()
         }
     }
     if (pressed & sInputKey_ThrowItem
-        && !(pressed & (sInputKey_LeftGameSpeakEnabler | sInputKey_RightGameSpeakEnabler)))
+        && !(pressed & (InputCommands::eLeftGameSpeak | InputCommands::eRightGameSpeak)))
     {
         if (!Input_IsChanting())
         {
@@ -2056,7 +2056,7 @@ s16 Slig::HandlePlayerControlled()
         }
     }
     if (pressed & sInputKey_FartRoll
-        && !(pressed & (sInputKey_LeftGameSpeakEnabler | sInputKey_RightGameSpeakEnabler)))
+        && !(pressed & (InputCommands::eLeftGameSpeak | InputCommands::eRightGameSpeak)))
     {
         if (!Input_IsChanting())
         {
@@ -2119,7 +2119,7 @@ s16 Slig::HandlePlayerControlled()
         }
     }
 
-    if (Input().IsAnyHeld(sInputKey_Hop | sInputKey_FartRoll) && !(Input().IsAnyPressed(sInputKey_LeftGameSpeakEnabler | sInputKey_RightGameSpeakEnabler)))
+    if (Input().IsAnyHeld(sInputKey_Hop | sInputKey_FartRoll) && !(Input().IsAnyPressed(InputCommands::eLeftGameSpeak | InputCommands::eRightGameSpeak)))
     {
         Slig::Slig_GameSpeak_SFX(SligSpeak::eBlurgh_11, 0, mGameSpeakPitchMin, this);
         mCurrentMotion = eSligMotions::Motion_32_Blurgh;
