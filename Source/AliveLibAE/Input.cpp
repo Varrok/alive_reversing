@@ -1943,28 +1943,28 @@ void InputObject::ShutDown_45F020()
 
 bool InputObject::IsAnyHeld(u32 command)
 {
-    return (this->mPads[sCurrentControllerIndex].mRawInput & command) != 0;
+    return (mPads[sCurrentControllerIndex].mRawInput & command) != 0;
 }
 
 bool InputObject::IsAnyPressed(u32 command)
 {
-    return (this->mPads[sCurrentControllerIndex].mPressed & command) != 0;
+    return (mPads[sCurrentControllerIndex].mPressed & command) != 0;
 }
 
 bool InputObject::IsAnyReleased(u32 keys)
 {
-    return (this->mPads[sCurrentControllerIndex].mReleased & keys) != 0;
+    return (mPads[sCurrentControllerIndex].mReleased & keys) != 0;
 }
 
 u32 InputObject::GetHeld()
 {
-    return this->mPads[sCurrentControllerIndex].mRawInput;
+    return mPads[sCurrentControllerIndex].mRawInput;
 }
 u32 InputObject::GetPressed()
 {
-    return this->mPads[sCurrentControllerIndex].mPressed;
+    return mPads[sCurrentControllerIndex].mPressed;
 }
 u32 InputObject::GetReleased()
 {
-    return this->mPads[sCurrentControllerIndex].mReleased;
+    return mPads[sCurrentControllerIndex].mReleased;
 }

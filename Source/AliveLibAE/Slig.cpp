@@ -4629,13 +4629,17 @@ void Slig::HandleDDCheat()
 {
     BaseAliveGameObjectCollisionLine = nullptr;
 
-    // TODO: InputCommand constants
-    if (Input().IsAnyHeld(0xF))
+    if (Input().IsAnyHeld(
+        InputCommands::Enum::eUp |
+        InputCommands::Enum::eDown |
+        InputCommands::Enum::eLeft |
+        InputCommands::Enum::eRight
+    ))
     {
         mVelX = dword_5473E8[Input().mPads[sCurrentControllerIndex].mDir >> 5];
         mVelY = dword_547408[Input().mPads[sCurrentControllerIndex].mDir >> 5];
 
-        if (Input().IsAnyHeld(0x10))
+        if (Input().IsAnyHeld(InputCommands::Enum::eRun))
         {
             mVelX += dword_5473E8[Input().mPads[sCurrentControllerIndex].mDir >> 5];
             mVelX += dword_5473E8[Input().mPads[sCurrentControllerIndex].mDir >> 5];

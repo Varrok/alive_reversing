@@ -815,7 +815,7 @@ s32 Abe::CreateFromSaveState(const u8* pData)
     sActiveHero->mHaveInvisibility = pSaveState->bHaveInvisiblity;
     sActiveHero->BaseAliveGameObjectCollisionLineType = pSaveState->mCollisionLineType;
 
-    sActiveHero->mPrevInput = InputObject::PsxButtonsToKeyboardInput_45EE40(pSaveState->mPrevHeld);
+    sActiveHero->mPrevInput = InputObject::PsxButtonsToKeyboardInput_45EE40(pSaveState->mPrevInput);
     sActiveHero->mReleasedButtons = InputObject::PsxButtonsToKeyboardInput_45EE40(pSaveState->mReleasedButtons);
     sActiveHero->mKnockdownMotion = pSaveState->mKnockdownMotion;
     sActiveHero->field_128.mRollingMotionTimer = sGnFrame - pSaveState->mRollingMotionTimer;
@@ -1574,7 +1574,7 @@ s32 Abe::VGetSaveState(u8* pSaveBuffer)
     pSaveState->mHaveShrykull = static_cast<s8>(mHaveShrykull);
     pSaveState->bHaveInvisiblity = static_cast<s8>(mHaveInvisibility);
 
-    pSaveState->mPrevHeld = InputObject::KeyboardInputToPsxButtons_45EF70(mPrevInput);
+    pSaveState->mPrevInput = InputObject::KeyboardInputToPsxButtons_45EF70(mPrevInput);
     pSaveState->mReleasedButtons = InputObject::KeyboardInputToPsxButtons_45EF70(mReleasedButtons);
 
     pSaveState->mKnockdownMotion = mKnockdownMotion;

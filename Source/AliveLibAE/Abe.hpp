@@ -344,7 +344,7 @@ struct AbeSaveState final
     bool mShrivel;
     s8 mHaveShrykull;
     s8 bHaveInvisiblity;
-    u16 mPrevHeld;
+    u16 mPrevInput;
     u16 mReleasedButtons;
     u16 mKnockdownMotion;
     s16 field_76_padding;
