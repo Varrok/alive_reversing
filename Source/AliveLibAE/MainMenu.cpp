@@ -1352,7 +1352,7 @@ MainMenuNextCam MainMenuController::Page_FMV_Level_Update_4D4AB0(u32 input_held)
     }
 
     s32 inputToUse = 0;
-    if (field_204_prev_pressed && field_204_prev_pressed == Input().mPads[sCurrentControllerIndex].mPressed)
+    if (field_204_prev_pressed && field_204_prev_pressed == Input().mPads[sCurrentControllerIndex].mRawInput)
     {
         field_202_input_hold_down_timer--;
         if (field_202_input_hold_down_timer == 0)
@@ -1368,7 +1368,7 @@ MainMenuNextCam MainMenuController::Page_FMV_Level_Update_4D4AB0(u32 input_held)
     else
     {
         field_202_input_hold_down_timer = 15;
-        field_204_prev_pressed = Input().mPads[sCurrentControllerIndex].mPressed;
+        field_204_prev_pressed = Input().mPads[sCurrentControllerIndex].mRawInput;
         inputToUse = input_held;
     }
 
@@ -1582,7 +1582,7 @@ void MainMenuController::BackStory_Or_NewGame_Render_4D2630(PrimHeader** ot)
 MainMenuNextCam MainMenuController::Page_Front_Update_4D0720(u32 input)
 {
     // Reset time out if any input detected
-    if (Input().mPads[0].mPressed)
+    if (Input().mPads[0].mRawInput)
     {
         field_1F8_page_timeout = 0;
         bLongerTimeoutToNextDemo = 0;
@@ -2023,7 +2023,7 @@ MainMenuNextCam MainMenuController::DemoSelect_Update_4D0E10(u32 input)
     gIsDemoStartedManually = false;
 
     s32 input_or_field_204 = input;
-    if (field_204_prev_pressed && field_204_prev_pressed == Input().mPads[sCurrentControllerIndex].mPressed)
+    if (field_204_prev_pressed && field_204_prev_pressed == Input().mPads[sCurrentControllerIndex].mRawInput)
     {
         field_202_input_hold_down_timer--;
         if (field_202_input_hold_down_timer == 0)
@@ -2035,7 +2035,7 @@ MainMenuNextCam MainMenuController::DemoSelect_Update_4D0E10(u32 input)
     else
     {
         field_202_input_hold_down_timer = 15;
-        field_204_prev_pressed = Input().mPads[sCurrentControllerIndex].mPressed;
+        field_204_prev_pressed = Input().mPads[sCurrentControllerIndex].mRawInput;
     }
 
     if (input_or_field_204 & (InputCommands::Enum::eUp | InputCommands::Enum::eLeft))
@@ -2292,7 +2292,7 @@ MainMenuNextCam MainMenuController::AbeMotions_Update_4D1F50(u32 input)
 
 MainMenuNextCam MainMenuController::PSX_Cooperative_Mode_Update_4D49B0(u32 /*input*/)
 {
-    const u32 held = Input().mPads[0].mHeld;
+    const u32 held = Input().mPads[0].mPressed;
     if (held & (InputCommands::Enum::eUnPause_OrConfirm | InputCommands::Enum::eBack))
     {
         return MainMenuNextCam(MainMenuCams::eBackstory_Or_NewGameCam);
@@ -2742,7 +2742,7 @@ void MainMenuController::HandleMainMenuUpdate()
     MainMenuPage* pPage = &sMainMenuPages_561960[field_214_page_index];
 
     const auto currentCamId = pPage->field_0_cam_id;
-    if (Input().mPads[0].mPressed && currentCamId != MainMenuCams::eGameBootCopyrightSplashCam && currentCamId != MainMenuCams::eUnknown20Cam && currentCamId != MainMenuCams::eControllerSelectionCam)
+    if (Input().mPads[0].mRawInput && currentCamId != MainMenuCams::eGameBootCopyrightSplashCam && currentCamId != MainMenuCams::eUnknown20Cam && currentCamId != MainMenuCams::eControllerSelectionCam)
     {
         field_1F8_page_timeout = 0;
     }
@@ -2754,12 +2754,13 @@ void MainMenuController::HandleMainMenuUpdate()
     if (pPage->field_4_time_out <= 0 || pPage->field_8_next_idx <= 0 || field_1F8_page_timeout <= pPage->field_4_time_out)
     {
         const MainMenuButton* btnArray = pPage->field_18_buttons;
-        const u32 inputHeld = Input().Held();
+        const u32 pressed = Input().mPads[0].mPressed;
+
         if (btnArray)
         {
             if (field_1FC_button_index != NO_SELECTABLE_BUTTONS)
             {
-                if (inputHeld & (InputCommands::Enum::eLeft | InputCommands::Enum::eUp))
+                if (pressed & (InputCommands::Enum::eLeft | InputCommands::Enum::eUp))
                 {
                     if (pPage->field_0_cam_id != MainMenuCams::eLoadGameMenuCam)
                     {
@@ -2787,7 +2788,7 @@ void MainMenuController::HandleMainMenuUpdate()
                     SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 35, 400);
                 }
 
-                if (inputHeld & (InputCommands::Enum::eRight | InputCommands::Enum::eDown))
+                if (pressed & (InputCommands::Enum::eRight | InputCommands::Enum::eDown))
                 {
                     if (pPage->field_0_cam_id != MainMenuCams::eLoadGameMenuCam)
                     {
@@ -2827,7 +2828,7 @@ void MainMenuController::HandleMainMenuUpdate()
             return;
         }
 
-        const MainMenuNextCam pageUpdateReturnedCam = (this->*(pPage->field_10_fn_update))(inputHeld);
+        const MainMenuNextCam pageUpdateReturnedCam = (this->*(pPage->field_10_fn_update))(pressed);
 
         if (pageUpdateReturnedCam.page_update_camera == MainMenuCams::eNoChange || pageUpdateReturnedCam.page_update_camera == gMap.mCurrentCamera)
         {

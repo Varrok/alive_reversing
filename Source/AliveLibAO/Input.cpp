@@ -293,27 +293,27 @@ void InputObject::Update(BaseGameAutoPlayer& gameAutoPlayer)
     {
         mPads[i].mPreviousDir = mPads[i].mDir;
         mPads[i].field_B = mPads[i].field_3;
-        mPads[i].mPreviousInput = mPads[i].mPressed;
+        mPads[i].mPreviousInput = mPads[i].mRawInput;
     }
 
     // Do AE input reading
     ::Input().Update(gameAutoPlayer);
 
     // Convert from AE bit flags to AO bit flags
-    mPads[0].mPressed = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mPressed)).Raw().all);
+    mPads[0].mRawInput = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mRawInput)).Raw().all);
 
     // TODO: This one probably needs its own conversion
     mPads[0].mDir = ::Input().mPads[0].mDir;
 
     mPads[0].mPreviousInput = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mPreviousInput)).Raw().all);
-    mPads[0].mHeld = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mHeld)).Raw().all);
+    mPads[0].mPressed = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mPressed)).Raw().all);
     mPads[0].mReleased = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mReleased)).Raw().all);
 
     // Handle demo input (AO impl)
     if (mbDemoPlaying & 1)
     {
         // Stop if any button on any pad is pressed
-        if (mPads[sCurrentControllerIndex].mPressed)
+        if (mPads[sCurrentControllerIndex].mRawInput)
         {
             mbDemoPlaying &= ~1u;
             return;
@@ -335,15 +335,15 @@ void InputObject::Update(BaseGameAutoPlayer& gameAutoPlayer)
         // Will do nothing if we hit the end command..
         if (mbDemoPlaying & 1)
         {
-            mPads[0].mPressed = static_cast<u16>(mCommand);
+            mPads[0].mRawInput = static_cast<u16>(mCommand);
         }
 
         for (s32 i = 0; i < 2; i++)
         {
-            mPads[i].mReleased = ~mPads[i].mPressed & mPads[i].mPreviousInput;
-            mPads[i].mHeld = ~mPads[i].mPreviousInput & mPads[i].mPressed;
-            mPads[i].mDir = byte_4BB428[(mPads[i].mPressed >> 12) & 0xF];
-            mPads[i].field_3 = byte_4BB428[(mPads[i].mPressed >> 4) & 0xF];
+            mPads[i].mReleased = ~mPads[i].mRawInput & mPads[i].mPreviousInput;
+            mPads[i].mPressed = ~mPads[i].mPreviousInput & mPads[i].mRawInput;
+            mPads[i].mDir = byte_4BB428[(mPads[i].mRawInput >> 12) & 0xF];
+            mPads[i].field_3 = byte_4BB428[(mPads[i].mRawInput >> 4) & 0xF];
         }
 
         return;
@@ -412,7 +412,7 @@ bool InputObject::IsAnyPressed(u32 command) const
 
 bool InputObject::IsAnyPressed(PadIndex padIx, u32 command) const
 {
-    return (mPads[PadIndexToInt(padIx)].mPressed & command) != 0;
+    return (mPads[PadIndexToInt(padIx)].mRawInput & command) != 0;
 }
 
 bool InputObject::IsAnyHeld(u32 command) const
@@ -422,7 +422,7 @@ bool InputObject::IsAnyHeld(u32 command) const
 
 bool InputObject::IsAnyHeld(PadIndex padIx, u32 command) const
 {
-    return (mPads[PadIndexToInt(padIx)].mHeld & command) != 0;
+    return (mPads[PadIndexToInt(padIx)].mPressed & command) != 0;
 }
 
 bool InputObject::IsAnyReleased(u32 command) const
@@ -448,33 +448,33 @@ bool InputObject::IsAllPressed(u32 commands) const
 
 bool InputObject::IsAllPressed(PadIndex padIx, u32 commands) const
 {
-    return (mPads[PadIndexToInt(padIx)].mPressed & commands) == commands;
+    return (mPads[PadIndexToInt(padIx)].mRawInput & commands) == commands;
 }
 
 
 bool InputObject::IsAllHeld(u32 commands) const
 {
-    return (mPads[sCurrentControllerIndex].mHeld & commands) == commands;
+    return (mPads[sCurrentControllerIndex].mPressed & commands) == commands;
 }
 
-u16 InputObject::Pressed() const
+u16 InputObject::GetHeld() const
 {
-    return Pressed(PadIndex::Active);
+    return GetHeld(PadIndex::Active);
 }
 
-u16 InputObject::Pressed(PadIndex padIx) const
+u16 InputObject::GetHeld(PadIndex padIx) const
 {
-    return mPads[PadIndexToInt(padIx)].mPressed;
+    return mPads[PadIndexToInt(padIx)].mRawInput;
 }
 
-u16 InputObject::Held() const
+u16 InputObject::GetPressed() const
 {
-    return Held(PadIndex::Active);
+    return GetPressed(PadIndex::Active);
 }
 
-u16 InputObject::Held(PadIndex padIx) const
+u16 InputObject::GetPressed(PadIndex padIx) const
 {
-    return Input().mPads[PadIndexToInt(padIx)].mHeld;
+    return Input().mPads[PadIndexToInt(padIx)].mPressed;
 }
 
 u32 InputObject::Input_Read_Pad(u32 padIdx)
@@ -482,7 +482,7 @@ u32 InputObject::Input_Read_Pad(u32 padIdx)
     return ::Input_Read_Pad(padIdx);
 }
 
-u16 InputObject::Released() const
+u16 InputObject::GetReleased() const
 {
     return Input().mPads[sCurrentControllerIndex].mReleased;
 }

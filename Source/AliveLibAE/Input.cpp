@@ -1578,7 +1578,7 @@ void Input_Reset_492660()
 
 u32 Input_IsChanting()
 {
-    return (Input().mPads[0].mPressed & InputCommands::Enum::eChant) == InputCommands::Enum::eChant;
+    return (Input().mPads[0].mRawInput & InputCommands::Enum::eChant) == InputCommands::Enum::eChant;
 }
 
 // Zeros the input key state array.
@@ -1662,6 +1662,7 @@ void InputObject::SetDemoResource_45F1E0(u32** pDemoRes)
     mbDemoPlaying |= 1u;
     mCommandDuration = 0;
 }
+#include <assert.h>
 
 // BC break of Update_45F040
 void InputObject::Update(BaseGameAutoPlayer& autoPlayer)
@@ -1688,13 +1689,13 @@ void InputObject::Update(BaseGameAutoPlayer& autoPlayer)
         0,
         0};
 
-    mPads[0].mPreviousInput = mPads[0].mPressed;
-    mPads[0].mPressed = autoPlayer.GetInput(0);
+    mPads[0].mPreviousInput = mPads[0].mRawInput;
+    mPads[0].mRawInput = autoPlayer.GetInput(0);
 
     if (Is_Demo_Playing_45F220())
     {
         // Stop if any button on any pad is pressed
-        if (mPads[sCurrentControllerIndex].mPressed)
+        if (mPads[sCurrentControllerIndex].mRawInput)
         {
             bLongerTimeoutToNextDemo = 0;
             UnsetDemoPlaying_45F240();
@@ -1717,19 +1718,19 @@ void InputObject::Update(BaseGameAutoPlayer& autoPlayer)
         // Will do nothing if we hit the end command..
         if (Is_Demo_Playing_45F220())
         {
-            mPads[0].mPressed = PsxButtonsToKeyboardInput_45EE40(mCommand);
+            mPads[0].mRawInput = PsxButtonsToKeyboardInput_45EE40(mCommand);
         }
     }
 
-    mPads[0].mReleased = mPads[0].mPreviousInput & ~mPads[0].mPressed;
-    mPads[0].mHeld = mPads[0].mPressed & ~mPads[0].mPreviousInput;
-    mPads[0].mDir = directionTable_545A4C[mPads[0].mPressed & 0xF];
+    mPads[0].mReleased = mPads[0].mPreviousInput & ~mPads[0].mRawInput;
+    mPads[0].mPressed = mPads[0].mRawInput & ~mPads[0].mPreviousInput;
+    mPads[0].mDir = directionTable_545A4C[mPads[0].mRawInput & 0xF];
 
-    mPads[1].mPreviousInput = mPads[1].mPressed;
-    mPads[1].mPressed = autoPlayer.GetInput(1);
-    mPads[1].mReleased = mPads[1].mPreviousInput & ~mPads[1].mPressed;
-    mPads[1].mHeld = mPads[1].mPressed & ~mPads[1].mPreviousInput;
-    mPads[1].mDir = directionTable_545A4C[mPads[1].mPressed & 0xF];
+    mPads[1].mPreviousInput = mPads[1].mRawInput;
+    mPads[1].mRawInput = autoPlayer.GetInput(1);
+    mPads[1].mReleased = mPads[1].mPreviousInput & ~mPads[1].mRawInput;
+    mPads[1].mPressed = mPads[1].mRawInput & ~mPads[1].mPreviousInput;
+    mPads[1].mDir = directionTable_545A4C[mPads[1].mRawInput & 0xF];
 }
 
 u32 InputObject::PsxButtonsToKeyboardInput_45EE40(u32 cmd)
@@ -1952,21 +1953,14 @@ void InputObject::ShutDown_45F020()
 #endif
 }
 
+bool InputObject::IsHeld(u32 command)
+{
+    return (this->mPads[sCurrentControllerIndex].mRawInput & command) != 0;
+}
+
 bool InputObject::IsPressed(u32 command)
 {
     return (this->mPads[sCurrentControllerIndex].mPressed & command) != 0;
-}
-
-bool InputObject::IsHeld(InputCommands::Enum command)
-{
-    if(command >= InputCommands::Enum::eGameSpeak1 && command <= InputCommands::Enum::eGameSpeak8)
-    {
-        return Input_IsGameSpeakPressed(this->mPads[sCurrentControllerIndex].mHeld, command);
-    }
-    else
-    {
-        return (this->mPads[sCurrentControllerIndex].mHeld & command) != 0;
-    }
 }
 
 bool InputObject::IsReleased(u32 keys)
@@ -1974,15 +1968,15 @@ bool InputObject::IsReleased(u32 keys)
     return (this->mPads[sCurrentControllerIndex].mReleased & keys) != 0;
 }
 
-u16 InputObject::Pressed() const
+u32 InputObject::GetHeld()
 {
-    return this->mPads[0].mPressed | this->mPads[sCurrentControllerIndex].mPressed;
+    return this->mPads[sCurrentControllerIndex].mRawInput;
 }
-u16 InputObject::Held() const
+u32 InputObject::GetPressed()
 {
-    return this->mPads[0].mHeld | this->mPads[sCurrentControllerIndex].mHeld;
+    return this->mPads[sCurrentControllerIndex].mPressed;
 }
-u16 InputObject::Released() const
+u32 InputObject::GetReleased()
 {
     return this->mPads[sCurrentControllerIndex].mReleased;
 }
