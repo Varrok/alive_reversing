@@ -566,7 +566,7 @@ void PauseMenu::Page_ControlsActions_Update()
         SFX_Play_Pitch(relive::SoundEffects::PossessEffect, 40, 2400);
     }
 
-    if (Input().IsPressed(0x100000))
+    if (Input().IsPressed(InputCommands::Enum::eUnPause_OrConfirm))
     {
         const s32 prev = ++mControlActionPageIndex;
         if (prev < 6)
@@ -788,7 +788,7 @@ void PauseMenu::Page_Save_Render(PrimHeader** ot, PauseMenuPage* pPage)
 
 void PauseMenu::Page_Status_Update()
 {
-    if (Input().IsPressed(0x300000))
+    if (Input().IsPressed(InputCommands::Enum::eBack | InputCommands::Enum::eUnPause_OrConfirm))
     {
         // Go back to the main page
         mActiveMenu = sMainMenuPage;
@@ -845,7 +845,7 @@ void PauseMenu::Page_Load_Update()
     }
 
     // Page up saves
-    if (pressed & 0x20000000)
+    if (pressed & InputCommands::Enum::ePageUp)
     {
         gSavedGameToLoadIdx -= 4;
 
@@ -860,7 +860,7 @@ void PauseMenu::Page_Load_Update()
     }
 
     // Page down saves
-    if (pressed & 0x40000000)
+    if (pressed & InputCommands::Enum::ePageDown)
     {
         // Don't overflow
         gSavedGameToLoadIdx += 4;
