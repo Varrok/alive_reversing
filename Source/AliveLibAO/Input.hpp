@@ -163,8 +163,6 @@ public:
     bool IsAnyHeld(u32 command) const;
     bool IsAnyReleased(u32 command) const;
     u8 Dir() const;
-    bool IsAllPressed(u32 commands) const;
-    bool IsAllHeld(u32 commands) const;
 
     enum class PadIndex
     {
