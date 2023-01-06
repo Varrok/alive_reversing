@@ -3213,7 +3213,7 @@ void Abe::Motion_10_Fart_45B1A0()
 
 void Abe::Motion_11_ToSpeak_45B0A0()
 {
-    mPrevHeld |= Input().GetHeld();
+    mPrevHeld |= Input().GetPressed();
     if (GetAnimation().GetIsLastFrame())
     {
         mCurrentMotion = DoGameSpeak_45AB70(mPrevHeld);
