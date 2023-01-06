@@ -2227,8 +2227,8 @@ void Glukkon::HandleInput()
         }
         else
         {
-            const auto inputPressed = Input().GetPressed();
-            if (inputPressed & InputCommands::Enum::eRight)
+            const auto held = Input().GetHeld();
+            if (held & InputCommands::Enum::eRight)
             {
                 if (GetAnimation().GetFlipX())
                 {
@@ -2239,7 +2239,7 @@ void Glukkon::HandleInput()
                     SetNextMotion(eGlukkonMotions::Motion_14_BeginWalk);
                 }
             }
-            else if (inputPressed & InputCommands::Enum::eLeft)
+            else if (held & InputCommands::Enum::eLeft)
             {
                 if (GetAnimation().GetFlipX())
                 {
@@ -2251,7 +2251,7 @@ void Glukkon::HandleInput()
                 }
             }
 
-            if (inputPressed & InputCommands::Enum::eRun)
+            if (held & InputCommands::Enum::eRun)
             {
                 if (GetNextMotion() == eGlukkonMotions::Motion_1_Walk)
                 {
@@ -2259,7 +2259,7 @@ void Glukkon::HandleInput()
                 }
             }
 
-            if (inputPressed & InputCommands::Enum::eHop)
+            if (held & InputCommands::Enum::eHop)
             {
                 SetNextMotion(eGlukkonMotions::Motion_4_Jump);
             }
