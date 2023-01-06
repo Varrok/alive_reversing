@@ -2434,15 +2434,15 @@ void FlyingSlig::HandlePlayerControls()
         }
     }
 
-    if (Input().IsPressed(InputCommands::Enum::eUp))
+    if (Input().IsHeld(InputCommands::Enum::eUp))
     {
-        if (Input().IsPressed(InputCommands::Enum::eLeft))
+        if (Input().IsHeld(InputCommands::Enum::eLeft))
         {
             field_184_xSpeed = (-field_2B8_max_speed_up * FP_FromDouble(0.707));
             field_188_ySpeed = (-field_2B8_max_speed_up * FP_FromDouble(0.707));
             return;
         }
-        if (Input().IsPressed(InputCommands::Enum::eRight))
+        if (Input().IsHeld(InputCommands::Enum::eRight))
         {
             field_184_xSpeed = (field_2B8_max_speed_up * FP_FromDouble(0.707));
             field_188_ySpeed = (-field_2B8_max_speed_up * FP_FromDouble(0.707));
@@ -2451,14 +2451,14 @@ void FlyingSlig::HandlePlayerControls()
         field_184_xSpeed = FP_FromInteger(0);
         field_188_ySpeed = -field_2B8_max_speed_up;
     }
-    else if (Input().IsPressed(InputCommands::Enum::eDown))
+    else if (Input().IsHeld(InputCommands::Enum::eDown))
     {
-        if (Input().IsPressed(InputCommands::Enum::eLeft))
+        if (Input().IsHeld(InputCommands::Enum::eLeft))
         {
             field_184_xSpeed = (-field_2B8_max_speed_up * FP_FromDouble(0.707));
             field_188_ySpeed = (field_2B8_max_speed_up * FP_FromDouble(0.707));
         }
-        else if (Input().IsPressed(InputCommands::Enum::eRight))
+        else if (Input().IsHeld(InputCommands::Enum::eRight))
         {
             field_184_xSpeed = (field_2B8_max_speed_up * FP_FromDouble(0.707));
             field_188_ySpeed = (field_2B8_max_speed_up * FP_FromDouble(0.707));
@@ -2469,12 +2469,12 @@ void FlyingSlig::HandlePlayerControls()
             field_188_ySpeed = field_2B8_max_speed_up;
         }
     }
-    else if (Input().IsPressed(InputCommands::Enum::eLeft))
+    else if (Input().IsHeld(InputCommands::Enum::eLeft))
     {
         field_188_ySpeed = FP_FromInteger(0);
         field_184_xSpeed = -field_2B8_max_speed_up;
     }
-    else if (Input().IsPressed(InputCommands::Enum::eRight))
+    else if (Input().IsHeld(InputCommands::Enum::eRight))
     {
         field_188_ySpeed = FP_FromInteger(0);
         field_184_xSpeed = field_2B8_max_speed_up;
