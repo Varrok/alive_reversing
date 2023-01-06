@@ -1512,12 +1512,12 @@ MainMenuNextCam MainMenuController::Gamespeak_Update_4D1FC0(u32 input_held)
 {
     field_230_target_entry_index = 0;
 
-    if (Input().IsHeld(InputCommands::Enum::eBack))
+    if (Input().IsAnyHeld(InputCommands::Enum::eBack))
     {
         return MainMenuNextCam(MainMenuCams::eMainMenuCam);
     }
 
-    if (!(Input().IsHeld(InputCommands::Enum::eUnPause_OrConfirm)))
+    if (!(Input().IsAnyHeld(InputCommands::Enum::eUnPause_OrConfirm)))
     {
         return MainMenuNextCam(MainMenuCams::eNoChange);
     }
@@ -1798,7 +1798,7 @@ MainMenuNextCam MainMenuController::LoadNewGame_Update_4D0920(u32 /*input*/)
 
 MainMenuNextCam MainMenuController::BackStory_Or_NewGame_Update_4D1C60(u32 input_held)
 {
-    if (Input().IsHeld(InputCommands::Enum::eUnPause_OrConfirm))
+    if (Input().IsAnyHeld(InputCommands::Enum::eUnPause_OrConfirm))
     {
         if (field_1FC_button_index == 0) // Show backstory
         {
@@ -1841,7 +1841,7 @@ MainMenuNextCam MainMenuController::BackStory_Or_NewGame_Update_4D1C60(u32 input
             return MainMenuNextCam(MainMenuCams::eGameIsLoading_ShaddapCam, NO_SELECTABLE_BUTTONS);
         }
     }
-    else if (Input().IsHeld(InputCommands::Enum::eBack)) // Escape/back
+    else if (Input().IsAnyHeld(InputCommands::Enum::eBack)) // Escape/back
     {
         word_BB43DC = 1;
         mCheatLevelSelectLoading = false;
@@ -2657,7 +2657,7 @@ MainMenuNextCam MainMenuController::HandleGameSpeakInput(u32 input_held, std::fu
         }
     }
 
-    if (Input().IsPressed(InputCommands::Enum::eBack))
+    if (Input().IsAnyPressed(InputCommands::Enum::eBack))
     {
         field_230_target_entry_index = 8;
         field_1FC_button_index = NO_SELECTABLE_BUTTONS;
