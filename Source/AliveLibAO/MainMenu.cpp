@@ -625,7 +625,7 @@ void Menu::FMV_Select_Update()
 
     if (gMovieRefCount == 0)
     {
-        if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUp)) // TODO: Input constants
+        if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUp))
         {
             if (mSelectedButtonIndex.raw > 0 && field_21C == FP_FromInteger(0))
             {
@@ -633,7 +633,7 @@ void Menu::FMV_Select_Update()
                 SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 45, 400);
             }
         }
-        else if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eDown | InputCommands::eCheatMode)) // TODO: Input constants
+        else if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eDown | InputCommands::eCheatMode))
         {
             if (mSelectedButtonIndex.raw < (sListCount - 1) && field_21C == FP_FromInteger(0))
             {
@@ -642,7 +642,7 @@ void Menu::FMV_Select_Update()
             }
         }
 
-        if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop)) // TODO: Input constants
+        if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
         {
             // Go back to main screen
             mUsingLvlSelectCheat = false;
@@ -658,7 +658,7 @@ void Menu::FMV_Select_Update()
             mFnUpdate = &Menu::FMV_Or_Level_Select_To_Back_Update;
         }
 
-        if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eUnPause_OrConfirm)) // TODO: Input constants
+        if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eUnPause_OrConfirm))
         {
             if (mToFmvSelect)
             {
