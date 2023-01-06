@@ -45,10 +45,49 @@ bool Input_IsGameSpeakPressedDirectly(InputCommands gameSpeakId)
     return Input().IsAnyPressed(gameSpeakId);
 }
 
+std::optional<InputCommands> Input_IsAnyGameSpeakPressed()
+{
+    if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak1))
+    {
+        return InputCommands::eGameSpeak1;
+    }
+    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak2))
+    {
+        return InputCommands::eGameSpeak2;
+    }
+    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak3))
+    {
+        return InputCommands::eGameSpeak3;
+    }
+    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak4))
+    {
+        return InputCommands::eGameSpeak4;
+    }
+    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak5))
+    {
+        return InputCommands::eGameSpeak5;
+    }
+    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak6))
+    {
+        return InputCommands::eGameSpeak6;
+    }
+    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak7))
+    {
+        return InputCommands::eGameSpeak7;
+    }
+    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak8))
+    {
+        return InputCommands::eGameSpeak8;
+    }
+
+    return std::nullopt;
+}
+
 bool Input_IsGameSpeakPressedIndirectly(InputCommands gameSpeakId)
 {
     auto held = Input().GetHeld();
     auto pressed = Input().GetPressed();
+
     bool correctSpeakBtnHeld = false;
     if (gameSpeakId >= InputCommands::eGameSpeak1 && gameSpeakId <= InputCommands::eGameSpeak4)
     {
@@ -147,6 +186,7 @@ static BitField32<AO::InputCommands> AEInputCommandsToAOInputCommands(const BitF
     r.Set(AO::InputCommands::eGameSpeak6, aeInput.Get(::InputCommands::Enum::eGameSpeak6));
     r.Set(AO::InputCommands::eGameSpeak7, aeInput.Get(::InputCommands::Enum::eGameSpeak7));
     r.Set(AO::InputCommands::eGameSpeak8, aeInput.Get(::InputCommands::Enum::eGameSpeak8));
+    r.Set(AO::InputCommands::eCheatMode, aeInput.Get(::InputCommands::Enum::eCheatMode));
     return r;
 }
 
@@ -313,7 +353,7 @@ void InputObject::Update(BaseGameAutoPlayer& gameAutoPlayer)
     // Do AE input reading
     ::Input().Update(gameAutoPlayer);
 
-    for (auto controllerId = 0; controllerId < 1; controllerId ++) //todo constant for controllers num
+    for (auto controllerId = 0; controllerId < 2; controllerId ++) //todo constant for controllers num
     {
         // Convert from AE bit flags to AO bit flags
         mPads[controllerId].mRawInput = static_cast<u32>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[controllerId].mRawInput)).Raw().all);

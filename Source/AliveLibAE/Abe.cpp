@@ -8335,19 +8335,8 @@ s16 Abe::DoGameSpeak_45AB70(s32 input)
             nextMotion = eAbeMotions::Motion_112_Chant;
         }
     }
-    else if (input & sInputKey_GameSpeak2)
-    {
-        Mudokon_SFX(MudSounds::eFollowMe_4, 0, 0, this);
-        gEventSystem->PushEvent(GameSpeakEvents::eAbe_FollowMe_10);
-        nextMotion = eAbeMotions::Motion_7_Speak_45B140;
-    }
-    else if (input & sInputKey_GameSpeak3)
-    {
-        Mudokon_SFX(MudSounds::eWait_6, 0, 0, this);
-        gEventSystem->PushEvent(GameSpeakEvents::eAbe_Wait_12);
-        nextMotion = eAbeMotions::Motion_8_Speak_45B160;
-    }
-    else if (input & sInputKey_GameSpeak1)
+    
+    if (input & sInputKey_GameSpeak1)
     {
         gEventSystem->PushEvent(GameSpeakEvents::eAbe_Hello_9);
         if (field_128.mMood == Mud_Emotion::eHappy_5 || field_128.mMood == Mud_Emotion::eWired_6)
@@ -8368,17 +8357,23 @@ s16 Abe::DoGameSpeak_45AB70(s32 input)
             nextMotion = eAbeMotions::Motion_9_Speak_45B180;
         }
     }
+    else if (input & sInputKey_GameSpeak2)
+    {
+        Mudokon_SFX(MudSounds::eFollowMe_4, 0, 0, this);
+        gEventSystem->PushEvent(GameSpeakEvents::eAbe_FollowMe_10);
+        nextMotion = eAbeMotions::Motion_7_Speak_45B140;
+    }
+    else if (input & sInputKey_GameSpeak3)
+    {
+        Mudokon_SFX(MudSounds::eWait_6, 0, 0, this);
+        gEventSystem->PushEvent(GameSpeakEvents::eAbe_Wait_12);
+        nextMotion = eAbeMotions::Motion_8_Speak_45B160;
+    }
     else if (input & sInputKey_GameSpeak4)
     {
         gEventSystem->PushEvent(GameSpeakEvents::eAbe_Work_21);
         Mudokon_SFX(MudSounds::eWork_25, 0, 0, this);
         nextMotion = eAbeMotions::Motion_10_Fart_45B1A0;
-    }
-    else if (input & sInputKey_GameSpeak6)
-    {
-        Mudokon_SFX(MudSounds::eAllOYa_17, 0, 0, this);
-        gEventSystem->PushEvent(GameSpeakEvents::eAbe_AllYa_23);
-        nextMotion = eAbeMotions::Motion_9_Speak_45B180;
     }
     else if (input & sInputKey_GameSpeak5)
     {
@@ -8433,11 +8428,11 @@ s16 Abe::DoGameSpeak_45AB70(s32 input)
             }
         }
     }
-    else if (input & sInputKey_GameSpeak8)
+    else if (input & sInputKey_GameSpeak6)
     {
-        Mudokon_SFX(MudSounds::eStopIt_26, 0, 0, this);
-        gEventSystem->PushEvent(GameSpeakEvents::eAbe_StopIt_22);
-        nextMotion = eAbeMotions::Motion_7_Speak_45B140;
+        Mudokon_SFX(MudSounds::eAllOYa_17, 0, 0, this);
+        gEventSystem->PushEvent(GameSpeakEvents::eAbe_AllYa_23);
+        nextMotion = eAbeMotions::Motion_9_Speak_45B180;
     }
     else if (input & sInputKey_GameSpeak7)
     {
@@ -8461,6 +8456,12 @@ s16 Abe::DoGameSpeak_45AB70(s32 input)
             Mudokon_SFX(MudSounds::eSadUgh_28, 0, 0, this);
             nextMotion = eAbeMotions::Motion_10_Fart_45B1A0; // TODO: Correct but isn't fart in this case ??
         }
+    }
+    else if (input & sInputKey_GameSpeak8)
+    {
+        Mudokon_SFX(MudSounds::eStopIt_26, 0, 0, this);
+        gEventSystem->PushEvent(GameSpeakEvents::eAbe_StopIt_22);
+        nextMotion = eAbeMotions::Motion_7_Speak_45B140;
     }
 
     return nextMotion;

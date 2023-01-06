@@ -2,6 +2,8 @@
 
 #include "BaseAliveGameObject.hpp"
 #include "Map.hpp"
+#include "Input.hpp"
+#include <optional>
 
 namespace relive
 {
@@ -12,7 +14,7 @@ namespace relive
 
 namespace AO {
 
-#define AO_ABE_MOTIONS_ENUM(ENTRY)                   \
+#define AO_ABE_MOTIONS_ENUM(ENTRY)            \
     ENTRY(Motion_0_Idle)                      \
     ENTRY(Motion_1_WalkLoop)                  \
     ENTRY(Motion_2_StandingTurn)              \
@@ -82,7 +84,7 @@ namespace AO {
     ENTRY(Motion_66_LedgeHang)                \
     ENTRY(Motion_67_ToOffScreenHoist)         \
     ENTRY(Motion_68_LedgeHangWobble)          \
-    ENTRY(Motion_69_RingRopePullHang)             \
+    ENTRY(Motion_69_RingRopePullHang)         \
     ENTRY(Motion_70_Knockback)                \
     ENTRY(Motion_71_KnockbackGetUp)           \
     ENTRY(Motion_72_PushWall)                 \
@@ -93,14 +95,14 @@ namespace AO {
     ENTRY(Motion_77_WellBegin)                \
     ENTRY(Motion_78_InsideWellLocal)          \
     ENTRY(Motion_79_WellShotOut)              \
-    ENTRY(Motion_80_430EF0)                          \
+    ENTRY(Motion_80_430EF0)                   \
     ENTRY(Motion_81_InsideWellExpress)        \
     ENTRY(Motion_82_WellExpressShotOut)       \
-    ENTRY(Motion_83_430F00)                          \
-    ENTRY(Motion_84_ToInsideWellLocal)                          \
-    ENTRY(Motion_85_ToWellShotOut)                          \
+    ENTRY(Motion_83_430F00)                   \
+    ENTRY(Motion_84_ToInsideWellLocal)        \
+    ENTRY(Motion_85_ToWellShotOut)            \
     ENTRY(Motion_86_FallLandDie)              \
-    ENTRY(Motion_87_ToFall)                          \
+    ENTRY(Motion_87_ToFall)                   \
     ENTRY(Motion_88_HandstoneBegin)           \
     ENTRY(Motion_89_HandstoneEnd)             \
     ENTRY(Motion_90_GrenadeMachineUse)        \
@@ -112,14 +114,14 @@ namespace AO {
     ENTRY(Motion_96_HopToFall)                \
     ENTRY(Motion_97_RunJumpToFall)            \
     ENTRY(Motion_98_LandSoft)                 \
-    ENTRY(Motion_99_HoistBeginLong)             \
+    ENTRY(Motion_99_HoistBeginLong)           \
     ENTRY(Motion_100_RollOffLedge)            \
     ENTRY(Motion_101_LeverUse)                \
     ENTRY(Motion_102_ElumWalkLoop)            \
     ENTRY(Motion_103_ElumIdle)                \
     ENTRY(Motion_104_ElumRunSlideStop)        \
     ENTRY(Motion_105_ElumRunTurn)             \
-    ENTRY(Motion_106_Null)                         \
+    ENTRY(Motion_106_Null)                    \
     ENTRY(Motion_107_ElumHopBegin)            \
     ENTRY(Motion_108_ElumHopMid)              \
     ENTRY(Motion_109_ElumHopLand)             \
@@ -129,10 +131,10 @@ namespace AO {
     ENTRY(Motion_113_ElumTurn)                \
     ENTRY(Motion_114_ElumRunLoop)             \
     ENTRY(Motion_115_ElumSpeak)               \
-    ENTRY(Motion_116_Null)                         \
+    ENTRY(Motion_116_Null)                    \
     ENTRY(Motion_117_ElumWalkBegin)           \
     ENTRY(Motion_118_ElumRunBegin)            \
-    ENTRY(Motion_119_Null)                         \
+    ENTRY(Motion_119_Null)                    \
     ENTRY(Motion_120_ElumRunToWalk)           \
     ENTRY(Motion_121_ElumMidRunToWalk)        \
     ENTRY(Motion_122_ElumRunTurnToRun)        \
@@ -338,10 +340,10 @@ public:
     void MoveForward();
     s16 MoveLiftUpOrDown(FP ySpeed);
     void ElumFree();
-    s16 DoGameSpeak(u16 input);
+    s16 DoGameSpeak();
     void SyncToElum(s16 elumMotion);
     void PickUpThrowabe_Or_PressBomb(FP fpX, s32 fpY, s16 bStandToCrouch);
-    void CrouchingGameSpeak();
+    void DoCrouchingGameSpeak();
     void FallOnBombs(); // TODO: this has nothing to do with falling
     s16 ToLeftRightMovement();
     void MoveWithVelocity(FP speed);
@@ -586,6 +588,8 @@ public:
     bool mElumUnmountBegin = false;
     SaveData* field_2AC_pSaveData = nullptr;
     bool mRidingElum = false;
+
+    std::optional<InputCommands> pendingGameSpeakCommand = std::nullopt;
 };
 
 extern Abe* sActiveHero;

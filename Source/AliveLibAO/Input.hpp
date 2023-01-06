@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../relive_lib/Function.hpp"
+#include <optional>
 
 class BaseGameAutoPlayer;
 
@@ -175,5 +176,5 @@ ALIVE_ASSERT_SIZEOF(InputObject, 0x30);
 InputObject& Input();
 
 bool Input_IsGameSpeakPressed(InputCommands gameSpeakId);
-
+std::optional<InputCommands> Input_IsAnyGameSpeakPressed();
 } // namespace AO

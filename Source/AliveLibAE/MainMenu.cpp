@@ -2647,7 +2647,7 @@ MainMenuNextCam MainMenuController::HandleGameSpeakInput(u32 input_held, std::fu
         return fnOnGameSpeak(InputCommands::Enum::eChant);
     }
 
-    for(u32 currGameSpeakId = InputCommands::Enum::eGameSpeak1; currGameSpeakId <= InputCommands::Enum::eGameSpeak8; currGameSpeakId++)
+    for(u32 currGameSpeakId = InputCommands::Enum::eGameSpeak1; currGameSpeakId <= InputCommands::Enum::eGameSpeak8; currGameSpeakId++) //todo unroll
     {
         auto currGameSpeak = static_cast<InputCommands::Enum>(currGameSpeakId);
         if(Input_IsGameSpeakPressed(currGameSpeak))
