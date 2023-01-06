@@ -2290,9 +2290,14 @@ void Menu::GameSpeak_Update()
         return;
     }
 
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eLeftGameSpeak)) //todo nonsensical
+    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eLeftGameSpeak))
     {
-        if (mMenuFade2)
+        if (!mMenuFade2 && Input().JoyStickEnabled())
+        {
+            mMenuFade2 = relive_new MainMenuFade(sGameSpeakButtons[10].xpos, sGameSpeakButtons[10].ypos + 36, buttonType::eCircle_0, 0);
+
+        }
+        else
         {
             const FP xpos = FP_FromInteger(sGameSpeakButtons[10].xpos);
             if (mMenuFade2->mXPos != xpos)
@@ -2301,15 +2306,15 @@ void Menu::GameSpeak_Update()
                 mMenuFade2->mYPos = FP_FromInteger(sGameSpeakButtons[10].ypos + 36);
             }
         }
-        else if (Input().JoyStickEnabled())
-        {
-            //mMenuFade2 = relive_new MainMenuFade(sGameSpeakButtons[10].xpos, sGameSpeakButtons[10].ypos + 36, buttonType::eCircle_0, 0);
-        }
     }
 
     if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eRightGameSpeak))
     {
-        if (mMenuFade2)
+        if (!mMenuFade2 && Input().JoyStickEnabled())
+        {
+            mMenuFade2 = relive_new MainMenuFade(sGameSpeakButtons[12].xpos, sGameSpeakButtons[12].ypos + 36, buttonType::eCircle_0, 0);
+        }
+        else
         {
             const FP xpos = FP_FromInteger(sGameSpeakButtons[12].xpos);
             if (mMenuFade2->mXPos != xpos)
@@ -2317,10 +2322,6 @@ void Menu::GameSpeak_Update()
                 mMenuFade2->mXPos = xpos;
                 mMenuFade2->mYPos = FP_FromInteger(sGameSpeakButtons[12].ypos + 36);
             }
-        }
-        else if (Input().JoyStickEnabled())
-        {
-            //mMenuFade2 = relive_new MainMenuFade(sGameSpeakButtons[12].xpos, sGameSpeakButtons[12].ypos + 36, buttonType::eCircle_0, 0);
         }
     }
 
@@ -2403,6 +2404,11 @@ void Menu::GameSpeak_Update()
         mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eWhistleLow_5;
         relive_new MainMenuFade(sGameSpeakButtons[5].xpos, sGameSpeakButtons[5].ypos + 36, buttonType::eCircle_0, 1);
         CycleGameSpeakIdleAnims();
+        return;
+    }
+
+    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eLeftGameSpeak | InputCommands::eRightGameSpeak))
+    {
         return;
     }
 
