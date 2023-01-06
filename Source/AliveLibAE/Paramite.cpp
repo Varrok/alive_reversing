@@ -5074,8 +5074,12 @@ void Paramite::HandleDDCheat()
         sArray2_5C92BC[7] = 4;
     }
 
-    // TODO: InputCommand constants
-    if (Input().IsAnyHeld(0xF))
+    if (Input().IsAnyHeld(
+        InputCommands::Enum::eUp |
+        InputCommands::Enum::eDown |
+        InputCommands::Enum::eLeft |
+        InputCommands::Enum::eRight
+    ))
     {
         mVelX = FP_FromInteger(sArray1_5C929C[Input().mPads[sCurrentControllerIndex].mDir >> 5]);
         mVelY = FP_FromInteger(sArray2_5C92BC[Input().mPads[sCurrentControllerIndex].mDir >> 5]);

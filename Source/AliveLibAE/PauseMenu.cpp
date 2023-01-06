@@ -591,7 +591,7 @@ void PauseMenu::Page_QuitConfirmation_Update()
         SFX_Play_Pitch(relive::SoundEffects::PossessEffect, 40, 2400);
     }
 
-    if (Input().IsAnyPressed(0x100000))
+    if (Input().IsAnyPressed(InputCommands::Enum::eUnPause_OrConfirm))
     {
         mPauseRenderLoop = false;
         SFX_Play_Pitch(relive::SoundEffects::PossessEffect, 40, 2400);
