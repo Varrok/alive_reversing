@@ -1580,7 +1580,7 @@ void Input_Reset_492660()
 
 u32 Input_IsChanting()
 {
-    return (Input().mPads[0].mRawInput & InputCommands::Enum::eChant) == InputCommands::Enum::eChant;
+    return Input().IsAnyHeld(InputCommands::Enum::eChant);
 }
 
 // Zeros the input key state array.
