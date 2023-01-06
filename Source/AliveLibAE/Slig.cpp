@@ -854,12 +854,12 @@ void Slig::Motion_0_StandIdle()
             }
             else
             {
-                const auto inputHeld = Input().mPads[sCurrentControllerIndex].mPressed;
+                const auto pressed = Input().GetPressed();
                 const auto gameSpeakCmds = InputCommands::Enum::eChant | InputCommands::Enum::eGameSpeak8 | InputCommands::Enum::eGameSpeak7 | InputCommands::Enum::eGameSpeak6 | InputCommands::Enum::eGameSpeak5 | InputCommands::Enum::eGameSpeak4 | InputCommands::Enum::eGameSpeak3 | InputCommands::Enum::eGameSpeak2 | InputCommands::Enum::eGameSpeak1;
 
-                if (inputHeld & gameSpeakCmds)
+                if (pressed & gameSpeakCmds)
                 {
-                    mInput = inputHeld;
+                    mInput = pressed;
                     mCurrentMotion = eSligMotions::Motion_17_GameSpeak;
                     return;
                 }
@@ -875,7 +875,7 @@ void Slig::Motion_0_StandIdle()
 
 void Slig::Motion_1_StandToWalk()
 {
-    mInput |= Input().mPads[sCurrentControllerIndex].mPressed;
+    mInput |= Input().GetPressed();
     if (GetAnimation().GetIsLastFrame())
     {
         mCurrentMotion = eSligMotions::Motion_2_Walking;
@@ -929,7 +929,7 @@ void Slig::Motion_2_Walking()
 
             if (sControlledCharacter == this && mHealth > FP_FromInteger(0))
             {
-                if (sInputKey_Run & Input().mPads[sCurrentControllerIndex].mRawInput)
+                if (Input().IsHeld(sInputKey_Run))
                 {
                     field_124_return_to_previous_motion = 1;
                     mPreviousMotion = eSligMotions::Motion_4_Running;
@@ -4630,12 +4630,12 @@ void Slig::HandleDDCheat()
     BaseAliveGameObjectCollisionLine = nullptr;
 
     // TODO: InputCommand constants
-    if (Input().mPads[sCurrentControllerIndex].mRawInput & 0xF)
+    if (Input().IsHeld(0xF))
     {
         mVelX = dword_5473E8[Input().mPads[sCurrentControllerIndex].mDir >> 5];
         mVelY = dword_547408[Input().mPads[sCurrentControllerIndex].mDir >> 5];
 
-        if (Input().mPads[sCurrentControllerIndex].mRawInput & 0x10)
+        if (Input().IsHeld(0x10))
         {
             mVelX += dword_5473E8[Input().mPads[sCurrentControllerIndex].mDir >> 5];
             mVelX += dword_5473E8[Input().mPads[sCurrentControllerIndex].mDir >> 5];
