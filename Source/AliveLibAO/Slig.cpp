@@ -557,13 +557,13 @@ void Slig::VUpdate()
     if (gDDCheat_FlyingEnabled && sControlledCharacter == this)
     {
         BaseAliveGameObjectCollisionLine = nullptr;
-        if (Input().IsAnyPressed(0xF000))
+        if (Input().IsAnyHeld(0xF000))
         {
             const s32 dir = Input().Dir();
             mVelX = FP_FromRaw(sSligVelXTable_4BCA30[dir]);
             mVelY = FP_FromRaw(sSligVelYTable_4BCA50[dir]);
 
-            if (Input().IsAnyPressed(0x20))
+            if (Input().IsAnyHeld(0x20))
             {
                 const FP velX = FP_FromRaw(sSligVelXTable_4BCA30[dir]);
                 const FP velY = FP_FromRaw(sSligVelYTable_4BCA50[dir]);
@@ -1489,7 +1489,7 @@ s16 Slig::GetNextMotionIncGameSpeak(u16 input)
         return eSligMotions::Motion_37_Depossessing;
     }
 
-    if (Input().IsAnyPressed(InputCommands::eLeftGameSpeak))
+    if (Input().IsAnyHeld(InputCommands::eLeftGameSpeak))
     {
         if (input & InputCommands::eGameSpeak2)
         {
@@ -1519,7 +1519,7 @@ s16 Slig::GetNextMotionIncGameSpeak(u16 input)
         }
         return -1;
     }
-    else if (Input().IsAnyPressed(InputCommands::eRightGameSpeak))
+    else if (Input().IsAnyHeld(InputCommands::eRightGameSpeak))
     {
         if (input & InputCommands::eGameSpeak8)
         {
@@ -1691,12 +1691,12 @@ s16 Slig::MoveLift(FP ySpeed)
             return eSligMotions::Motion_51_LiftGripping;
         }
 
-        if (Input().IsAnyPressed(sInputKey_Up))
+        if (Input().IsAnyHeld(sInputKey_Up))
         {
             return eSligMotions::Motion_47_LiftUp;
         }
 
-        if (Input().IsAnyPressed(sInputKey_Down))
+        if (Input().IsAnyHeld(sInputKey_Down))
         {
             return eSligMotions::Motion_48_LiftDown;
         }
@@ -1708,12 +1708,12 @@ s16 Slig::MoveLift(FP ySpeed)
             return eSligMotions::Motion_51_LiftGripping;
         }
 
-        if (Input().IsAnyPressed(sInputKey_Down))
+        if (Input().IsAnyHeld(sInputKey_Down))
         {
             return eSligMotions::Motion_48_LiftDown;
         }
 
-        if (Input().IsAnyPressed(sInputKey_Up))
+        if (Input().IsAnyHeld(sInputKey_Up))
         {
             return eSligMotions::Motion_47_LiftUp;
         }
@@ -1982,7 +1982,7 @@ s16 Slig::HandlePlayerControlled()
         }
     }
 
-    if (Input().IsAnyHeld(sInputKey_DoAction)
+    if (Input().IsAnyPressed(sInputKey_DoAction)
         && !(pressed & (InputCommands::eLeftGameSpeak | InputCommands::eRightGameSpeak)))
     {
         if (!Input_IsChanting())
@@ -2082,7 +2082,7 @@ s16 Slig::HandlePlayerControlled()
         }
         else
         {
-            if (Input().IsAnyHeld(sInputKey_Down))
+            if (Input().IsAnyPressed(sInputKey_Down))
             {
                 Slig::Slig_GameSpeak_SFX(SligSpeak::eWhat_9, 0, mGameSpeakPitchMin, this);
                 mCurrentMotion = eSligMotions::Motion_30_SpeakWhat;
@@ -2108,7 +2108,7 @@ s16 Slig::HandlePlayerControlled()
         }
         else
         {
-            if (Input().IsAnyHeld(sInputKey_Up))
+            if (Input().IsAnyPressed(sInputKey_Up))
             {
                 Slig::Slig_GameSpeak_SFX(SligSpeak::eWhat_9, 0, mGameSpeakPitchMin, this);
                 mCurrentMotion = eSligMotions::Motion_30_SpeakWhat;
@@ -2119,7 +2119,7 @@ s16 Slig::HandlePlayerControlled()
         }
     }
 
-    if (Input().IsAnyHeld(sInputKey_Hop | sInputKey_FartRoll) && !(Input().IsAnyPressed(InputCommands::eLeftGameSpeak | InputCommands::eRightGameSpeak)))
+    if (Input().IsAnyPressed(sInputKey_Hop | sInputKey_FartRoll) && !(Input().IsAnyHeld(InputCommands::eLeftGameSpeak | InputCommands::eRightGameSpeak)))
     {
         Slig::Slig_GameSpeak_SFX(SligSpeak::eBlurgh_11, 0, mGameSpeakPitchMin, this);
         mCurrentMotion = eSligMotions::Motion_32_Blurgh;
@@ -2131,7 +2131,7 @@ s16 Slig::HandlePlayerControlled()
 
 void Slig::PlayerControlRunningSlideStopOrTurn(s16 last_anim_frame)
 {
-    if (mVelX > FP_FromInteger(0) && Input().IsAnyPressed(sInputKey_Left))
+    if (mVelX > FP_FromInteger(0) && Input().IsAnyHeld(sInputKey_Left))
     {
         mVelX = GetSpriteScale() * FP_FromDouble(13.2);
         mCurrentMotion = eSligMotions::Motion_10_SlidingTurn;
@@ -2139,7 +2139,7 @@ void Slig::PlayerControlRunningSlideStopOrTurn(s16 last_anim_frame)
         return;
     }
 
-    if (mVelX < FP_FromInteger(0) && Input().IsAnyPressed(sInputKey_Right))
+    if (mVelX < FP_FromInteger(0) && Input().IsAnyHeld(sInputKey_Right))
     {
         mVelX = GetSpriteScale() * FP_FromDouble(-13.2);
         mCurrentMotion = eSligMotions::Motion_10_SlidingTurn;
@@ -2147,7 +2147,7 @@ void Slig::PlayerControlRunningSlideStopOrTurn(s16 last_anim_frame)
         return;
     }
 
-    if (!Input().IsAnyPressed(sInputKey_Right | sInputKey_Left))
+    if (!Input().IsAnyHeld(sInputKey_Right | sInputKey_Left))
     {
         if (mVelX >= FP_FromInteger(0))
         {
@@ -2163,7 +2163,7 @@ void Slig::PlayerControlRunningSlideStopOrTurn(s16 last_anim_frame)
         return;
     }
 
-    if (Input().IsAnyPressed(sInputKey_Run))
+    if (Input().IsAnyHeld(sInputKey_Run))
     {
         field_126_input = 0;
         return;
@@ -2364,9 +2364,9 @@ void Slig::Motion_0_StandIdle()
                     return;
                 }
             }
-            else if (Input().IsAnyPressed(0x04 | 0x01))
+            else if (Input().IsAnyHeld(0x04 | 0x01))
             {
-                if (Input().IsAnyHeld(0xF0))
+                if (Input().IsAnyPressed(0xF0))
                 {
                     field_126_input = Input().GetPressed();
                     mCurrentMotion = eSligMotions::Motion_18_GameSpeak;
@@ -2432,7 +2432,7 @@ void Slig::Motion_2_Walking()
                 }
                 if (sControlledCharacter == this && mHealth > FP_FromInteger(0))
                 {
-                    if (Input().IsAnyPressed(sInputKey_Run))
+                    if (Input().IsAnyHeld(sInputKey_Run))
                     {
                         mPreviousMotion = eSligMotions::Motion_4_Running;
                         mBaseAliveGameObjectLastAnimFrame = 5;
@@ -2482,9 +2482,9 @@ void Slig::Motion_2_Walking()
                 }
                 else
                 {
-                    if ((mVelX > FP_FromInteger(0) && Input().IsAnyPressed(sInputKey_Left))
-                        || (mVelX < FP_FromInteger(0) && Input().IsAnyPressed(sInputKey_Right))
-                        || !(Input().IsAnyPressed(sInputKey_Right | sInputKey_Left)))
+                    if ((mVelX > FP_FromInteger(0) && Input().IsAnyHeld(sInputKey_Left))
+                        || (mVelX < FP_FromInteger(0) && Input().IsAnyHeld(sInputKey_Right))
+                        || !(Input().IsAnyHeld(sInputKey_Right | sInputKey_Left)))
                     {
                         mCurrentMotion = eSligMotions::Motion_19_WalkToStand;
                     }
@@ -2503,7 +2503,7 @@ void Slig::Motion_2_Walking()
 
                 if (sControlledCharacter == this && mHealth > FP_FromInteger(0))
                 {
-                    if (Input().IsAnyPressed(sInputKey_Run))
+                    if (Input().IsAnyHeld(sInputKey_Run))
                     {
                         mPreviousMotion = 4;
                         mBaseAliveGameObjectLastAnimFrame = 13;
@@ -2674,14 +2674,14 @@ void Slig::Motion_6_Shoot()
     {
         if (sControlledCharacter == this && mHealth > FP_FromInteger(0))
         {
-            if (Input().IsAnyPressed(sInputKey_ThrowItem))
+            if (Input().IsAnyHeld(sInputKey_ThrowItem))
             {
                 const FP k35Scaled = GetSpriteScale() * FP_FromInteger(35);
                 const FP kGridSize = ScaleToGridSize(GetSpriteScale());
                 const FP k8 = FP_FromInteger(8);
 
                 // Recoil right
-                if (GetAnimation().GetFlipX() && Input().IsAnyPressed(sInputKey_Right))
+                if (GetAnimation().GetFlipX() && Input().IsAnyHeld(sInputKey_Right))
                 {
                     PathLine* pLine = nullptr;
                     FP hitX = {};
@@ -2713,7 +2713,7 @@ void Slig::Motion_6_Shoot()
                 }
 
                 // Recoil left
-                if (!GetAnimation().GetFlipX() && Input().IsAnyPressed(sInputKey_Left))
+                if (!GetAnimation().GetFlipX() && Input().IsAnyHeld(sInputKey_Left))
                 {
                     PathLine* pLine = nullptr;
                     FP hitX = {};
@@ -2937,8 +2937,8 @@ void Slig::Motion_9_SlidingToStand()
                     MainMovement();
                 }
             }
-            else if ((GetAnimation().GetFlipX() && Input().IsAnyPressed(sInputKey_Right))
-                     || (!(GetAnimation().GetFlipX()) && Input().IsAnyPressed(sInputKey_Left)))
+            else if ((GetAnimation().GetFlipX() && Input().IsAnyHeld(sInputKey_Right))
+                     || (!(GetAnimation().GetFlipX()) && Input().IsAnyHeld(sInputKey_Left)))
             {
                 mPreviousMotion = eSligMotions::Motion_10_SlidingTurn;
                 mBaseAliveGameObjectLastAnimFrame = GetAnimation().GetCurrentFrame();
@@ -2976,7 +2976,7 @@ void Slig::Motion_10_SlidingTurn()
             }
             else
             {
-                if (Input().IsAnyPressed(sInputKey_Run))
+                if (Input().IsAnyHeld(sInputKey_Run))
                 {
                     mVelX = (ScaleToGridSize(GetSpriteScale()) / FP_FromInteger(4));
                     mCurrentMotion = eSligMotions::Motion_12_SlidingTurnToRun;
@@ -2999,7 +2999,7 @@ void Slig::Motion_10_SlidingTurn()
             }
             else
             {
-                if (Input().IsAnyPressed(sInputKey_Run))
+                if (Input().IsAnyHeld(sInputKey_Run))
                 {
                     mCurrentMotion = eSligMotions::Motion_12_SlidingTurnToRun;
                     mVelX = -(ScaleToGridSize(GetSpriteScale()) / FP_FromInteger(4));
@@ -3078,7 +3078,7 @@ void Slig::Motion_16_StandingToStep()
 {
     if (GetAnimation().GetIsLastFrame())
     {
-        if (Input().IsAnyPressed(sInputKey_Left | sInputKey_Right))
+        if (Input().IsAnyHeld(sInputKey_Left | sInputKey_Right))
         {
             mCurrentMotion = eSligMotions::Motion_1_StandToWalk;
         }
@@ -3152,7 +3152,7 @@ void Slig::Motion_20_Recoil()
                     mNextMotion = -1;
                 }
             }
-            else if (Input().IsAnyPressed(sInputKey_ThrowItem))
+            else if (Input().IsAnyHeld(sInputKey_ThrowItem))
             {
                 mVelX = FP_FromInteger(0);
                 mPreviousMotion = eSligMotions::Motion_6_Shoot;
@@ -3753,7 +3753,7 @@ void Slig::Motion_49_LiftGrip()
 
         if (GetAnimation().GetIsLastFrame())
         {
-            if (Input().IsAnyPressed(sInputKey_Up))
+            if (Input().IsAnyHeld(sInputKey_Up))
             {
                 if (pLiftPoint->OnTopFloor())
                 {
@@ -3766,7 +3766,7 @@ void Slig::Motion_49_LiftGrip()
                 return;
             }
 
-            if (Input().IsAnyPressed(sInputKey_Down))
+            if (Input().IsAnyHeld(sInputKey_Down))
             {
                 if (pLiftPoint->OnBottomFloor())
                 {
@@ -3804,7 +3804,7 @@ void Slig::Motion_51_LiftGripping()
         pLiftPoint->Move(FP_FromInteger(0), FP_FromInteger(0));
         mVelY = FP_FromInteger(0);
 
-        if (Input().IsAnyPressed(sInputKey_Up))
+        if (Input().IsAnyHeld(sInputKey_Up))
         {
             if (!pLiftPoint->OnTopFloor())
             {
@@ -3813,7 +3813,7 @@ void Slig::Motion_51_LiftGripping()
         }
         else
         {
-            if (Input().IsAnyPressed(sInputKey_Down))
+            if (Input().IsAnyHeld(sInputKey_Down))
             {
                 if (!pLiftPoint->OnBottomFloor())
                 {

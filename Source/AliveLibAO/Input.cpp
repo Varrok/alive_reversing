@@ -42,8 +42,6 @@ u8 sPad2Buffer_507738[64] = {};
 
 bool Input_IsGameSpeakPressedDirectly(InputCommands gameSpeakId)
 {
-    // LOG_INFO("presseed %d", Input().GetPressed());
-    // LOG_INFO("gs %d", gameSpeakId);
     return Input().IsAnyPressed(gameSpeakId);
 }
 
@@ -87,7 +85,7 @@ bool Input_IsGameSpeakPressedIndirectly(InputCommands gameSpeakId)
             }
             case InputCommands::eGameSpeak5:
             {
-                return pressed & InputCommands::eCrouchOrRoll;
+                return pressed & InputCommands::eDoAction;
                 break;
             }
             case InputCommands::eGameSpeak6:
@@ -102,7 +100,7 @@ bool Input_IsGameSpeakPressedIndirectly(InputCommands gameSpeakId)
             }
             case InputCommands::eGameSpeak8:
             {
-                return pressed & InputCommands::eDoAction;
+                return pressed & InputCommands::eCrouchOrRoll;
                 break;
             }
             default: break;
@@ -434,22 +432,22 @@ bool InputObject::JoyStickEnabled() const
     return ::Input_JoyStickEnabled();
 }
 
-bool InputObject::IsAnyPressed(u32 command) const
-{
-    return IsAnyPressed(PadIndex::Active, command);
-}
-
-bool InputObject::IsAnyPressed(PadIndex padIx, u32 command) const
-{
-    return (mPads[PadIndexToInt(padIx)].mRawInput & command) != 0;
-}
-
 bool InputObject::IsAnyHeld(u32 command) const
 {
     return IsAnyHeld(PadIndex::Active, command);
 }
 
 bool InputObject::IsAnyHeld(PadIndex padIx, u32 command) const
+{
+    return (mPads[PadIndexToInt(padIx)].mRawInput & command) != 0;
+}
+
+bool InputObject::IsAnyPressed(u32 command) const
+{
+    return IsAnyPressed(PadIndex::Active, command);
+}
+
+bool InputObject::IsAnyPressed(PadIndex padIx, u32 command) const
 {
     return (mPads[PadIndexToInt(padIx)].mPressed & command) != 0;
 }

@@ -625,7 +625,7 @@ void Menu::FMV_Select_Update()
 
     if (gMovieRefCount == 0)
     {
-        if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUp))
+        if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eUp))
         {
             if (mSelectedButtonIndex.raw > 0 && field_21C == FP_FromInteger(0))
             {
@@ -633,7 +633,7 @@ void Menu::FMV_Select_Update()
                 SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 45, 400);
             }
         }
-        else if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eDown | InputCommands::eCheatMode))
+        else if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eDown | InputCommands::eCheatMode))
         {
             if (mSelectedButtonIndex.raw < (sListCount - 1) && field_21C == FP_FromInteger(0))
             {
@@ -642,7 +642,7 @@ void Menu::FMV_Select_Update()
             }
         }
 
-        if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
+        if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
         {
             // Go back to main screen
             mUsingLvlSelectCheat = false;
@@ -658,7 +658,7 @@ void Menu::FMV_Select_Update()
             mFnUpdate = &Menu::FMV_Or_Level_Select_To_Back_Update;
         }
 
-        if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eUnPause_OrConfirm))
+        if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUnPause_OrConfirm))
         {
             if (mToFmvSelect)
             {
@@ -977,7 +977,7 @@ void Menu::MainScreen_Update()
     }
 
     // Backwards menu button
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eLeft | InputCommands::eUp))
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eLeft | InputCommands::eUp))
     {
         mSelectedButtonIndex.raw--;
         if (mSelectedButtonIndex.mainmenu < MainMenuOptions::eGameSpeak_0)
@@ -991,7 +991,7 @@ void Menu::MainScreen_Update()
     }
 
     // Forward menu button
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, (InputCommands::eDown | InputCommands::eRight | InputCommands::eCheatMode)))
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, (InputCommands::eDown | InputCommands::eRight | InputCommands::eCheatMode)))
     {
         mSelectedButtonIndex.raw++;
         if (mSelectedButtonIndex.mainmenu > MainMenuOptions::eOptions_4) // TODO: Why isn't count of stru_4D00B0 ??
@@ -1004,7 +1004,7 @@ void Menu::MainScreen_Update()
         bSmallerTimeout = sDemoPlay;
     }
     const s32 idleMax = bSmallerTimeout != 0 ? 300 : 1500;
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, (InputCommands::eThrowItem | InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction | InputCommands::eCheatMode | InputCommands::eBack)) || mIdleInputCounter > idleMax)
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, (InputCommands::eThrowItem | InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction | InputCommands::eCheatMode | InputCommands::eBack)) || mIdleInputCounter > idleMax)
     {
         if (mIdleInputCounter <= idleMax)
         {
@@ -1728,7 +1728,7 @@ void Menu::Options_Update()
     }
 
     // Menu backwards
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eUp))
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUp))
     {
         if (mSelectedButtonIndex.options_menu <= OptionsMenuOptions::eController_0)
         {
@@ -1744,7 +1744,7 @@ void Menu::Options_Update()
     }
 
     // Menu forwards
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eDown | InputCommands::eCheatMode))
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eDown | InputCommands::eCheatMode))
     {
         if (mSelectedButtonIndex.options_menu >= OptionsMenuOptions::eSound_1)
         {
@@ -1759,14 +1759,14 @@ void Menu::Options_Update()
         SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 45, 400);
     }
 
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction))
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction))
     {
         Mudokon_SFX(MudSounds::eOkay_13, 0, 0, 0);
         GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Ok));
         mFnUpdate = &Menu::Options_WaitForAbeSpeak_Update;
     }
 
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop) || mIdleInputCounter > 900)
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop) || mIdleInputCounter > 900)
     {
         // Back to main menu
         mSelectedButtonIndex.options_menu = OptionsMenuOptions::eMainMenu_2;
@@ -2072,7 +2072,7 @@ void Menu::Options_Sound_Update()
         mIdleInputCounter++;
     }
 
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eUp)) // TODO: Input constants
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUp)) // TODO: Input constants
     {
         if (mSelectedButtonIndex.sound_menu <= SoundOptions::eStereo_0)
         {
@@ -2087,7 +2087,7 @@ void Menu::Options_Sound_Update()
         SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 45, 400);
     }
 
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eDown | InputCommands::eCheatMode))
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eDown | InputCommands::eCheatMode))
     {
         if (mSelectedButtonIndex.sound_menu >= SoundOptions::eMono_1)
         {
@@ -2102,7 +2102,7 @@ void Menu::Options_Sound_Update()
         SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 45, 400);
     }
 
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eUnPause_OrConfirm))
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUnPause_OrConfirm))
     {
         if (mSelectedButtonIndex.raw)
         {
@@ -2119,7 +2119,7 @@ void Menu::Options_Sound_Update()
         mFnUpdate = &Menu::Options_WaitForAbeSayOK_Update;
     }
 
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop) || mIdleInputCounter > 900)
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop) || mIdleInputCounter > 900)
     {
         mSelectedButtonIndex.sound_menu = SoundOptions::eExit_2;
         mButtonAnim.Set_Animation_Data(GetAnimRes(sSoundOptionsButtons[2].animId));
@@ -2290,7 +2290,7 @@ void Menu::GameSpeak_Update()
         return;
     }
 
-    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eLeftGameSpeak)) //todo nonsensical
+    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eLeftGameSpeak)) //todo nonsensical
     {
         if (mMenuFade2)
         {
@@ -2303,7 +2303,24 @@ void Menu::GameSpeak_Update()
         }
         else if (Input().JoyStickEnabled())
         {
-            mMenuFade2 = relive_new MainMenuFade(sGameSpeakButtons[10].xpos, sGameSpeakButtons[10].ypos + 36, buttonType::eCircle_0, 0);
+            //mMenuFade2 = relive_new MainMenuFade(sGameSpeakButtons[10].xpos, sGameSpeakButtons[10].ypos + 36, buttonType::eCircle_0, 0);
+        }
+    }
+
+    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eRightGameSpeak))
+    {
+        if (mMenuFade2)
+        {
+            const FP xpos = FP_FromInteger(sGameSpeakButtons[12].xpos);
+            if (mMenuFade2->mXPos != xpos)
+            {
+                mMenuFade2->mXPos = xpos;
+                mMenuFade2->mYPos = FP_FromInteger(sGameSpeakButtons[12].ypos + 36);
+            }
+        }
+        else if (Input().JoyStickEnabled())
+        {
+            //mMenuFade2 = relive_new MainMenuFade(sGameSpeakButtons[12].xpos, sGameSpeakButtons[12].ypos + 36, buttonType::eCircle_0, 0);
         }
     }
 
@@ -2348,30 +2365,13 @@ void Menu::GameSpeak_Update()
         return;
     }
 
-    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eRightGameSpeak))
-    {
-        if (mMenuFade2)
-        {
-            const FP xpos = FP_FromInteger(sGameSpeakButtons[12].xpos);
-            if (mMenuFade2->mXPos != xpos)
-            {
-                mMenuFade2->mXPos = xpos;
-                mMenuFade2->mYPos = FP_FromInteger(sGameSpeakButtons[12].ypos + 36);
-            }
-        }
-        else if (Input().JoyStickEnabled())
-        {
-            mMenuFade2 = relive_new MainMenuFade(sGameSpeakButtons[12].xpos, sGameSpeakButtons[12].ypos + 36, buttonType::eCircle_0, 0);
-        }
-    }
-
     if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak5))
     {
-        Mudokon_SFX(MudSounds::eWhistleLow_2, 0, 0, 0);
+        Mudokon_SFX(MudSounds::eLaugh2_11, 0, 0, 0);
         field_204_flags |= 1u;
-        GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_WhistleLow));
-        mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eWhistleLow_5;
-        relive_new MainMenuFade(sGameSpeakButtons[5].xpos, sGameSpeakButtons[5].ypos + 36, buttonType::eCircle_0, 1);
+        GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Laugh));
+        mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eLaugh_6;
+        relive_new MainMenuFade(sGameSpeakButtons[6].xpos, sGameSpeakButtons[6].ypos + 36, buttonType::eCircle_0, 1);
         CycleGameSpeakIdleAnims();
         return;
     }
@@ -2397,16 +2397,16 @@ void Menu::GameSpeak_Update()
     }
     else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak8))
     {
-        Mudokon_SFX(MudSounds::eLaugh2_11, 0, 0, 0);
+        Mudokon_SFX(MudSounds::eWhistleLow_2, 0, 0, 0);
         field_204_flags |= 1u;
-        GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Laugh));
-        mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eLaugh_6;
-        relive_new MainMenuFade(sGameSpeakButtons[6].xpos, sGameSpeakButtons[6].ypos + 36, buttonType::eCircle_0, 1);
+        GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_WhistleLow));
+        mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eWhistleLow_5;
+        relive_new MainMenuFade(sGameSpeakButtons[5].xpos, sGameSpeakButtons[5].ypos + 36, buttonType::eCircle_0, 1);
         CycleGameSpeakIdleAnims();
         return;
     }
 
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack) || mIdleInputCounter > 1600)
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eBack) || mIdleInputCounter > 1600)
     {
         Mudokon_SFX(MudSounds::eGoodbye_12, 0, 0, 0);
 
@@ -2496,7 +2496,7 @@ void Menu::Level_Cheat_To_Loading_Update()
 
 void Menu::Options_Controller_Update()
 {
-    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUp))
+    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eUp))
     {
         if (mSelectedButtonIndex.raw > 0 && field_228 == FP_FromInteger(0))
         {
@@ -2504,7 +2504,7 @@ void Menu::Options_Controller_Update()
             SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 45, 400);
         }
     }
-    else if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eDown | InputCommands::eCheatMode))
+    else if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eDown | InputCommands::eCheatMode))
     {
         if (mSelectedButtonIndex.raw < sAvailableControllers - 1 && field_228 == FP_FromInteger(0))
         {
@@ -2513,14 +2513,14 @@ void Menu::Options_Controller_Update()
         }
     }
 
-    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
+    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
     {
         field_230_bGoBack = 1;
         mMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
         mFnUpdate = &Menu::GoTo_ControllerConfigure_Or_Back_AfterScreenTrans_Update;
     }
 
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, (InputCommands::eThrowItem | InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction)))
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, (InputCommands::eThrowItem | InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction)))
     {
         field_230_bGoBack = 0;
         mMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
@@ -2800,7 +2800,7 @@ void Menu::ButtonRemap_Update()
         return;
     }
 
-    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eLeft))
+    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eLeft))
     {
         if (mSelectedButtonIndex.remap_menu >= RemapOptions::eAction_4)
         {
@@ -2809,7 +2809,7 @@ void Menu::ButtonRemap_Update()
         SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 45, 400); // TODO: Input constants
         bWaitingForRemapInput_9F2DE8 = 1;
     }
-    else if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eRight))
+    else if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eRight))
     {
         if (mSelectedButtonIndex.remap_menu < RemapOptions::eAction_4)
         {
@@ -2818,7 +2818,7 @@ void Menu::ButtonRemap_Update()
         SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 45, 400); // TODO: Input constants
         bWaitingForRemapInput_9F2DE8 = 1;
     }
-    else if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUp))
+    else if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eUp))
     {
         mSelectedButtonIndex.raw--;
         SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 45, 400); // TODO: Input constants
@@ -2838,7 +2838,7 @@ void Menu::ButtonRemap_Update()
         }
 #endif
     }
-    else if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eDown | InputCommands::eCheatMode))
+    else if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eDown | InputCommands::eCheatMode))
     {
         mSelectedButtonIndex.raw++;
         SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 45, 400); // TODO: Input constants
@@ -2865,7 +2865,7 @@ void Menu::ButtonRemap_Update()
         mSelectedButtonIndex.remap_menu = RemapOptions::eRun_0;
     }
 
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
     {
         // Show abe motions screen
         mMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
@@ -2873,7 +2873,7 @@ void Menu::ButtonRemap_Update()
         mFnUpdate = &Menu::To_ShowAbeMotions_ChangeCamera_Update;
     }
 
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, (InputCommands::eThrowItem | InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction)))
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, (InputCommands::eThrowItem | InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction)))
     {
         // Rebind a key (in that horrible white blinding screen)
         mMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
@@ -3060,7 +3060,7 @@ void Menu::Load_Update()
         mIdleInputCounter++;
     }
 
-    if ((Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
+    if ((Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
         || mIdleInputCounter > 1000)
     {
 #if !MISC_PC_MENU_FIXES // OG Change - Fixes automatic scroll when exiting Load Menu
@@ -3072,7 +3072,7 @@ void Menu::Load_Update()
         mLoadSave = false;
     }
 
-    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUp))
+    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eUp))
     {
         if (mSelectedButtonIndex.raw > 0 && field_228 == FP_FromInteger(0))
         {
@@ -3080,7 +3080,7 @@ void Menu::Load_Update()
 
             SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 45, 400);
 
-            if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
+            if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
             {
                 field_230_bGoBack = 1;
                 mMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
@@ -3092,7 +3092,7 @@ void Menu::Load_Update()
     }
     else
     {
-        if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eDown | InputCommands::eCheatMode))
+        if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eDown | InputCommands::eCheatMode))
         {
             if (mSelectedButtonIndex.raw < (sSaveIdx - 1) && field_228 == FP_FromInteger(0))
             {
@@ -3100,7 +3100,7 @@ void Menu::Load_Update()
 
                 SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 45, 400);
 
-                if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
+                if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
                 {
                     field_230_bGoBack = 1;
                     mMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
@@ -3112,7 +3112,7 @@ void Menu::Load_Update()
         }
     }
 
-    if (Input().IsAnyHeld(InputObject::PadIndex::First, (InputCommands::eThrowItem | InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction)))
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, (InputCommands::eThrowItem | InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction)))
     {
         if (sSaveIdx)
         {
@@ -3195,7 +3195,7 @@ void Menu::ToggleMotions_Update()
 
     if (gNumCamSwappers <= 0)
     {
-        if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction | InputCommands::eCheatMode))
+        if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction | InputCommands::eCheatMode))
         {
             if (Input().JoyStickEnabled())
             {
@@ -3213,7 +3213,7 @@ void Menu::ToggleMotions_Update()
             SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 45, 400);
         }
 
-        if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop) || mIdleInputCounter > 1600)
+        if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop) || mIdleInputCounter > 1600)
         {
             // Back to options
             mSelectedButtonIndex.motions_menu = MotionsOptions::eExit_2;
@@ -3237,7 +3237,7 @@ void Menu::Toggle_Motions_Screens_Update()
 
     if (gNumCamSwappers <= 0)
     {
-        if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction | InputCommands::eCheatMode))
+        if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction | InputCommands::eCheatMode))
         {
             if (Input().JoyStickEnabled())
             {
@@ -3254,7 +3254,7 @@ void Menu::Toggle_Motions_Screens_Update()
             SFX_Play_Pitch(relive::SoundEffects::MenuNavigation, 45, 400);
         }
 
-        if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop) || mIdleInputCounter > 1600)
+        if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop) || mIdleInputCounter > 1600)
         {
             mSelectedButtonIndex.motions_menu = MotionsOptions::eExit_2;
             mButtonAnim.Set_Animation_Data(GetAnimRes(sAbeMotionsButtons[2].animId));
