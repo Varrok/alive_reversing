@@ -1250,11 +1250,11 @@ bool Input_IsGameSpeakPressed(InputCommands::Enum gameSpeakId)
     auto held = Input().GetHeld();
     auto pressed = Input().GetPressed();
     bool correctSpeakBtnHeld = false;
-    if (gameSpeakId >= InputCommands::Enum::eGameSpeak1 && gameSpeakId <= InputCommands::Enum::eGameSpeak4 )
+    if (gameSpeakId >= InputCommands::Enum::eGameSpeak1 && gameSpeakId <= InputCommands::Enum::eGameSpeak4)
     {
         correctSpeakBtnHeld = held & InputCommands::Enum::eLeftGameSpeak;
     }
-    else if (gameSpeakId >= InputCommands::Enum::eGameSpeak5 && gameSpeakId <= InputCommands::Enum::eGameSpeak8 )
+    else if (gameSpeakId >= InputCommands::Enum::eGameSpeak5 && gameSpeakId <= InputCommands::Enum::eGameSpeak8)
     {
         correctSpeakBtnHeld = held & InputCommands::Enum::eRightGameSpeak;
     }
