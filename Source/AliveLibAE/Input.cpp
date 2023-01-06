@@ -1941,17 +1941,17 @@ void InputObject::ShutDown_45F020()
 #endif
 }
 
-bool InputObject::IsHeld(u32 command)
+bool InputObject::IsAnyHeld(u32 command)
 {
     return (this->mPads[sCurrentControllerIndex].mRawInput & command) != 0;
 }
 
-bool InputObject::IsPressed(u32 command)
+bool InputObject::IsAnyPressed(u32 command)
 {
     return (this->mPads[sCurrentControllerIndex].mPressed & command) != 0;
 }
 
-bool InputObject::IsReleased(u32 keys)
+bool InputObject::IsAnyReleased(u32 keys)
 {
     return (this->mPads[sCurrentControllerIndex].mReleased & keys) != 0;
 }

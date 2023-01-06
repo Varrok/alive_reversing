@@ -2519,7 +2519,7 @@ MainMenuNextCam MainMenuController::RemapInput_Update_4D1820(u32 input)
 {
     if (dword_BB43F8)
     {
-        if (dword_BB43F8 == 1 && Input().IsReleased(InputCommands::Enum::eUnPause_OrConfirm))
+        if (dword_BB43F8 == 1 && Input().IsAnyReleased(InputCommands::Enum::eUnPause_OrConfirm))
         {
             dword_BB43F8 = 2;
             return MainMenuNextCam(MainMenuCams::eNoChange);
@@ -2711,7 +2711,7 @@ MainMenuNextCam MainMenuController::HandleGameSpeakInput(u32 input_held, std::fu
 
 void MainMenuController::HandleCreditsControllerUpdate()
 {
-    if (Input().IsPressed(InputCommands::Enum::eBack))
+    if (Input().IsAnyPressed(InputCommands::Enum::eBack))
     {
         gCreditsControllerExists = 0;
         gMap.SetActiveCam(EReliveLevelIds::eMenu, 1, 6, CameraSwapEffects::eInstantChange_0, 0, 0);

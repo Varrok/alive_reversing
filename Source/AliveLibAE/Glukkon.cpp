@@ -378,7 +378,7 @@ void Glukkon::Motion_1_Walk()
                         SetAnim(eGlukkonMotions::Motion_18_WalkToJump);
                     }
                 }
-                else if (Input().IsHeld(InputCommands::Enum::eRun))
+                else if (Input().IsAnyHeld(InputCommands::Enum::eRun))
                 {
                     SetAnim(eGlukkonMotions::Motion_18_WalkToJump, true);
                 }
@@ -412,7 +412,7 @@ void Glukkon::Motion_1_Walk()
                 }
                 else
                 {
-                    if ((mVelX > FP_FromInteger(0) && Input().IsHeld(InputCommands::Enum::eLeft)) || (mVelX < FP_FromInteger(0) && Input().IsHeld(InputCommands::Enum::eRight)) || !(Input().IsHeld(InputCommands::Enum::eLeft | InputCommands::Enum::eRight)))
+                    if ((mVelX > FP_FromInteger(0) && Input().IsAnyHeld(InputCommands::Enum::eLeft)) || (mVelX < FP_FromInteger(0) && Input().IsAnyHeld(InputCommands::Enum::eRight)) || !(Input().IsAnyHeld(InputCommands::Enum::eLeft | InputCommands::Enum::eRight)))
                     {
                         if (GetAnimation().GetCurrentFrame() == 8)
                         {
