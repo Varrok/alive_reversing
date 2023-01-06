@@ -440,23 +440,6 @@ u8 InputObject::Dir() const
     return Input().mPads[sCurrentControllerIndex].mDir >> 5;
 }
 
-
-bool InputObject::IsAllPressed(u32 commands) const
-{
-    return IsAllPressed(PadIndex::Active, commands);
-}
-
-bool InputObject::IsAllPressed(PadIndex padIx, u32 commands) const
-{
-    return (mPads[PadIndexToInt(padIx)].mRawInput & commands) == commands;
-}
-
-
-bool InputObject::IsAllHeld(u32 commands) const
-{
-    return (mPads[sCurrentControllerIndex].mPressed & commands) == commands;
-}
-
 u16 InputObject::GetHeld() const
 {
     return GetHeld(PadIndex::Active);
