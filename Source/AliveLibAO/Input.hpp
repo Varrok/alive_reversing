@@ -8,18 +8,17 @@ namespace AO {
 
 struct PSX_Pad final
 {
-    u16 mRawInput;
+    u32 mRawInput;
     u8 mDir;
     s8 field_3;
-    s16 mPreviousInput;
-    u16 mPressed;
-    s16 mReleased;
+    u32 mPreviousInput;
+    u32 mPressed;
+    u32 mReleased;
     s8 mPreviousDir;
     s8 field_B;
 };
 ALIVE_ASSERT_SIZEOF(PSX_Pad, 0xC);
 
-// TODO: most of these are gonna be wrong bar the ones in abe.cpp
 enum InputCommands : u32
 {
     eRightGameSpeak = 1u << 0,    // 0x1
@@ -160,14 +159,14 @@ public:
     bool IsAnyReleased(PadIndex padIx, u32 command) const;
     bool IsAllPressed(PadIndex padIx, u32 commands) const;
 
-    u16 GetHeld(PadIndex padIx) const;
+    u32 GetHeld(PadIndex padIx) const;
 
     // These use the active pad
-    u16 GetHeld() const;
-    u16 GetPressed() const;
-    u16 GetReleased() const;
+    u32 GetHeld() const;
+    u32 GetPressed() const;
+    u32 GetReleased() const;
 
-    u16 GetPressed(PadIndex padIx) const;
+    u32 GetPressed(PadIndex padIx) const;
 
     u32 Input_Read_Pad(u32 padIdx);
 };

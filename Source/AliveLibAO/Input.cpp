@@ -24,18 +24,6 @@ const InputCommands sInputKey_Sneak = eSneak;
 const InputCommands sInputKey_FartRoll = eCrouchOrRoll;
 const InputCommands sInputKey_ThrowItem = eThrowItem;
 
-const InputCommands sInputKey_LeftGameSpeakEnabler = eLeftGameSpeak;
-const InputCommands sInputKey_GameSpeak1 = eHop;
-const InputCommands sInputKey_GameSpeak2 = eDoAction;
-const InputCommands sInputKey_GameSpeak3 = eThrowItem;
-const InputCommands sInputKey_GameSpeak4 = eCrouchOrRoll;
-
-const InputCommands sInputKey_RightGameSpeakEnabler = eRightGameSpeak;
-const InputCommands sInputKey_GameSpeak5 = eCrouchOrRoll;
-const InputCommands sInputKey_GameSpeak6 = eHop;
-const InputCommands sInputKey_GameSpeak7 = eThrowItem;
-const InputCommands sInputKey_GameSpeak8 = eDoAction;
-
 void InputObject::InitPad(u32 /*padCount*/)
 {
     for (PSX_Pad& pad : mPads)
@@ -52,8 +40,14 @@ void InputObject::InitPad(u32 /*padCount*/)
 u8 sPad1Buffer_507778[64] = {};
 u8 sPad2Buffer_507738[64] = {};
 
+bool Input_IsGameSpeakPressedDirectly(InputCommands gameSpeakId)
+{
+    // LOG_INFO("presseed %d", Input().GetPressed());
+    // LOG_INFO("gs %d", gameSpeakId);
+    return Input().IsAnyPressed(gameSpeakId);
+}
 
-bool Input_IsGameSpeakPressed(InputCommands gameSpeakId)
+bool Input_IsGameSpeakPressedIndirectly(InputCommands gameSpeakId)
 {
     auto held = Input().GetHeld();
     auto pressed = Input().GetPressed();
@@ -117,61 +111,17 @@ bool Input_IsGameSpeakPressed(InputCommands gameSpeakId)
     return false;
 }
 
-
-//TODO NUKE
-// static void ConvertAEGamespeakAEtoAOGamespeak(BitField32<AO::InputCommands>& value, const BitField32<::InputCommands::Enum>& aeInput)
-// {
-//     if (aeInput.Get(::InputCommands::Enum::eGameSpeak1))
-//     {
-//         value.Set(AO::InputCommands::eLeftGamespeak);
-//         value.Set(AO::InputCommands::eHop);
-//     }
-//     else if (aeInput.Get(::InputCommands::Enum::eGameSpeak2))
-//     {
-//         value.Set(AO::InputCommands::eLeftGamespeak);
-//         value.Set(AO::InputCommands::eDoAction);
-//     }
-//     else if (aeInput.Get(::InputCommands::Enum::eGameSpeak3))
-//     {
-//         value.Set(AO::InputCommands::eLeftGamespeak);
-//         value.Set(AO::InputCommands::eCrouchOrRoll);
-//     }
-//     else if (aeInput.Get(::InputCommands::Enum::eGameSpeak4))
-//     {
-//         value.Set(AO::InputCommands::eLeftGamespeak);
-//         value.Set(AO::InputCommands::eThrowItem);
-//     }
-//     else if (aeInput.Get(::InputCommands::Enum::eGameSpeak5))
-//     {
-//         value.Set(AO::InputCommands::eRightGameSpeak);
-//         //value.Set(AO::InputCommands::eDoAction);
-//         value.Set(AO::InputCommands::eCrouchOrRoll);
-//     }
-//     else if (aeInput.Get(::InputCommands::Enum::eGameSpeak6))
-//     {
-//         value.Set(AO::InputCommands::eRightGameSpeak);
-//         value.Set(AO::InputCommands::eHop);
-//     }
-//     else if (aeInput.Get(::InputCommands::Enum::eGameSpeak7))
-//     {
-//         value.Set(AO::InputCommands::eRightGameSpeak);
-//         value.Set(AO::InputCommands::eThrowItem);
-//     }
-//     else if (aeInput.Get(::InputCommands::Enum::eGameSpeak8))
-//     {
-//         value.Set(AO::InputCommands::eRightGameSpeak);
-//         // value.Set(AO::InputCommands::eCrouchOrRoll);
-//         value.Set(AO::InputCommands::eDoAction);
-//     }
-//     else if (aeInput.Get(::InputCommands::Enum::eBack))
-//     {
-//         value.Set(AO::InputCommands::eBack);
-//     }
-//     else if (aeInput.Get(::InputCommands::Enum::eCheatMode))
-//     {
-//         value.Set(AO::InputCommands::eCheatMode);
-//     }
-// }
+bool Input_IsGameSpeakPressed(InputCommands gameSpeakId)
+{
+    if (Input_IsGameSpeakPressedDirectly(gameSpeakId))
+    {
+        return true;
+    }
+    else
+    {
+        return Input_IsGameSpeakPressedIndirectly(gameSpeakId);
+    }
+}
 
 static BitField32<AO::InputCommands> AEInputCommandsToAOInputCommands(const BitField32<::InputCommands::Enum>& aeInput)
 {
@@ -192,6 +142,11 @@ static BitField32<AO::InputCommands> AEInputCommandsToAOInputCommands(const BitF
     r.Set(AO::InputCommands::eLeftGameSpeak, aeInput.Get(::InputCommands::Enum::eLeftGameSpeak));
     r.Set(AO::InputCommands::eRightGameSpeak, aeInput.Get(::InputCommands::Enum::eRightGameSpeak));
     r.Set(AO::InputCommands::eGameSpeak1, aeInput.Get(::InputCommands::Enum::eGameSpeak1));
+    if(aeInput.Get(::InputCommands::Enum::eGameSpeak1))
+    {
+        LOG_INFO("GS1 pressed");
+        LOG_INFO("AO Gamespeak 1 is now: %d", r.Get(InputCommands::eGameSpeak1));
+    }
     r.Set(AO::InputCommands::eGameSpeak2, aeInput.Get(::InputCommands::Enum::eGameSpeak2));
     r.Set(AO::InputCommands::eGameSpeak3, aeInput.Get(::InputCommands::Enum::eGameSpeak3));
     r.Set(AO::InputCommands::eGameSpeak4, aeInput.Get(::InputCommands::Enum::eGameSpeak4));
@@ -222,14 +177,14 @@ static BitField32<::InputCommands::Enum> AOInputCommandsToAEInputCommands(const 
     // OG issue - LCD screens says hold alt + shift which is wrong
     r.Set(::InputCommands::Enum::eChant, aoInput.Get(AO::InputCommands::eLeftGameSpeak) && aoInput.Get(AO::InputCommands::eRightGameSpeak));
 
-    r.Set(::InputCommands::Enum::eGameSpeak1, aoInput.Get(AO::InputCommands::eLeftGameSpeak) && aoInput.Get(AO::InputCommands::eHop));
-    r.Set(::InputCommands::Enum::eGameSpeak2, aoInput.Get(AO::InputCommands::eLeftGameSpeak) && aoInput.Get(AO::InputCommands::eDoAction));
-    r.Set(::InputCommands::Enum::eGameSpeak3, aoInput.Get(AO::InputCommands::eLeftGameSpeak) && aoInput.Get(AO::InputCommands::eCrouchOrRoll));
-    r.Set(::InputCommands::Enum::eGameSpeak4, aoInput.Get(AO::InputCommands::eLeftGameSpeak) && aoInput.Get(AO::InputCommands::eThrowItem));
-    r.Set(::InputCommands::Enum::eGameSpeak5, aoInput.Get(AO::InputCommands::eRightGameSpeak) && aoInput.Get(AO::InputCommands::eDoAction));
-    r.Set(::InputCommands::Enum::eGameSpeak6, aoInput.Get(AO::InputCommands::eRightGameSpeak) && aoInput.Get(AO::InputCommands::eHop));
-    r.Set(::InputCommands::Enum::eGameSpeak7, aoInput.Get(AO::InputCommands::eRightGameSpeak) && aoInput.Get(AO::InputCommands::eThrowItem));
-    r.Set(::InputCommands::Enum::eGameSpeak8, aoInput.Get(AO::InputCommands::eRightGameSpeak) && aoInput.Get(AO::InputCommands::eCrouchOrRoll));
+    r.Set(::InputCommands::Enum::eGameSpeak1, aoInput.Get(AO::InputCommands::eGameSpeak1));
+    r.Set(::InputCommands::Enum::eGameSpeak2, aoInput.Get(AO::InputCommands::eGameSpeak2));
+    r.Set(::InputCommands::Enum::eGameSpeak3, aoInput.Get(AO::InputCommands::eGameSpeak3));
+    r.Set(::InputCommands::Enum::eGameSpeak4, aoInput.Get(AO::InputCommands::eGameSpeak4));
+    r.Set(::InputCommands::Enum::eGameSpeak5, aoInput.Get(AO::InputCommands::eGameSpeak5));
+    r.Set(::InputCommands::Enum::eGameSpeak6, aoInput.Get(AO::InputCommands::eGameSpeak6));
+    r.Set(::InputCommands::Enum::eGameSpeak7, aoInput.Get(AO::InputCommands::eGameSpeak7));
+    r.Set(::InputCommands::Enum::eGameSpeak8, aoInput.Get(AO::InputCommands::eGameSpeak8));
     r.Set(::InputCommands::Enum::eCheatMode, aoInput.Get(AO::InputCommands::eCheatMode));
 
     // needed for remapping Speak I and Speak II on controllers
@@ -365,15 +320,23 @@ void InputObject::Update(BaseGameAutoPlayer& gameAutoPlayer)
     // Do AE input reading
     ::Input().Update(gameAutoPlayer);
 
-    // Convert from AE bit flags to AO bit flags
-    mPads[0].mRawInput = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mRawInput)).Raw().all);
+    for (auto controllerId = 0; controllerId < 1; controllerId ++) //todo constant for controllers num
+    {
+        // Convert from AE bit flags to AO bit flags
+        mPads[controllerId].mRawInput = static_cast<u32>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[controllerId].mRawInput)).Raw().all);
 
-    // TODO: This one probably needs its own conversion
-    mPads[0].mDir = ::Input().mPads[0].mDir;
+        // TODO: This one probably needs its own conversion
+        mPads[controllerId].mDir = ::Input().mPads[controllerId].mDir;
 
-    mPads[0].mPreviousInput = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mPreviousInput)).Raw().all);
-    mPads[0].mPressed = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mPressed)).Raw().all);
-    mPads[0].mReleased = static_cast<u16>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[0].mReleased)).Raw().all);
+        mPads[controllerId].mPreviousInput = static_cast<u32>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[controllerId].mPreviousInput)).Raw().all);
+        LOG_INFO("presseed AE %d", ::Input().mPads[controllerId].mPressed);
+        mPads[controllerId].mPressed = static_cast<u32>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[controllerId].mPressed)).Raw().all);
+        LOG_INFO("presseed AO %d", Input().GetPressed());
+
+        mPads[controllerId].mReleased = static_cast<u32>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[controllerId].mReleased)).Raw().all);
+    }
+
+
 
     // Handle demo input (AO impl)
     if (mbDemoPlaying & 1)
@@ -401,7 +364,7 @@ void InputObject::Update(BaseGameAutoPlayer& gameAutoPlayer)
         // Will do nothing if we hit the end command..
         if (mbDemoPlaying & 1)
         {
-            mPads[0].mRawInput = static_cast<u16>(mCommand);
+            mPads[0].mRawInput = static_cast<u32>(mCommand);
         }
 
         for (s32 i = 0; i < 2; i++)
@@ -506,22 +469,22 @@ u8 InputObject::Dir() const
     return Input().mPads[sCurrentControllerIndex].mDir >> 5;
 }
 
-u16 InputObject::GetHeld() const
+u32 InputObject::GetHeld() const
 {
     return GetHeld(PadIndex::Active);
 }
 
-u16 InputObject::GetHeld(PadIndex padIx) const
+u32 InputObject::GetHeld(PadIndex padIx) const
 {
     return mPads[PadIndexToInt(padIx)].mRawInput;
 }
 
-u16 InputObject::GetPressed() const
+u32 InputObject::GetPressed() const
 {
     return GetPressed(PadIndex::Active);
 }
 
-u16 InputObject::GetPressed(PadIndex padIx) const
+u32 InputObject::GetPressed(PadIndex padIx) const
 {
     return Input().mPads[PadIndexToInt(padIx)].mPressed;
 }
@@ -531,7 +494,7 @@ u32 InputObject::Input_Read_Pad(u32 padIdx)
     return ::Input_Read_Pad(padIdx);
 }
 
-u16 InputObject::GetReleased() const
+u32 InputObject::GetReleased() const
 {
     return Input().mPads[sCurrentControllerIndex].mReleased;
 }

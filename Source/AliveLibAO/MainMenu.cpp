@@ -2290,7 +2290,7 @@ void Menu::GameSpeak_Update()
         return;
     }
 
-    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eLeftGameSpeak))
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eLeftGameSpeak)) //todo nonsensical
     {
         if (mMenuFade2)
         {
@@ -2305,39 +2305,45 @@ void Menu::GameSpeak_Update()
         {
             mMenuFade2 = relive_new MainMenuFade(sGameSpeakButtons[10].xpos, sGameSpeakButtons[10].ypos + 36, buttonType::eCircle_0, 0);
         }
+    }
 
-        if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak2))
-        {
-            Mudokon_SFX(MudSounds::eFollowMe_4, 0, 0, 0);
-            field_204_flags |= 1u;
-            GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_FollowMe));
-            mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eFollowMe_2;
-            relive_new MainMenuFade(sGameSpeakButtons[2].xpos, sGameSpeakButtons[2].ypos + 36, buttonType::eCircle_0, 1);
-        }
-        else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak3))
-        {
-            Mudokon_SFX(MudSounds::eWait_6, 0, 0, 0);
-            field_204_flags |= 1u;
-            GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Wait));
-            mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eWait_0;
-            relive_new MainMenuFade(sGameSpeakButtons[0].xpos, sGameSpeakButtons[0].ypos + 36, buttonType::eCircle_0, 1);
-        }
-        else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak1))
-        {
-            Mudokon_SFX(MudSounds::eHello_3, 0, 0, 0);
-            field_204_flags |= 1u;
-            GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Hello));
-            mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eHello_1;
-            relive_new MainMenuFade(sGameSpeakButtons[1].xpos, sGameSpeakButtons[1].ypos + 36, buttonType::eCircle_0, 1);
-        }
-        else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak4))
-        {
-            Mudokon_SFX(MudSounds::eAngry_5, 0, 0, 0);
-            field_204_flags |= 1u;
-            GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Anger));
-            mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eAngry_3;
-            relive_new MainMenuFade(sGameSpeakButtons[3].xpos, sGameSpeakButtons[3].ypos + 36, buttonType::eCircle_0, 1);
-        }
+    if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak1))
+    {
+        Mudokon_SFX(MudSounds::eHello_3, 0, 0, 0);
+        field_204_flags |= 1u;
+        GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Hello));
+        mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eHello_1;
+        relive_new MainMenuFade(sGameSpeakButtons[1].xpos, sGameSpeakButtons[1].ypos + 36, buttonType::eCircle_0, 1);
+        CycleGameSpeakIdleAnims();
+        return;
+    }
+    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak2))
+    {
+        Mudokon_SFX(MudSounds::eFollowMe_4, 0, 0, 0);
+        field_204_flags |= 1u;
+        GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_FollowMe));
+        mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eFollowMe_2;
+        relive_new MainMenuFade(sGameSpeakButtons[2].xpos, sGameSpeakButtons[2].ypos + 36, buttonType::eCircle_0, 1);
+        CycleGameSpeakIdleAnims();
+        return;
+    }
+    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak3))
+    {
+        Mudokon_SFX(MudSounds::eWait_6, 0, 0, 0);
+        field_204_flags |= 1u;
+        GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Wait));
+        mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eWait_0;
+        relive_new MainMenuFade(sGameSpeakButtons[0].xpos, sGameSpeakButtons[0].ypos + 36, buttonType::eCircle_0, 1);
+        CycleGameSpeakIdleAnims();
+        return;
+    }
+    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak4))
+    {
+        Mudokon_SFX(MudSounds::eAngry_5, 0, 0, 0);
+        field_204_flags |= 1u;
+        GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Anger));
+        mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eAngry_3;
+        relive_new MainMenuFade(sGameSpeakButtons[3].xpos, sGameSpeakButtons[3].ypos + 36, buttonType::eCircle_0, 1);
         CycleGameSpeakIdleAnims();
         return;
     }
@@ -2357,68 +2363,75 @@ void Menu::GameSpeak_Update()
         {
             mMenuFade2 = relive_new MainMenuFade(sGameSpeakButtons[12].xpos, sGameSpeakButtons[12].ypos + 36, buttonType::eCircle_0, 0);
         }
+    }
 
-        if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak6))
-        {
-            Mudokon_SFX(MudSounds::eWhistleHigh_1, 0, 0, 0);
-            field_204_flags |= 1u;
-            GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_WhistleHigh));
-            mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eWhistleHigh_4;
-            relive_new MainMenuFade(sGameSpeakButtons[4].xpos, sGameSpeakButtons[4].ypos + 36, buttonType::eCircle_0, 1);
-        }
-        else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak8))
-        {
-            Mudokon_SFX(MudSounds::eLaugh2_11, 0, 0, 0);
-            field_204_flags |= 1u;
-            GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Laugh));
-            mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eLaugh_6;
-            relive_new MainMenuFade(sGameSpeakButtons[6].xpos, sGameSpeakButtons[6].ypos + 36, buttonType::eCircle_0, 1);
-        }
-        else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak5))
-        {
-            Mudokon_SFX(MudSounds::eWhistleLow_2, 0, 0, 0);
-            field_204_flags |= 1u;
-            GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_WhistleLow));
-            mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eWhistleLow_5;
-            relive_new MainMenuFade(sGameSpeakButtons[5].xpos, sGameSpeakButtons[5].ypos + 36, buttonType::eCircle_0, 1);
-        }
-        else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak7))
-        {
-            Mudokon_SFX(MudSounds::eFart_7, 0, 0, 0);
-            field_204_flags |= 1u;
-            GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Fart));
-            mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eFart_7;
-            relive_new MainMenuFade(sGameSpeakButtons[7].xpos, sGameSpeakButtons[7].ypos + 36, buttonType::eCircle_0, 1);
-        }
+    if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak5))
+    {
+        Mudokon_SFX(MudSounds::eWhistleLow_2, 0, 0, 0);
+        field_204_flags |= 1u;
+        GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_WhistleLow));
+        mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eWhistleLow_5;
+        relive_new MainMenuFade(sGameSpeakButtons[5].xpos, sGameSpeakButtons[5].ypos + 36, buttonType::eCircle_0, 1);
+        CycleGameSpeakIdleAnims();
+        return;
+    }
+    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak6))
+    {
+        Mudokon_SFX(MudSounds::eWhistleHigh_1, 0, 0, 0);
+        field_204_flags |= 1u;
+        GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_WhistleHigh));
+        mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eWhistleHigh_4;
+        relive_new MainMenuFade(sGameSpeakButtons[4].xpos, sGameSpeakButtons[4].ypos + 36, buttonType::eCircle_0, 1);
+        CycleGameSpeakIdleAnims();
+        return;
+    }
+    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak7))
+    {
+        Mudokon_SFX(MudSounds::eFart_7, 0, 0, 0);
+        field_204_flags |= 1u;
+        GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Fart));
+        mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eFart_7;
+        relive_new MainMenuFade(sGameSpeakButtons[7].xpos, sGameSpeakButtons[7].ypos + 36, buttonType::eCircle_0, 1);
+        CycleGameSpeakIdleAnims();
+        return;
+    }
+    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak8))
+    {
+        Mudokon_SFX(MudSounds::eLaugh2_11, 0, 0, 0);
+        field_204_flags |= 1u;
+        GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Laugh));
+        mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eLaugh_6;
+        relive_new MainMenuFade(sGameSpeakButtons[6].xpos, sGameSpeakButtons[6].ypos + 36, buttonType::eCircle_0, 1);
         CycleGameSpeakIdleAnims();
         return;
     }
 
-    if (!Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack) && mIdleInputCounter <= 1600)
+    if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack) || mIdleInputCounter > 1600)
     {
+        Mudokon_SFX(MudSounds::eGoodbye_12, 0, 0, 0);
+
+        field_204_flags |= 1u;
+        GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Goodbye));
+        mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eMainMenu_9;
+
+        relive_new MainMenuFade(sGameSpeakButtons[9].xpos, sGameSpeakButtons[9].ypos + 36, buttonType::eCircle_0, 1);
+
+        mFnUpdate = &Menu::GameSpeakBack_WaitForAbeGoodbye_Update;
+
+        if (mMenuFade1)
+        {
+            mMenuFade1->field_E8_bDestroyOnDone = 1;
+            mMenuFade1 = nullptr;
+        }
+
         if (mMenuFade2)
         {
             mMenuFade2->field_E8_bDestroyOnDone = 1;
             mMenuFade2 = nullptr;
         }
+
         CycleGameSpeakIdleAnims();
         return;
-    }
-
-    Mudokon_SFX(MudSounds::eGoodbye_12, 0, 0, 0);
-
-    field_204_flags |= 1u;
-    GetAnimation().Set_Animation_Data(GetAnimRes(AnimId::MenuAbeSpeak_Goodbye));
-    mSelectedButtonIndex.gamespeak_menu = GameSpeakOptions::eMainMenu_9;
-
-    relive_new MainMenuFade(sGameSpeakButtons[9].xpos, sGameSpeakButtons[9].ypos + 36, buttonType::eCircle_0, 1);
-
-    mFnUpdate = &Menu::GameSpeakBack_WaitForAbeGoodbye_Update;
-
-    if (mMenuFade1)
-    {
-        mMenuFade1->field_E8_bDestroyOnDone = 1;
-        mMenuFade1 = nullptr;
     }
 
     if (mMenuFade2)
@@ -2426,8 +2439,8 @@ void Menu::GameSpeak_Update()
         mMenuFade2->field_E8_bDestroyOnDone = 1;
         mMenuFade2 = nullptr;
     }
-
     CycleGameSpeakIdleAnims();
+    return;
 }
 
 void Menu::CycleGameSpeakIdleAnims()
