@@ -475,7 +475,7 @@ void ChimeLock::VUpdate()
                 }
 
                 const auto pressed = Input().GetHeld();
-                if (Input().IsAnyHeld(eThrowItem) && !(field_134_pressed & eThrowItem))
+                if (Input().IsAnyPressed(eThrowItem) && !(field_134_pressed & eThrowItem))
                 {
                     SetTargetBellIfSpace(3);
                     field_134_pressed = pressed;

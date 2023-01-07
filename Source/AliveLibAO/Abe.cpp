@@ -3221,11 +3221,13 @@ void Abe::Motion_0_Idle()
     }
     if (auto gameSpeakPressed = Input_IsAnyGameSpeakPressed())
     {
-        pendingGameSpeakCommand = gameSpeakPressed;
-        const auto pressed = Input().GetPressed();
-        field_10C_prev_held = pressed;
-        mCurrentMotion = eAbeMotions::Motion_58_ToSpeak;
-        return;
+        const auto held = Input().GetPressed();
+        if (held & 0xF0)
+        {
+            field_10C_prev_held = held;
+            mCurrentMotion = eAbeMotions::Motion_58_ToSpeak;
+            return;
+        }
     }
     if (Input().IsAnyHeld(sInputKey_Hop))
     {
@@ -4290,7 +4292,7 @@ void Abe::Motion_19_CrouchIdle()
 
     FollowLift();
 
-    if (Input_IsChanting())
+    if (Input().IsAnyHeld(InputCommands::eLeftGamespeak) && Input().IsAnyHeld(InputCommands::eRightGameSpeak))
     {
         Mudokon_SFX(MudSounds::eDunno_15, 0, 0, this);
         mCurrentMotion = eAbeMotions::Motion_23_CrouchSpeak;
@@ -6015,6 +6017,7 @@ void Abe::Motion_58_ToSpeak()
     FollowLift();
 
     field_10C_prev_held |= Input().GetPressed();
+
     if (GetAnimation().GetIsLastFrame())
     {
         mCurrentMotion = DoGameSpeak();
@@ -7807,7 +7810,14 @@ void Abe::Motion_102_ElumWalkLoop()
 
 void Abe::Motion_103_ElumIdle()
 {
-    if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak1))
+    if (!Input().IsAnyPressed(sInputKey_LeftGameSpeakEnabler | sInputKey_RightGameSpeakEnabler) || !Input().IsAnyHeld(0xF0))
+    {
+        if (Input().GetPressed() == sInputKey_Down && !gDDCheat_FlyingEnabled)
+        {
+            mCurrentMotion = eAbeMotions::Motion_137_ElumUnmountBegin;
+        }
+    }
+    else
     {
         mCurrentMotion = eAbeMotions::Motion_115_ElumSpeak;
         gEventSystem->VPushEvent(GameSpeakEvents::eAbe_Hello_9);

@@ -9,12 +9,12 @@ namespace AO {
 
 struct PSX_Pad final
 {
-    u32 mRawInput;
+    u16 mRawInput;
     u8 mDir;
     s8 field_3;
-    u32 mPreviousInput;
-    u32 mPressed;
-    u32 mReleased;
+    s16 mPreviousInput;
+    u16 mPressed;
+    s16 mReleased;
     s8 mPreviousDir;
     s8 field_B;
 };
@@ -160,14 +160,14 @@ public:
     bool IsAnyReleased(PadIndex padIx, u32 command) const;
     bool IsAllPressed(PadIndex padIx, u32 commands) const;
 
-    u32 GetHeld(PadIndex padIx) const;
+    u16 GetHeld(PadIndex padIx) const;
 
     // These use the active pad
-    u32 GetHeld() const;
-    u32 GetPressed() const;
-    u32 GetReleased() const;
+    u16 GetHeld() const;
+    u16 GetPressed() const;
+    u16 GetReleased() const;
 
-    u32 GetPressed(PadIndex padIx) const;
+    u16 GetPressed(PadIndex padIx) const;
 
     u32 Input_Read_Pad(u32 padIdx);
 };
