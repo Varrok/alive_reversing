@@ -21,7 +21,6 @@
 #include "../relive_lib/Events.hpp"
 #include "Abe.hpp"
 #include "MusicController.hpp"
-#include <gmock/gmock.h>
 #include "CheatController.hpp"
 #include "Slurg.hpp"
 #include "PathDataExtensions.hpp"
@@ -473,66 +472,6 @@ u32 SYS_GetTicks()
     // Using this instead of SDL_GetTicks resolves a weird x64 issue on windows where
     // the tick returned is a lot faster on some machines.
     return static_cast<u32>(SDL_GetPerformanceCounter() / (SDL_GetPerformanceFrequency() / 1000));
-}
-
-MessageBoxButton Sys_MessageBox(TWindowHandleType windowHandle, const char_type* message, const char_type* title, MessageBoxType type)
-{
-    SDL_MessageBoxData data = {};
-    data.title = title;
-    data.message = message;
-
-    if (type == MessageBoxType::eQuestion)
-    {
-        const static SDL_MessageBoxButtonData buttons[] = {
-            {0, 1, "No"},
-            {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes"},
-        };
-
-        data.numbuttons = SDL_arraysize(buttons);
-        data.buttons = buttons;
-    }
-    else
-    {
-        const static SDL_MessageBoxButtonData buttons[] = {
-            {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK"},
-        };
-
-        data.numbuttons = SDL_arraysize(buttons);
-        data.buttons = buttons;
-    }
-
-    data.window = windowHandle;
-
-    switch (type)
-    {
-    case MessageBoxType::eStandard:
-        data.flags = SDL_MESSAGEBOX_ERROR;
-        break;
-    case MessageBoxType::eError:
-        data.flags = SDL_MESSAGEBOX_INFORMATION;
-        break;
-    case MessageBoxType::eQuestion:
-        data.flags = SDL_MESSAGEBOX_WARNING;
-        break;
-    default:
-        data.flags = SDL_MESSAGEBOX_ERROR;
-    }
-
-    s32 button = 0;
-
-    SDL_ShowMessageBox(&data, &button);
-
-    if (type == MessageBoxType::eQuestion)
-    {
-        if (button == 1)
-        {
-            return MessageBoxButton::eNo;
-        }
-
-        return MessageBoxButton::eYes;
-    }
-
-    return MessageBoxButton::eOK;
 }
 
 void Alive_Show_ErrorMsg(const char_type* msg)
