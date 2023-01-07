@@ -474,16 +474,6 @@ bool InputObject::IsAnyPressed(u32 command) const
 
 bool InputObject::IsAnyPressed(PadIndex padIx, u32 command) const
 {
-    return (mPads[PadIndexToInt(padIx)].mRawInput & command) != 0;
-}
-
-bool InputObject::IsAnyHeld(u32 command) const
-{
-    return IsAnyHeld(PadIndex::Active, command);
-}
-
-bool InputObject::IsAnyHeld(PadIndex padIx, u32 command) const
-{
     return (mPads[PadIndexToInt(padIx)].mPressed & command) != 0;
 }
 
