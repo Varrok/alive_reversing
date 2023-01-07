@@ -1875,73 +1875,101 @@ void Abe::DoCrouchingGameSpeak()
 {
     field_10C_prev_held |= Input().GetPressed();
 
-    if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak1))
+    if(!pendingGameSpeakCommand)
     {
-        gEventSystem->VPushEvent(GameSpeakEvents::eAbe_Hello_9);
-        Mudokon_SFX(MudSounds::eHello_3, 0, 0, this);
-        mCurrentMotion = eAbeMotions::Motion_22_CrouchSpeak;
+        pendingGameSpeakCommand = Input_IsAnyGameSpeakPressed();
     }
-    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak2))
+
+    if(pendingGameSpeakCommand != std::nullopt)
     {
-        gEventSystem->VPushEvent(GameSpeakEvents::eAbe_FollowMe_10);
-        Mudokon_SFX(MudSounds::eFollowMe_4, 0, 0, this);
-        mCurrentMotion = eAbeMotions::Motion_22_CrouchSpeak;
-    }
-    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak3))
-    {
-        gEventSystem->VPushEvent(GameSpeakEvents::eAbe_Anger_11);
-        Mudokon_SFX(MudSounds::eAngry_5, 0, 0, this);
-        mCurrentMotion = eAbeMotions::Motion_23_CrouchSpeak;
-    }
-    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak4))
-    {
-        gEventSystem->VPushEvent(GameSpeakEvents::eAbe_Wait_12);
-        Mudokon_SFX(MudSounds::eWait_6, 0, 0, this);
-        mCurrentMotion = eAbeMotions::Motion_23_CrouchSpeak;
-    }
-    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak5))
-    {
-        gEventSystem->VPushEvent(GameSpeakEvents::eAbe_Laugh_4);
-        Mudokon_SFX(MudSounds::eLaugh1_8, 0, 0, this);
-        mCurrentMotion = eAbeMotions::Motion_23_CrouchSpeak;
-    }
-    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak6))
-    {
-        gEventSystem->VPushEvent(GameSpeakEvents::eAbe_WhistleHigh_1);
-        Mudokon_SFX(MudSounds::eWhistleHigh_1, 0, 0, this);
-        mCurrentMotion = eAbeMotions::Motion_23_CrouchSpeak;
-    }
-    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak7))
-    {
-        gEventSystem->VPushEvent(GameSpeakEvents::eAbe_Fart_3);
-        Mudokon_SFX(MudSounds::eFart_7, 0, 0, this);
-        if (gEnableFartGasCheat)
+        s16 nextMotion = -1;
+        switch(pendingGameSpeakCommand.value())
         {
-            FP xPos = {};
-            if (GetAnimation().GetFlipX())
+            case InputCommands::eGameSpeak1:
             {
-                xPos = mXPos + FP_FromDouble(10) * GetSpriteScale();
+                gEventSystem->VPushEvent(GameSpeakEvents::eAbe_Hello_9);
+                Mudokon_SFX(MudSounds::eHello_3, 0, 0, this);
+                nextMotion = eAbeMotions::Motion_22_CrouchSpeak;
+                break;
             }
-            else
+            case InputCommands::eGameSpeak2:
             {
-                xPos = mXPos - FP_FromDouble(10) * GetSpriteScale();
+                gEventSystem->VPushEvent(GameSpeakEvents::eAbe_FollowMe_10);
+                Mudokon_SFX(MudSounds::eFollowMe_4, 0, 0, this);
+                nextMotion = eAbeMotions::Motion_22_CrouchSpeak;
+                break;
             }
-            New_Smoke_Particles(
-                xPos,
-                mYPos - FP_FromDouble(6) * GetSpriteScale(),
-                GetSpriteScale() * FP_FromDouble(0.5),
-                3,
-                RGB16{ 32, 128, 32 });
+            case InputCommands::eGameSpeak3:
+            {
+                gEventSystem->VPushEvent(GameSpeakEvents::eAbe_Wait_12);
+                Mudokon_SFX(MudSounds::eWait_6, 0, 0, this);
+                nextMotion = eAbeMotions::Motion_23_CrouchSpeak;
+
+                break;
+            }
+            case InputCommands::eGameSpeak4:
+            {
+                gEventSystem->VPushEvent(GameSpeakEvents::eAbe_Anger_11);
+                Mudokon_SFX(MudSounds::eAngry_5, 0, 0, this);
+                nextMotion = eAbeMotions::Motion_23_CrouchSpeak;
+                break;
+            }
+            case InputCommands::eGameSpeak5:
+            {
+                gEventSystem->VPushEvent(GameSpeakEvents::eAbe_Laugh_4);
+                Mudokon_SFX(MudSounds::eLaugh1_8, 0, 0, this);
+                nextMotion = eAbeMotions::Motion_23_CrouchSpeak;
+                break;
+            }
+            case InputCommands::eGameSpeak6:
+            {
+                gEventSystem->VPushEvent(GameSpeakEvents::eAbe_WhistleHigh_1);
+                Mudokon_SFX(MudSounds::eWhistleHigh_1, 0, 0, this);
+                nextMotion = eAbeMotions::Motion_23_CrouchSpeak;
+                break;
+            }
+            case InputCommands::eGameSpeak7:
+            {
+                gEventSystem->VPushEvent(GameSpeakEvents::eAbe_Fart_3);
+                Mudokon_SFX(MudSounds::eFart_7, 0, 0, this);
+                if (gEnableFartGasCheat)
+                {
+                    FP xPos = {};
+                    if (GetAnimation().GetFlipX())
+                    {
+                        xPos = mXPos + FP_FromDouble(10) * GetSpriteScale();
+                    }
+                    else
+                    {
+                        xPos = mXPos - FP_FromDouble(10) * GetSpriteScale();
+                    }
+                    New_Smoke_Particles(
+                        xPos,
+                        mYPos - FP_FromDouble(6) * GetSpriteScale(),
+                        GetSpriteScale() * FP_FromDouble(0.5),
+                        3,
+                        RGB16{ 32, 128, 32 });
+                }
+                field_130_say = 8;
+                field_134_auto_say_timer = sGnFrame + 15;
+                nextMotion = eAbeMotions::Motion_22_CrouchSpeak;
+                break;
+            }
+            case InputCommands::eGameSpeak8:
+            {
+                gEventSystem->VPushEvent(GameSpeakEvents::eAbe_WhistleLow_2);
+                Mudokon_SFX(MudSounds::eWhistleLow_2, 0, 0, this);
+                nextMotion = eAbeMotions::Motion_22_CrouchSpeak;
+                break;
+            }
+            default:
+            {
+                break;
+            }
         }
-        field_130_say = 8;
-        mCurrentMotion = eAbeMotions::Motion_22_CrouchSpeak;
-        field_134_auto_say_timer = sGnFrame + 15;
-    }
-    else if (Input_IsGameSpeakPressed(InputCommands::eGameSpeak8))
-    {
-        gEventSystem->VPushEvent(GameSpeakEvents::eAbe_WhistleLow_2);
-        Mudokon_SFX(MudSounds::eWhistleLow_2, 0, 0, this);
-        mCurrentMotion = eAbeMotions::Motion_22_CrouchSpeak;
+
+        pendingGameSpeakCommand.reset();
+        mCurrentMotion = nextMotion;
     }
 }
 
@@ -4311,7 +4339,6 @@ void Abe::Motion_19_CrouchIdle()
         return;
     }
 
-
     // Hit bombs/pick up items ?
     if (Input().IsAnyPressed(sInputKey_DoAction))
     {
@@ -4466,7 +4493,12 @@ void Abe::Motion_22_CrouchSpeak()
 
 void Abe::Motion_23_CrouchSpeak()
 {
-    field_10C_prev_held |= Input().GetPressed();
+    field_10C_prev_held |= Input().GetPressed(); //todo remove me
+
+    if(!pendingGameSpeakCommand)
+    {
+        pendingGameSpeakCommand = Input_IsAnyGameSpeakPressed();
+    }
 
     if (GetAnimation().GetIsLastFrame())
     {
@@ -6017,6 +6049,11 @@ void Abe::Motion_58_ToSpeak()
     FollowLift();
 
     field_10C_prev_held |= Input().GetPressed();
+
+    if(!pendingGameSpeakCommand)
+    {
+        pendingGameSpeakCommand = Input_IsAnyGameSpeakPressed();
+    }
 
     if (GetAnimation().GetIsLastFrame())
     {
