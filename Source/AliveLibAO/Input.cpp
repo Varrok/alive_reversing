@@ -352,6 +352,7 @@ void InputObject::Update(BaseGameAutoPlayer& gameAutoPlayer)
         mPads[currentControllerId].mPressed = static_cast<u32>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[currentControllerId].mPressed)).Raw().all);
         mPads[currentControllerId].mReleased = static_cast<u32>(AEInputCommandsToAOInputCommands(MakeAEInputBits(::Input().mPads[currentControllerId].mReleased)).Raw().all);
         LOG_INFO("AO RAW INPUT %d: %d",currentControllerId, mPads[currentControllerId].mRawInput);
+        LOG_INFO("EO RAW INPUT %d: %d",currentControllerId, ::Input().mPads[currentControllerId].mRawInput);
     }
 
     // Handle demo input (AO impl)

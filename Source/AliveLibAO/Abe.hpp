@@ -526,7 +526,7 @@ public:
     void Motion_163_ShrykullEnd();
     void Motion_164_PoisonGasDeath();
 
-    s16 field_10C_prev_held = 0;
+    s32 field_10C_prev_held = 0;
     s16 field_10E_released_buttons = 0;
     AllInternalStates field_110_state = {};
     s16 field_112_prev_motion = 0;

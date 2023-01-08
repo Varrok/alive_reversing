@@ -39,16 +39,14 @@ enum InputCommands : u32
     eDown = 1u << 14,             // 0x4000
     eLeft = 1u << 15,             // 0x8000
 
-
-    //todo temporary values
-    eGameSpeak1 = eHop,
-    eGameSpeak2 = eDoAction,
-    eGameSpeak3 = eThrowItem,
-    eGameSpeak4 = eCrouchOrRoll,
-    eGameSpeak5 = eCrouchOrRoll,
-    eGameSpeak6 = eHop,
-    eGameSpeak7 = eThrowItem,
-    eGameSpeak8 = eDoAction,
+    eGameSpeak1 = 1u << 16, //eHop,
+    eGameSpeak2 = 1u << 17, //eDoAction,
+    eGameSpeak3 = 1u << 18, //eThrowItem,
+    eGameSpeak4 = 1u << 19, //eCrouchOrRoll,
+    eGameSpeak5 = 1u << 20, //eCrouchOrRoll,
+    eGameSpeak6 = 1u << 21, //eHop,
+    eGameSpeak7 = 1u << 22, //eThrowItem,
+    eGameSpeak8 = 1u << 23, //eDoAction,
 
     // ---
     // anything else below this won't fit into 16-bit variables
