@@ -2072,7 +2072,7 @@ void Menu::Options_Sound_Update()
         mIdleInputCounter++;
     }
 
-    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUp)) // TODO: Input constants
+    if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eUp))
     {
         if (mSelectedButtonIndex.sound_menu <= SoundOptions::eStereo_0)
         {

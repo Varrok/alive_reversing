@@ -38,28 +38,38 @@ enum InputCommands : u32
     eRight = 1u << 13,            // 0x2000
     eDown = 1u << 14,             // 0x4000
     eLeft = 1u << 15,             // 0x8000
-    eGameSpeak1 = 1u << 16,
-    eGameSpeak2 = 1u << 17,
-    eGameSpeak3 = 1u << 18,
-    eGameSpeak4 = 1u << 19,
-    eGameSpeak5 = 1u << 20,
-    eGameSpeak6 = 1u << 21,
-    eGameSpeak7 = 1u << 22,
-    eGameSpeak8 = 1u << 23,
+
+
+    //todo temporary values
+    eGameSpeak1 = eHop,
+    eGameSpeak2 = eDoAction,
+    eGameSpeak3 = eThrowItem,
+    eGameSpeak4 = eCrouchOrRoll,
+    eGameSpeak5 = eCrouchOrRoll,
+    eGameSpeak6 = eHop,
+    eGameSpeak7 = eThrowItem,
+    eGameSpeak8 = eDoAction,
+
+    // ---
+    // anything else below this won't fit into 16-bit variables
+    // ---
+    //eGameSpeak7 = 1u << 16, // 0x10000
+    //eGameSpeak8 = 1u << 17, // 0x20000
+    //eChant = 1u << 18, // 0x40000
+    //ePause = 1u << 19, // Or enter
+    //eUnPause_OrConfirm = 1u << 20, // 0x100000 Or/and back
+    //eBack = 1u << 21, // 0x200000
+    //eCheatMode = 1u << 22,
+    //eLeftGameSpeak = 1u << 23, // 0x800000
+    //eRightGameSpeak = 1u << 24, // 0x1000000    = nothing
+    // 0x2000000    = nothing
+    // 0x4000000    = nothing
+    // 0x8000000    = nothing
+    // 0x10000000   = nothing
+    // 0x20000000   = nothing
+    // 0x40000000   = nothing
+    //e0x80000000 = 1u << 31,
 };
-
-extern const InputCommands sInputKey_Right;
-extern const InputCommands sInputKey_Left;
-extern const InputCommands sInputKey_Up;
-extern const InputCommands sInputKey_Down;
-extern const InputCommands sInputKey_Hop;
-extern const InputCommands sInputKey_DoAction;
-extern const InputCommands sInputKey_Run;
-extern const InputCommands sInputKey_Sneak;
-extern const InputCommands sInputKey_FartRoll;
-extern const InputCommands sInputKey_ThrowItem;
-
-const InputCommands sInputKey_Chant = static_cast<InputCommands>(eRightGameSpeak | eLeftGameSpeak);
 
 #define kAO_Esc "\x06"
 
@@ -108,7 +118,6 @@ s8 Input_GetLastPressedKey();
 
 void Input_Reset();
 
-bool Input_JoyStickEnabled();
 void Input_SetJoyStickEnabled(bool enabled);
 bool Input_JoyStickAvailable();
 

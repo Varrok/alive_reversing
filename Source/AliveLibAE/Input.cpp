@@ -16,31 +16,8 @@
 
 static SDL_GameController* pSDLController = nullptr;
 
-// -- Variables -- //
-
-const InputCommands::Enum sInputKey_Right = InputCommands::Enum::eRight;
-const InputCommands::Enum sInputKey_Left = InputCommands::Enum::eLeft;
-const InputCommands::Enum sInputKey_Up = InputCommands::Enum::eUp;
-const InputCommands::Enum sInputKey_Down = InputCommands::Enum::eDown;
-const InputCommands::Enum sInputKey_Hop = InputCommands::Enum::eHop;
-const InputCommands::Enum sInputKey_DoAction = InputCommands::Enum::eDoAction;
-const InputCommands::Enum sInputKey_Run = InputCommands::Enum::eRun;
-const InputCommands::Enum sInputKey_Sneak = InputCommands::Enum::eSneak;
-const InputCommands::Enum sInputKey_FartRoll = InputCommands::Enum::eFartOrRoll;
-const InputCommands::Enum sInputKey_ThrowItem = InputCommands::Enum::eThrowItem;
-const InputCommands::Enum sInputKey_GameSpeak2 = InputCommands::Enum::eGameSpeak2;
-const InputCommands::Enum sInputKey_GameSpeak4 = InputCommands::Enum::eGameSpeak4;
-const InputCommands::Enum sInputKey_GameSpeak3 = InputCommands::Enum::eGameSpeak3;
-const InputCommands::Enum sInputKey_GameSpeak1 = InputCommands::Enum::eGameSpeak1;
-const InputCommands::Enum sInputKey_GameSpeak6 = InputCommands::Enum::eGameSpeak6;
-const InputCommands::Enum sInputKey_GameSpeak5 = InputCommands::Enum::eGameSpeak5;
-const InputCommands::Enum sInputKey_GameSpeak8 = InputCommands::Enum::eGameSpeak8;
-const InputCommands::Enum sInputKey_GameSpeak7 = InputCommands::Enum::eGameSpeak7;
-
-const InputCommands::Enum sInputKey_Chant = InputCommands::Enum::eChant;
-
 // Bitmask for all menu-exclusive (navigation, entering, etc.) input commands
-const u32 AllMenuCommandsMask = (InputCommands::Enum::ePause | InputCommands::Enum::eUnPause_OrConfirm | InputCommands::Enum::eBack | InputCommands::Enum::eConfigure);
+const u32 AllMenuCommandsMask = (InputCommands::ePause | InputCommands::eUnPause_OrConfirm | InputCommands::eBack | InputCommands::eConfigure);
 
 // Is a joystick plugged in and can be switched to?
 bool sJoystickAvailable = false;
@@ -81,42 +58,42 @@ u32 sLastPad_Input_BD1878 = 0;
 bool sReadPadEnable_BD1874 = false;
 
 const InputBinding sDefaultKeyboardBindings_55EAD8[36] = {
-    {VK_LEFT, InputCommands::Enum::eLeft},
-    {VK_RIGHT, InputCommands::Enum::eRight},
-    {VK_UP, InputCommands::Enum::eUp},
-    {VK_DOWN, InputCommands::Enum::eDown},
-    {VK_CONTROL, InputCommands::Enum::eDoAction},
-    {VK_MENU, InputCommands::Enum::eSneak},
-    {VK_SHIFT, InputCommands::Enum::eRun},
-    {VK_SPACE, InputCommands::Enum::eHop},
-    {'Z', InputCommands::Enum::eThrowItem},
-    {'X', static_cast<InputCommands::Enum>(InputCommands::Enum::eUnPause_OrConfirm | InputCommands::Enum::eFartOrRoll)},
-    {VK_ESCAPE, static_cast<InputCommands::Enum>(InputCommands::Enum::ePause | InputCommands::Enum::eBack)},
-    {VK_RETURN, static_cast<InputCommands::Enum>(InputCommands::Enum::eUnPause_OrConfirm | InputCommands::Enum::eFartOrRoll)},
-    {VK_TAB, InputCommands::Enum::eCheatMode},
-    {'1', InputCommands::Enum::eGameSpeak1},
-    {'2', InputCommands::Enum::eGameSpeak2},
-    {'3', InputCommands::Enum::eGameSpeak3},
-    {'4', InputCommands::Enum::eGameSpeak4},
-    {'5', InputCommands::Enum::eGameSpeak5},
-    {'6', InputCommands::Enum::eGameSpeak6},
-    {'7', InputCommands::Enum::eGameSpeak7},
-    {'8', InputCommands::Enum::eGameSpeak8},
-    {'0', InputCommands::Enum::eChant},
-    {VK_NUMPAD1, InputCommands::Enum::eGameSpeak1},
-    {VK_NUMPAD2, InputCommands::Enum::eGameSpeak2},
-    {VK_NUMPAD3, InputCommands::Enum::eGameSpeak3},
-    {VK_NUMPAD4, InputCommands::Enum::eGameSpeak4},
-    {VK_NUMPAD5, InputCommands::Enum::eGameSpeak5},
-    {VK_NUMPAD6, InputCommands::Enum::eGameSpeak6},
-    {VK_NUMPAD7, InputCommands::Enum::eGameSpeak7},
-    {VK_NUMPAD8, InputCommands::Enum::eGameSpeak8},
-    {VK_NUMPAD0, InputCommands::Enum::eChant},
-    {'C', InputCommands::Enum::eConfigure},
-    {VK_PRIOR, static_cast<InputCommands::Enum>(0x20000000)},
-    {VK_NEXT, static_cast<InputCommands::Enum>(0x40000000)},
-    {VK_DELETE, static_cast<InputCommands::Enum>(0x10000000)},
-    {0, static_cast<InputCommands::Enum>(0)}
+    {VK_LEFT, InputCommands::eLeft},
+    {VK_RIGHT, InputCommands::eRight},
+    {VK_UP, InputCommands::eUp},
+    {VK_DOWN, InputCommands::eDown},
+    {VK_CONTROL, InputCommands::eDoAction},
+    {VK_MENU, InputCommands::eSneak},
+    {VK_SHIFT, InputCommands::eRun},
+    {VK_SPACE, InputCommands::eHop},
+    {'Z', InputCommands::eThrowItem},
+    {'X', static_cast<InputCommands>(InputCommands::eUnPause_OrConfirm | InputCommands::eFartOrRoll)},
+    {VK_ESCAPE, static_cast<InputCommands>(InputCommands::ePause | InputCommands::eBack)},
+    {VK_RETURN, static_cast<InputCommands>(InputCommands::eUnPause_OrConfirm | InputCommands::eFartOrRoll)},
+    {VK_TAB, InputCommands::eCheatMode},
+    {'1', InputCommands::eGameSpeak1},
+    {'2', InputCommands::eGameSpeak2},
+    {'3', InputCommands::eGameSpeak3},
+    {'4', InputCommands::eGameSpeak4},
+    {'5', InputCommands::eGameSpeak5},
+    {'6', InputCommands::eGameSpeak6},
+    {'7', InputCommands::eGameSpeak7},
+    {'8', InputCommands::eGameSpeak8},
+    {'0', InputCommands::eChant},
+    {VK_NUMPAD1, InputCommands::eGameSpeak1},
+    {VK_NUMPAD2, InputCommands::eGameSpeak2},
+    {VK_NUMPAD3, InputCommands::eGameSpeak3},
+    {VK_NUMPAD4, InputCommands::eGameSpeak4},
+    {VK_NUMPAD5, InputCommands::eGameSpeak5},
+    {VK_NUMPAD6, InputCommands::eGameSpeak6},
+    {VK_NUMPAD7, InputCommands::eGameSpeak7},
+    {VK_NUMPAD8, InputCommands::eGameSpeak8},
+    {VK_NUMPAD0, InputCommands::eChant},
+    {'C', InputCommands::eConfigure},
+    {VK_PRIOR, static_cast<InputCommands>(0x20000000)},
+    {VK_NEXT, static_cast<InputCommands>(0x40000000)},
+    {VK_DELETE, static_cast<InputCommands>(0x10000000)},
+    {0, static_cast<InputCommands>(0)}
 };
 
 #define GAME_PAD_VK_BIT_FACE_BTN_LEFT 0
@@ -145,16 +122,16 @@ enum Flags_VKGamepad_Buttons_Pressed
 
 const s16 gamePadBindingsSize = 10;
 const InputBinding sDefaultGamepadBindings_55EA2C[gamePadBindingsSize] = {
-    {GAME_PAD_VK_BIT_FACE_BTN_LEFT, InputCommands::Enum::eDoAction},                                             // Square / X
-    {GAME_PAD_VK_BIT_FACE_BTN_BOTTOM, static_cast<InputCommands::Enum>(InputCommands::Enum::eFartOrRoll | InputCommands::Enum::eUnPause_OrConfirm)}, // Cross / A
-    {GAME_PAD_VK_BIT_FACE_BTN_RIGHT, InputCommands::Enum::eThrowItem},                                            // Circle / B
-    {GAME_PAD_VK_BIT_FACE_BTN_TOP, static_cast<InputCommands::Enum>(InputCommands::Enum::eHop | InputCommands::Enum::eBack)},                     // Triangle / Y
-    {GAME_PAD_VK_BIT_LEFT_SHOULDER, InputCommands::Enum::eLeftGameSpeak},                                               // L1 / LB
-    {GAME_PAD_VK_BIT_RIGHT_SHOULDER, InputCommands::Enum::eRun},                                                  // R1 / RB
-    {GAME_PAD_VK_BIT_LEFT_TRIGGER, InputCommands::Enum::eRightGameSpeak},                                               // L2 / LT
-    {GAME_PAD_VK_BIT_RIGHT_TRIGGER, InputCommands::Enum::eSneak},                                                // R2 / RT
-    {GAME_PAD_VK_BIT_BACK, InputCommands::Enum::eBack},
-    {GAME_PAD_VK_BIT_START, static_cast<InputCommands::Enum>(InputCommands::Enum::ePause | InputCommands::Enum::eUnPause_OrConfirm)} // Start / Menu
+    {GAME_PAD_VK_BIT_FACE_BTN_LEFT, InputCommands::eDoAction},                                             // Square / X
+    {GAME_PAD_VK_BIT_FACE_BTN_BOTTOM, static_cast<InputCommands>(InputCommands::eFartOrRoll | InputCommands::eUnPause_OrConfirm)}, // Cross / A
+    {GAME_PAD_VK_BIT_FACE_BTN_RIGHT, InputCommands::eThrowItem},                                            // Circle / B
+    {GAME_PAD_VK_BIT_FACE_BTN_TOP, static_cast<InputCommands>(InputCommands::eHop | InputCommands::eBack)},                     // Triangle / Y
+    {GAME_PAD_VK_BIT_LEFT_SHOULDER, InputCommands::eLeftGameSpeak},                                               // L1 / LB
+    {GAME_PAD_VK_BIT_RIGHT_SHOULDER, InputCommands::eRun},                                                  // R1 / RB
+    {GAME_PAD_VK_BIT_LEFT_TRIGGER, InputCommands::eRightGameSpeak},                                               // L2 / LT
+    {GAME_PAD_VK_BIT_RIGHT_TRIGGER, InputCommands::eSneak},                                                // R2 / RT
+    {GAME_PAD_VK_BIT_BACK, InputCommands::eBack},
+    {GAME_PAD_VK_BIT_START, static_cast<InputCommands>(InputCommands::ePause | InputCommands::eUnPause_OrConfirm)} // Start / Menu
 };
 
 u32 sKeyboardBindings_5C9930[256] = {};
@@ -181,19 +158,19 @@ void Input_StickControl_45FF60(f32 x, f32 y, u32* buttons)
         {
             if (x > 0.3f)
             {
-                *buttons |= InputCommands::Enum::eRun;
+                *buttons |= InputCommands::eRun;
             }
         }
         else if (bAutoX_5C2EE4 == 2)
         {
             if (x > 0.15f)
             {
-                *buttons |= InputCommands::Enum::eSneak;
+                *buttons |= InputCommands::eSneak;
             }
 
             if (x < -0.25f)
             {
-                *buttons |= InputCommands::Enum::eRun;
+                *buttons |= InputCommands::eRun;
             }
         }
     }
@@ -209,19 +186,19 @@ void Input_StickControl_45FF60(f32 x, f32 y, u32* buttons)
         {
             if (y > 0.3f)
             {
-                *buttons |= InputCommands::Enum::eDoAction;
+                *buttons |= InputCommands::eDoAction;
             }
         }
         else if (bAutoY_5C2EF0 == 2)
         {
             if (y > 0.15f)
             {
-                *buttons |= InputCommands::Enum::eThrowItem;
+                *buttons |= InputCommands::eThrowItem;
             }
 
             if (y < -0.25f)
             {
-                *buttons |= InputCommands::Enum::eDoAction;
+                *buttons |= InputCommands::eDoAction;
             }
         }
     }
@@ -382,7 +359,7 @@ void Input_Init_Names_491870()
 
     for (s32 i = 0; i < gamePadBindingsSize; i++)
     {
-        if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eLeftGameSpeak)
+        if (sGamePadBindings_5C98E0[i] & InputCommands::eLeftGameSpeak)
         {
             sprintf(sGamepadDisplayKeyNames_5C9798.keys[10].field_0_name, "%s+%s", sJoyButtonNames_5C9908[i], sJoyButtonNames_5C9908[3]);
             sprintf(sGamepadDisplayKeyNames_5C9798.keys[11].field_0_name, "%s+%s", sJoyButtonNames_5C9908[i], sJoyButtonNames_5C9908[0]);
@@ -390,7 +367,7 @@ void Input_Init_Names_491870()
             sprintf(sGamepadDisplayKeyNames_5C9798.keys[13].field_0_name, "%s+%s", sJoyButtonNames_5C9908[i], sJoyButtonNames_5C9908[2]);
             eSpeak1idx = i;
         }
-        else if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eRightGameSpeak)
+        else if (sGamePadBindings_5C98E0[i] & InputCommands::eRightGameSpeak)
         {
             sprintf(sGamepadDisplayKeyNames_5C9798.keys[14].field_0_name, "%s+%s", sJoyButtonNames_5C9908[i], sJoyButtonNames_5C9908[1]);
             sprintf(sGamepadDisplayKeyNames_5C9798.keys[15].field_0_name, "%s+%s", sJoyButtonNames_5C9908[i], sJoyButtonNames_5C9908[3]);
@@ -451,11 +428,6 @@ const char_type* Input_GetButtonString_492530(const char_type* idx, s32 controll
     return ret;
 }
 
-bool Input_JoyStickEnabled()
-{
-    return sJoystickEnabled;
-}
-
 bool Input_JoyStickAvailable()
 {
     return sJoystickAvailable;
@@ -466,7 +438,7 @@ void Input_SetJoyStickEnabled(bool enabled)
     sJoystickEnabled = enabled;
 }
 
-s32 Input_Remap_492680(InputCommands::Enum inputCmd)
+s32 Input_Remap_492680(InputCommands inputCmd)
 {
     if (!Input_GetInputEnabled_4EDDE0())
     {
@@ -502,7 +474,7 @@ s32 Input_Remap_492680(InputCommands::Enum inputCmd)
             }
 
             // don't allow binding Speak I/II to any of the right-hand side action buttons
-            if (inputCmd & (InputCommands::Enum::eLeftGameSpeak | InputCommands::Enum::eRightGameSpeak) && bindIdx < 4)
+            if (inputCmd & (InputCommands::eLeftGameSpeak | InputCommands::eRightGameSpeak) && bindIdx < 4)
             {
                 return 0;
             }
@@ -587,37 +559,37 @@ void Input_ResetBinding_4925A0(s32 input_command, s32 bIsGamePad)
     }
 }
 
-InputCommands::Enum Input_LoadSettingsIni_GetInputCommand_492B80(const char_type* pActionName)
+InputCommands Input_LoadSettingsIni_GetInputCommand_492B80(const char_type* pActionName)
 {
     if (!_strcmpi(pActionName, "run"))
     {
-        return InputCommands::Enum::eRun;
+        return InputCommands::eRun;
     }
     if (!_strcmpi(pActionName, "sneak"))
     {
-        return InputCommands::Enum::eSneak;
+        return InputCommands::eSneak;
     }
     if (!_strcmpi(pActionName, "jump"))
     {
-        return InputCommands::Enum::eHop;
+        return InputCommands::eHop;
     }
     if (!_strcmpi(pActionName, "action"))
     {
-        return InputCommands::Enum::eDoAction;
+        return InputCommands::eDoAction;
     }
     if (!_strcmpi(pActionName, "throw"))
     {
-        return InputCommands::Enum::eThrowItem;
+        return InputCommands::eThrowItem;
     }
     if (!_strcmpi(pActionName, "fart"))
     {
-        return InputCommands::Enum::eFartOrRoll;
+        return InputCommands::eFartOrRoll;
     }
     if (_strcmpi(pActionName, "speak1"))
     {
-        return _strcmpi(pActionName, "speak2") != 0 ? static_cast<InputCommands::Enum>(0) : InputCommands::Enum::eRightGameSpeak;
+        return _strcmpi(pActionName, "speak2") != 0 ? static_cast<InputCommands>(0) : InputCommands::eRightGameSpeak;
     }
-    return InputCommands::Enum::eLeftGameSpeak;
+    return InputCommands::eLeftGameSpeak;
 }
 
 s32 Input_GetKeyboardKeyCode_492CA0(const char_type* keyName)
@@ -652,7 +624,7 @@ void Input_SetKeyboardBinding_493180(const char_type* pKeyName, s32 inputCommand
     if (keyCode >= 0)
     {
         Input_ResetBinding_4925A0(inputCommand, 0);
-        sKeyboardBindings_5C9930[keyCode] = static_cast<InputCommands::Enum>(sKeyboardBindings_5C9930[keyCode] | inputCommand);
+        sKeyboardBindings_5C9930[keyCode] = static_cast<InputCommands>(sKeyboardBindings_5C9930[keyCode] | inputCommand);
     }
 }
 
@@ -662,7 +634,7 @@ void Input_SetGamePadBinding_4931D0(const char_type* pButtonName, s32 inputComma
     Input_ResetBinding_4925A0(inputCommand, 1);
     if (gamePadCode >= 0)
     {
-        sGamePadBindings_5C98E0[gamePadCode] = static_cast<InputCommands::Enum>(sGamePadBindings_5C98E0[gamePadCode] | inputCommand);
+        sGamePadBindings_5C98E0[gamePadCode] = static_cast<InputCommands>(sGamePadBindings_5C98E0[gamePadCode] | inputCommand);
     }
 }
 
@@ -776,24 +748,24 @@ void NewParseSettingsIni()
             if (category == iniCategories[1])
             {
                 currentCategory = IniCategory::eKeyboard;
-                Input_ResetBinding_4925A0(InputCommands::Enum::eRun, 0);
-                Input_ResetBinding_4925A0(InputCommands::Enum::eSneak, 0);
-                Input_ResetBinding_4925A0(InputCommands::Enum::eHop, 0);
-                Input_ResetBinding_4925A0(InputCommands::Enum::eDoAction, 0);
-                Input_ResetBinding_4925A0(InputCommands::Enum::eThrowItem, 0);
-                Input_ResetBinding_4925A0(InputCommands::Enum::eFartOrRoll, 0);
+                Input_ResetBinding_4925A0(InputCommands::eRun, 0);
+                Input_ResetBinding_4925A0(InputCommands::eSneak, 0);
+                Input_ResetBinding_4925A0(InputCommands::eHop, 0);
+                Input_ResetBinding_4925A0(InputCommands::eDoAction, 0);
+                Input_ResetBinding_4925A0(InputCommands::eThrowItem, 0);
+                Input_ResetBinding_4925A0(InputCommands::eFartOrRoll, 0);
             }
             else if (category == iniCategories[2])
             {
                 currentCategory = IniCategory::eGamepad;
-                Input_ResetBinding_4925A0(InputCommands::Enum::eRun, 1);
-                Input_ResetBinding_4925A0(InputCommands::Enum::eSneak, 1);
-                Input_ResetBinding_4925A0(InputCommands::Enum::eHop, 1);
-                Input_ResetBinding_4925A0(InputCommands::Enum::eDoAction, 1);
-                Input_ResetBinding_4925A0(InputCommands::Enum::eThrowItem, 1);
-                Input_ResetBinding_4925A0(InputCommands::Enum::eFartOrRoll, 1);
-                Input_ResetBinding_4925A0(InputCommands::Enum::eLeftGameSpeak, 1);
-                Input_ResetBinding_4925A0(InputCommands::Enum::eRightGameSpeak, 1);
+                Input_ResetBinding_4925A0(InputCommands::eRun, 1);
+                Input_ResetBinding_4925A0(InputCommands::eSneak, 1);
+                Input_ResetBinding_4925A0(InputCommands::eHop, 1);
+                Input_ResetBinding_4925A0(InputCommands::eDoAction, 1);
+                Input_ResetBinding_4925A0(InputCommands::eThrowItem, 1);
+                Input_ResetBinding_4925A0(InputCommands::eFartOrRoll, 1);
+                Input_ResetBinding_4925A0(InputCommands::eLeftGameSpeak, 1);
+                Input_ResetBinding_4925A0(InputCommands::eRightGameSpeak, 1);
             }
             else if (category == iniCategories[3])
             {
@@ -830,12 +802,12 @@ void NewParseSettingsIni()
                 }
                 else if (currentCategory == IniCategory::eKeyboard)
                 {
-                    InputCommands::Enum kbInputCommand = Input_LoadSettingsIni_GetInputCommand_492B80(param[0].c_str());
+                    InputCommands kbInputCommand = Input_LoadSettingsIni_GetInputCommand_492B80(param[0].c_str());
                     Input_SetKeyboardBinding_493180(param[1].c_str(), kbInputCommand);
                 }
                 else if (currentCategory == IniCategory::eGamepad)
                 {
-                    InputCommands::Enum gamepadInputCommand = Input_LoadSettingsIni_GetInputCommand_492B80(param[0].c_str());
+                    InputCommands gamepadInputCommand = Input_LoadSettingsIni_GetInputCommand_492B80(param[0].c_str());
                     Input_SetGamePadBinding_4931D0(param[1].c_str(), gamepadInputCommand);
                 }
                 else if (currentCategory == IniCategory::eAlive)
@@ -1104,28 +1076,28 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
 
             if ((sGamepadCapFlags_5C2EF8 & eDisableAutoRun) == 1 && sJoystickNumButtons_5C2EFC <= 4 && fabs(pX1) >= 0.75f) // Auto sprint
             {
-                pressedInputCommands |= InputCommands::Enum::eRun;
+                pressedInputCommands |= InputCommands::eRun;
             }
 
             float axisDeadZoneThreshold = 0.050000001f;
             if (pX1 > axisDeadZoneThreshold)
             {
-                pressedInputCommands |= InputCommands::Enum::eRight;
+                pressedInputCommands |= InputCommands::eRight;
             }
             else if(pX1 < -axisDeadZoneThreshold)
             {
-                pressedInputCommands |= InputCommands::Enum::eLeft;
+                pressedInputCommands |= InputCommands::eLeft;
             }
             if (pY1 > axisDeadZoneThreshold)
             {
-                pressedInputCommands |= InputCommands::Enum::eDown;
+                pressedInputCommands |= InputCommands::eDown;
             }
             else if(pY1 < -axisDeadZoneThreshold)
             {
-                pressedInputCommands |= InputCommands::Enum::eUp;
+                pressedInputCommands |= InputCommands::eUp;
             }
 
-            if (!(pressedInputCommands & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft | InputCommands::Enum::eDown | InputCommands::Enum::eUp)))
+            if (!(pressedInputCommands & (InputCommands::eRight | InputCommands::eLeft | InputCommands::eDown | InputCommands::eUp)))
             {
                 s32 shoulderButtonsPressedCount = 0;
 
@@ -1133,7 +1105,7 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
                 bool isGameSpeakRightPressed = false;
                 for (s32 i = 0; i < gamePadBindingsSize; i++)
                 {
-                    if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eLeftGameSpeak)
+                    if (sGamePadBindings_5C98E0[i] & InputCommands::eLeftGameSpeak)
                     {
                         if (gamepadButtonsPressed.Get(static_cast<Flags_VKGamepad_Buttons_Pressed>( 1 << i )))
                         {
@@ -1142,7 +1114,7 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
                         }
                     }
 
-                    if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eRightGameSpeak)
+                    if (sGamePadBindings_5C98E0[i] & InputCommands::eRightGameSpeak)
                     {
                         if (gamepadButtonsPressed.Get(static_cast<Flags_VKGamepad_Buttons_Pressed>( 1 << i )))
                         {
@@ -1151,7 +1123,7 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
                         }
                     }
 
-                    if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eRun)
+                    if (sGamePadBindings_5C98E0[i] & InputCommands::eRun)
                     {
                         if (gamepadButtonsPressed.Get(static_cast<Flags_VKGamepad_Buttons_Pressed>( 1 << i )))
                         {
@@ -1159,7 +1131,7 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
                         }
                     }
 
-                    if (sGamePadBindings_5C98E0[i] & InputCommands::Enum::eSneak)
+                    if (sGamePadBindings_5C98E0[i] & InputCommands::eSneak)
                     {
                         if (gamepadButtonsPressed.Get(static_cast<Flags_VKGamepad_Buttons_Pressed>( 1 << i )))
                         {
@@ -1176,9 +1148,9 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
 
                 if (isChanting)
                 {
-                    pressedInputCommands |= InputCommands::Enum::eChant;
+                    pressedInputCommands |= InputCommands::eChant;
                 }
-                else if(isGameSpeakLeftPressed || isGameSpeakRightPressed)
+                else if(isGameSpeakLeftPressed || isGameSpeakRightPressed) //todo
                 {
                     // gamepadButtonsPressed.Clear(Flags_VKGamepad_Buttons_Pressed::eBit1_face_btn_left);
                     // gamepadButtonsPressed.Clear(Flags_VKGamepad_Buttons_Pressed::eBit2_face_btn_bottom);
@@ -1202,10 +1174,10 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
             {
                 if (!(sGamepadCapFlags_5C2EF8 & eDisableAutoRun))
                 {
-                    if ((pressedInputCommands ^ sPrevious_down_keyboard_keys_5C9F74) & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft))
+                    if ((pressedInputCommands ^ sPrevious_down_keyboard_keys_5C9F74) & (InputCommands::eRight | InputCommands::eLeft))
                     {
                         dword_5C9F78 = sGamepadCapFlags_5C2EF8 & eDisableAutoRun;
-                        if (!(sPrevious_down_keyboard_keys_5C9F74 & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft)))
+                        if (!(sPrevious_down_keyboard_keys_5C9F74 & (InputCommands::eRight | InputCommands::eLeft)))
                         {
                             currentTime = SYS_GetTicks();
                             if ((u32)(sPrevTimeStamp_5C98D8 - dword_5C98DC) <= 220 && currentTime - sPrevTimeStamp_5C98D8 <= 220)
@@ -1214,7 +1186,7 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
                             }
                             dword_5C98DC = currentTime;
                         }
-                        if (!(pressedInputCommands & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft)))
+                        if (!(pressedInputCommands & (InputCommands::eRight | InputCommands::eLeft)))
                         {
                             sPrevTimeStamp_5C98D8 = SYS_GetTicks();
                         }
@@ -1222,21 +1194,21 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
                 }
                 if (dword_5C9F78)
                 {
-                    pressedInputCommands |= InputCommands::Enum::eRun;
+                    pressedInputCommands |= InputCommands::eRun;
                 }
             }
         }
 
         // If pressing up and down at same time turn off
-        if ((pressedInputCommands & (InputCommands::Enum::eDown | InputCommands::Enum::eUp)) == (InputCommands::Enum::eDown | InputCommands::Enum::eUp))
+        if ((pressedInputCommands & (InputCommands::eDown | InputCommands::eUp)) == (InputCommands::eDown | InputCommands::eUp))
         {
-            pressedInputCommands &= ~(InputCommands::Enum::eDown | InputCommands::Enum::eUp);
+            pressedInputCommands &= ~(InputCommands::eDown | InputCommands::eUp);
         }
 
         // If pressing left and right at same time turn off
-        if ((pressedInputCommands & (InputCommands::Enum::eRight | InputCommands::Enum::eLeft)) == (InputCommands::Enum::eRight | InputCommands::Enum::eLeft))
+        if ((pressedInputCommands & (InputCommands::eRight | InputCommands::eLeft)) == (InputCommands::eRight | InputCommands::eLeft))
         {
-            pressedInputCommands &= ~(InputCommands::Enum::eRight | InputCommands::Enum::eLeft);
+            pressedInputCommands &= ~(InputCommands::eRight | InputCommands::eLeft);
         }
 
         converted_input = pressedInputCommands;
@@ -1245,62 +1217,62 @@ s32 Input_Convert_KeyboardGamePadInput_To_Internal_Format_492150()
     return converted_input;
 }
 
-bool Input_IsGameSpeakPressed(InputCommands::Enum gameSpeakId)
+bool Input_IsGameSpeakPressed(InputCommands gameSpeakId)
 {
     auto held = Input().GetHeld();
     auto pressed = Input().GetPressed();
     bool correctSpeakBtnHeld = false;
-    if (gameSpeakId >= InputCommands::Enum::eGameSpeak1 && gameSpeakId <= InputCommands::Enum::eGameSpeak4)
+    if (gameSpeakId >= InputCommands::eGameSpeak1 && gameSpeakId <= InputCommands::eGameSpeak4)
     {
-        correctSpeakBtnHeld = held & InputCommands::Enum::eLeftGameSpeak;
+        correctSpeakBtnHeld = held & InputCommands::eLeftGameSpeak;
     }
-    else if (gameSpeakId >= InputCommands::Enum::eGameSpeak5 && gameSpeakId <= InputCommands::Enum::eGameSpeak8)
+    else if (gameSpeakId >= InputCommands::eGameSpeak5 && gameSpeakId <= InputCommands::eGameSpeak8)
     {
-        correctSpeakBtnHeld = held & InputCommands::Enum::eRightGameSpeak;
+        correctSpeakBtnHeld = held & InputCommands::eRightGameSpeak;
     }
 
     if(correctSpeakBtnHeld)
     {
         switch(gameSpeakId)
         {
-            case InputCommands::Enum::eGameSpeak1:
+            case InputCommands::eGameSpeak1:
             {
-                return pressed & InputCommands::Enum::eHop;
+                return pressed & InputCommands::eHop;
                 break;
             }
-            case InputCommands::Enum::eGameSpeak2:
+            case InputCommands::eGameSpeak2:
             {
-                return pressed & InputCommands::Enum::eDoAction;
+                return pressed & InputCommands::eDoAction;
                 break;
             }
-            case InputCommands::Enum::eGameSpeak3:
+            case InputCommands::eGameSpeak3:
             {
-                return pressed & InputCommands::Enum::eFartOrRoll;
+                return pressed & InputCommands::eFartOrRoll;
                 break;
             }
-            case InputCommands::Enum::eGameSpeak4:
+            case InputCommands::eGameSpeak4:
             {
-                return pressed & InputCommands::Enum::eThrowItem;
+                return pressed & InputCommands::eThrowItem;
                 break;
             }
-            case InputCommands::Enum::eGameSpeak5:
+            case InputCommands::eGameSpeak5:
             {
-                return pressed & InputCommands::Enum::eFartOrRoll;
+                return pressed & InputCommands::eFartOrRoll;
                 break;
             }
-            case InputCommands::Enum::eGameSpeak6:
+            case InputCommands::eGameSpeak6:
             {
-                return pressed & InputCommands::Enum::eHop;
+                return pressed & InputCommands::eHop;
                 break;
             }
-            case InputCommands::Enum::eGameSpeak7:
+            case InputCommands::eGameSpeak7:
             {
-                return pressed & InputCommands::Enum::eThrowItem;
+                return pressed & InputCommands::eThrowItem;
                 break;
             }
-            case InputCommands::Enum::eGameSpeak8:
+            case InputCommands::eGameSpeak8:
             {
-                return pressed & InputCommands::Enum::eDoAction;
+                return pressed & InputCommands::eDoAction;
                 break;
             }
             default: break;
@@ -1580,7 +1552,7 @@ void Input_Reset_492660()
 
 u32 Input_IsChanting()
 {
-    return (Input().mPads[0].mRawInput & InputCommands::Enum::eChant) == InputCommands::Enum::eChant;
+    return (Input().mPads[0].mRawInput & InputCommands::eChant) == InputCommands::eChant;
 }
 
 // Zeros the input key state array.
@@ -1645,6 +1617,11 @@ void Input_Pads_Reset_4FA960()
 {
     sLastPad_Input_BD1878 = 0;
     sReadPadEnable_BD1874 = true;
+}
+
+bool InputObject::JoyStickEnabled() const
+{
+    return sJoystickEnabled;
 }
 
 s32 InputObject::Is_Demo_Playing_45F220()
@@ -1761,108 +1738,108 @@ u32 InputObject::PsxButtonsToKeyboardInput_45EE40(u32 cmd)
 
     if (shoulderButtonsPressedCount > 1) // Any 2 shoulder button combo = chanting
     {
-        return InputCommands::Enum::eChant;
+        return InputCommands::eChant;
     }
 
     u32 rawInput = 0;
     if (cmd & PsxButtonBits::eDPadUp)
     {
-        rawInput |= InputCommands::Enum::eUp;
+        rawInput |= InputCommands::eUp;
     }
 
     if (cmd & PsxButtonBits::eDPadRight)
     {
-        rawInput |= InputCommands::Enum::eRight;
+        rawInput |= InputCommands::eRight;
     }
 
     if (cmd & PsxButtonBits::eDPadDown)
     {
-        rawInput |= InputCommands::Enum::eDown;
+        rawInput |= InputCommands::eDown;
     }
 
     if (cmd & PsxButtonBits::eDPadLeft)
     {
-        rawInput |= InputCommands::Enum::eLeft;
+        rawInput |= InputCommands::eLeft;
     }
 
     if (cmd & PsxButtonBits::eR1)
     {
-        rawInput |= InputCommands::Enum::eRun;
+        rawInput |= InputCommands::eRun;
     }
 
     if (cmd & PsxButtonBits::eR2)
     {
-        rawInput |= InputCommands::Enum::eSneak;
+        rawInput |= InputCommands::eSneak;
     }
 
     if (cmd & PsxButtonBits::eL1)
     {
-        rawInput |= InputCommands::Enum::eLeftGameSpeak;
+        rawInput |= InputCommands::eLeftGameSpeak;
 
         if (cmd & PsxButtonBits::eTriangle)
         {
-            rawInput |= InputCommands::Enum::eGameSpeak1;
+            rawInput |= InputCommands::eGameSpeak1;
         }
 
         if (cmd & PsxButtonBits::eCircle)
         {
-            rawInput |= InputCommands::Enum::eGameSpeak4;
+            rawInput |= InputCommands::eGameSpeak4;
         }
 
         if (cmd & PsxButtonBits::eCross)
         {
-            rawInput |= InputCommands::Enum::eGameSpeak3;
+            rawInput |= InputCommands::eGameSpeak3;
         }
 
         if (cmd & PsxButtonBits::eSquare)
         {
-            rawInput |= InputCommands::Enum::eGameSpeak2;
+            rawInput |= InputCommands::eGameSpeak2;
         }
     }
     else if (cmd & PsxButtonBits::eL2)
     {
-        rawInput |= InputCommands::Enum::eRightGameSpeak;
+        rawInput |= InputCommands::eRightGameSpeak;
 
         if (cmd & PsxButtonBits::eTriangle)
         {
-            rawInput |= InputCommands::Enum::eGameSpeak6;
+            rawInput |= InputCommands::eGameSpeak6;
         }
 
         if (cmd & PsxButtonBits::eCircle)
         {
-            rawInput |= InputCommands::Enum::eGameSpeak7;
+            rawInput |= InputCommands::eGameSpeak7;
         }
 
         if (cmd & PsxButtonBits::eCross)
         {
-            rawInput |= InputCommands::Enum::eGameSpeak5;
+            rawInput |= InputCommands::eGameSpeak5;
         }
 
         if (cmd & PsxButtonBits::eSquare)
         {
-            rawInput |= InputCommands::Enum::eGameSpeak8;
+            rawInput |= InputCommands::eGameSpeak8;
         }
     }
     else // No shoulder buttons
     {
         if (cmd & PsxButtonBits::eTriangle)
         {
-            rawInput |= InputCommands::Enum::eHop;
+            rawInput |= InputCommands::eHop;
         }
 
         if (cmd & PsxButtonBits::eCircle)
         {
-            rawInput |= InputCommands::Enum::eThrowItem;
+            rawInput |= InputCommands::eThrowItem;
         }
 
         if (cmd & PsxButtonBits::eCross)
         {
-            rawInput |= InputCommands::Enum::eFartOrRoll;
+            rawInput |= InputCommands::eFartOrRoll;
         }
 
         if (cmd & PsxButtonBits::eSquare)
         {
-            rawInput |= InputCommands::Enum::eDoAction;
+            rawInput |= InputCommands::eDoAction;
         }
     }
 
@@ -1879,67 +1856,67 @@ s8 InputObject::KeyboardInputToPsxButtons_45EF70(s32 cmd)
         result = 0;
     }
 
-    if (cmd & InputCommands::Enum::eChant)
+    if (cmd & InputCommands::eChant)
     {
         result |= PsxButtonBits::eL1 + PsxButtonBits::eL2;
     }
 
-    if (cmd & InputCommands::Enum::eHop)
+    if (cmd & InputCommands::eHop)
     {
         result |= PsxButtonBits::eTriangle;
     }
 
-    if (cmd & InputCommands::Enum::eThrowItem)
+    if (cmd & InputCommands::eThrowItem)
     {
         result |= PsxButtonBits::eCircle;
     }
 
-    if (cmd & InputCommands::Enum::eFartOrRoll)
+    if (cmd & InputCommands::eFartOrRoll)
     {
         result |= PsxButtonBits::eCross;
     }
 
-    if (cmd & InputCommands::Enum::eDoAction)
+    if (cmd & InputCommands::eDoAction)
     {
         result |= PsxButtonBits::eSquare;
     }
 
-    if (cmd & InputCommands::Enum::eGameSpeak1)
+    if (cmd & InputCommands::eGameSpeak1)
     {
         result |= PsxButtonBits::eL1 + PsxButtonBits::eTriangle;
     }
 
-    if (cmd & InputCommands::Enum::eGameSpeak2)
+    if (cmd & InputCommands::eGameSpeak2)
     {
         result |= PsxButtonBits::eL1 + PsxButtonBits::eSquare;
     }
 
-    if (cmd & InputCommands::Enum::eGameSpeak3)
+    if (cmd & InputCommands::eGameSpeak3)
     {
         result |= PsxButtonBits::eL1 + PsxButtonBits::eCross;
     }
 
-    if (cmd & InputCommands::Enum::eGameSpeak4)
+    if (cmd & InputCommands::eGameSpeak4)
     {
         result |= PsxButtonBits::eL1 + PsxButtonBits::eCircle;
     }
 
-    if (cmd & InputCommands::Enum::eGameSpeak5)
+    if (cmd & InputCommands::eGameSpeak5)
     {
         result |= PsxButtonBits::eL2 + PsxButtonBits::eCross;
     }
 
-    if (cmd & InputCommands::Enum::eGameSpeak6)
+    if (cmd & InputCommands::eGameSpeak6)
     {
         result |= PsxButtonBits::eL2 + PsxButtonBits::eTriangle;
     }
 
-    if (cmd & InputCommands::Enum::eGameSpeak7)
+    if (cmd & InputCommands::eGameSpeak7)
     {
         result |= PsxButtonBits::eL2 + PsxButtonBits::eCircle;
     }
 
-    if (cmd & InputCommands::Enum::eGameSpeak8)
+    if (cmd & InputCommands::eGameSpeak8)
     {
         result |= PsxButtonBits::eL2 + PsxButtonBits::eSquare;
     }
