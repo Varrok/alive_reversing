@@ -778,7 +778,7 @@ s8 Sys_PumpMessages()
                 totalConnectedJoysticks++;
                 LOG_INFO("User just inserted joystick!");
                 Input_Init();
-                Input_SetJoyStickEnabled(true);
+                Input().SetJoyStickEnabled(true);
             }
             else if (event.type == SDL_JOYDEVICEREMOVED && !isRecording)
             {
@@ -791,7 +791,7 @@ s8 Sys_PumpMessages()
                 }
                 else
                 {
-                    Input_SetJoyStickEnabled(false);
+                    Input().SetJoyStickEnabled(false);
                 }
             }
         }

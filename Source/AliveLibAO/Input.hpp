@@ -159,7 +159,9 @@ public:
 
     void SetCurrentController(PadIndex padIdx);
 
-    bool JoyStickEnabled() const;
+    bool IsJoyStickAvailable();
+    bool IsJoyStickEnabled() const;
+    void SetJoyStickEnabled(bool enabled) const;
 
     // Check a specific pad
     bool IsAnyHeld(PadIndex padIx, u32 command) const;

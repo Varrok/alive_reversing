@@ -428,12 +428,12 @@ const char_type* Input_GetButtonString_492530(const char_type* idx, s32 controll
     return ret;
 }
 
-bool Input_JoyStickAvailable()
+bool InputObject::IsJoyStickAvailable()
 {
     return sJoystickAvailable;
 }
 
-void Input_SetJoyStickEnabled(bool enabled)
+void InputObject::SetJoyStickEnabled(bool enabled)
 {
     sJoystickEnabled = enabled;
 }
@@ -851,10 +851,7 @@ void Input_SaveSettingsIni_Common()
 
     if (sJoystickEnabled)
     {
-        if (sJoystickEnabled)
-        {
-            output << "controller = Gamepad\n";
-        }
+        output << "controller = Gamepad\n";
     }
     else
     {
@@ -1619,7 +1616,7 @@ void Input_Pads_Reset_4FA960()
     sReadPadEnable_BD1874 = true;
 }
 
-bool InputObject::JoyStickEnabled() const
+bool InputObject::IsJoyStickEnabled() const
 {
     return sJoystickEnabled;
 }

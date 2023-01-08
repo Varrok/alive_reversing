@@ -168,7 +168,9 @@ public:
     u32 GetPressed();
     u32 GetReleased();
 
-    bool JoyStickEnabled() const;
+    bool IsJoyStickAvailable();
+    bool IsJoyStickEnabled() const;
+    void SetJoyStickEnabled(bool enabled);
 };
 
 InputObject& Input();
