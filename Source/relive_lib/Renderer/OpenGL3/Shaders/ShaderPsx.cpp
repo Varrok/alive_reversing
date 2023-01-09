@@ -290,11 +290,11 @@ void drawDiamond(vec2 pos, vec4 colour)
     {
         isPixelOnAnyLine = 1.0;
     }
-    if(drawLine(top - onePxOffsetX + onePxOffsetY + onePxOffsetY + onePxOffsetY, right , gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+    if(drawLine(top - onePxOffsetX + onePxOffsetY + onePxOffsetY + onePxOffsetY, right, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
     {
         isPixelOnAnyLine = 1.0;
     }
-    if(drawLine(right - onePxOffsetX - onePxOffsetX, bottom - onePxOffsetX , gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+    if(drawLine(right - onePxOffsetX - onePxOffsetX, bottom - onePxOffsetX, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
     {
         isPixelOnAnyLine = 1.0;
     }
