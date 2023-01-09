@@ -337,7 +337,6 @@ void drawNumber(int whichNumber, vec2 pos, vec4 colour)
     float width = one_pxX * 10;
     float height = one_pxY * 9;
 
-
     vec2 topLeft = vec2(posPX.x, posPX.y + height - one_pxY);
     vec2 topRight = vec2(posPX.x + width, posPX.y + height - one_pxY);
 
@@ -354,7 +353,11 @@ void drawNumber(int whichNumber, vec2 pos, vec4 colour)
     vec2 middleRightRight = middleRight + vec2(width /2, 0) + halfPxOffsetX * 4;
     vec2 absoluteMiddle = middleLeft + vec2(width / 2, 0);
 
-    vec2 roundTopLeft = middleLeftLeft + vec2((width / 2) / 3, (height / 2) * 2 / 3)
+    vec2 roundTopLeft = middleLeftLeft + vec2((width / 2) / 3, (height / 2) * 2 / 3) - halfPxOffsetY;
+    vec2 roundBottomLeft = middleLeftLeft + vec2((width / 2) / 3, -(height / 2) * 2 / 3) + halfPxOffsetY;
+
+    vec2 roundTopRight = middleRightRight - vec2((width / 2) / 3, -(height / 2) * 2 / 3) - halfPxOffsetY + halfPxOffsetX;
+    vec2 roundBottomRight = middleRightRight - vec2((width / 2) / 3, (height / 2) * 2 / 3) + halfPxOffsetY + halfPxOffsetX;
 
     bool isPixelOnAnyLine = false;
     switch (whichNumber) {
@@ -494,7 +497,7 @@ void drawNumber(int whichNumber, vec2 pos, vec4 colour)
         {
             isPixelOnAnyLine = true;
         }
-        if(drawThinnerLine(topRight + halfPxOffsetX * 0 + halfPxOffsetY * -2, bottomMiddle, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+        if(drawThinnerLine(topRight + halfPxOffsetX + halfPxOffsetY * -1, bottomMiddle, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
         {
             isPixelOnAnyLine = true;
         }
@@ -546,19 +549,25 @@ void drawNumber(int whichNumber, vec2 pos, vec4 colour)
 
         topRight = topRight - halfPxOffsetY * 2 + halfPxOffsetX * 4;
         bottomRight = bottomRight + halfPxOffsetY * 2 + halfPxOffsetX * 4;
-        if(drawLine(topLeft - halfPxOffsetX * 0, middleLeftLeft, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+        if(drawLine(topLeft, roundTopLeft, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+        {
+            isPixelOnAnyLine = true;
+        }
+        if(drawLine(roundTopLeft, middleLeftLeft, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
         {
             isPixelOnAnyLine = true;
         }
 
-//roundTopLeft
-
+        if(drawLine(middleLeftLeft, roundBottomLeft, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+        {
+            isPixelOnAnyLine = true;
+        }
+        if(drawLine(roundBottomLeft, bottomLeft - halfPxOffsetX * 1, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+        {
+            isPixelOnAnyLine = true;
+        }
 
         if(drawLine(topLeft - halfPxOffsetX * 2, absoluteMiddle + halfPxOffsetX * 2, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
-        {
-            isPixelOnAnyLine = true;
-        }
-        if(drawLine(bottomLeft - halfPxOffsetX * 0, middleLeftLeft, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
         {
             isPixelOnAnyLine = true;
         }
@@ -566,20 +575,28 @@ void drawNumber(int whichNumber, vec2 pos, vec4 colour)
         {
             isPixelOnAnyLine = true;
         }
+        if(drawLine(topRight - halfPxOffsetX, absoluteMiddle, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+        {
+            isPixelOnAnyLine = true;
+        }
+        if(drawLine(bottomRight - halfPxOffsetX, absoluteMiddle, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+        {
+            isPixelOnAnyLine = true;
+        }
 
-        if(drawLine(topRight - halfPxOffsetX * 0, absoluteMiddle, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+        if(drawLine(topRight, roundTopRight + halfPxOffsetX * 2, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
         {
             isPixelOnAnyLine = true;
         }
-        if(drawLine(topRight - halfPxOffsetX * 2, middleRightRight + halfPxOffsetX * 2, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+        if(drawLine(roundTopRight, middleRightRight + halfPxOffsetX * 2, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
         {
             isPixelOnAnyLine = true;
         }
-        if(drawLine(bottomRight - halfPxOffsetX * 0, absoluteMiddle, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+        if(drawLine(middleRightRight + halfPxOffsetX * 2, roundBottomRight, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
         {
             isPixelOnAnyLine = true;
         }
-        if(drawLine(bottomRight - halfPxOffsetX * 2, middleRightRight + halfPxOffsetX * 2, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+        if(drawLine(roundBottomRight, bottomRight + halfPxOffsetX * 2, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
         {
             isPixelOnAnyLine = true;
         }
@@ -622,7 +639,7 @@ void main()
             drawNumber(8, vec2(256 + offset * 7,100), vec4(64.0/256.0, 88.0/256.0, 16.0/256.0, 1));
             drawNumber(9, vec2(256 + offset * 8,100), vec4(64.0/256.0, 88.0/256.0, 16.0/256.0, 1));
             drawNumber(0, vec2(256 + offset * 9,100), vec4(64.0/256.0, 88.0/256.0, 16.0/256.0, 1));
-            drawNumber(-1, vec2(256 + offset * 11,100), vec4(64.0/256.0, 88.0/256.0, 16.0/256.0, 1));
+            drawNumber(-1,vec2(256 + offset * 10 + 10,100), vec4(64.0/256.0, 88.0/256.0, 16.0/256.0, 1));
             break;
 
         case DRAW_FG1:
