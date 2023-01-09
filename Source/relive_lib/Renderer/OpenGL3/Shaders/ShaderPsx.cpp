@@ -304,7 +304,7 @@ void drawDiamond(vec2 pos, vec4 colour)
     }
     if(isPixelOnAnyLine == 1.0)
     {
-	    outColor = vec4(isPixelOnAnyLine * colour.x, isPixelOnAnyLine * colour.y, isPixelOnAnyLine * colour.z, colour.w);
+        outColor = vec4(isPixelOnAnyLine * colour.x, isPixelOnAnyLine * colour.y, isPixelOnAnyLine * colour.z, colour.w);
     }
 }
 
