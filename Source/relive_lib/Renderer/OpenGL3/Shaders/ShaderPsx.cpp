@@ -247,6 +247,67 @@ void draw_gas()
     }
 }
 
+#define resolution vec2(640.0, 240.0)
+
+//Stolen from https://www.shadertoy.com/view/4ljfRD
+#define pi 3.14159265
+float drawLine (vec2 p1, vec2 p2, vec2 uv, float a)
+{
+    float r = 0.;
+    float one_px = 1. / resolution.x; //not really one px
+    
+    // get dist between points
+    float d = distance(p1, p2);
+    
+    // get dist between current pixel and p1
+    float duv = distance(p1, uv);
+
+    //if point is on line, according to dist, it should match current uv 
+    r = 1.-floor(1.-(a*one_px)+distance (mix(p1, p2, clamp(duv/d, 0., 1.)),  uv));
+        
+    return r;
+}
+
+void drawDiamond(vec2 pos, vec4 colour)
+{
+    float one_pxX = 1. / resolution.x;
+    float one_pxY = 1. / resolution.y;
+
+    vec2 posPX = vec2(pos.x * one_pxX, pos.y * one_pxY);
+    float halfWidth = one_pxX * 13;
+    float halfHeight = one_pxX * 16;
+
+    vec2 left = vec2(posPX.x, posPX.y + halfHeight);
+    vec2 bottom = vec2(posPX.x + halfWidth, posPX.y);
+    vec2 right = vec2(posPX.x + halfWidth + halfWidth, posPX.y + halfHeight);
+    vec2 top = vec2(posPX.x + halfWidth, posPX.y + halfHeight + halfHeight);
+
+    vec2 onePxOffsetX = vec2(one_pxX, 0);
+    vec2 onePxOffsetY = vec2(0, one_pxX);
+
+    float isPixelOnAnyLine = 0.0;
+    if(drawLine(top + onePxOffsetY, left, gl_FragCoord.xy / resolution.xy, 1.) > 0.0) //top left
+    {
+        isPixelOnAnyLine = 1.0;
+    }
+    if(drawLine(top - onePxOffsetX + onePxOffsetY + onePxOffsetY + onePxOffsetY, right , gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+    {
+        isPixelOnAnyLine = 1.0;
+    }
+    if(drawLine(right - onePxOffsetX - onePxOffsetX, bottom - onePxOffsetX , gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+    {
+        isPixelOnAnyLine = 1.0;
+    }
+    if(drawLine(bottom + onePxOffsetX, left + onePxOffsetY + onePxOffsetX, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
+    {
+        isPixelOnAnyLine = 1.0;
+    }
+    if(isPixelOnAnyLine == 1.0)
+    {
+	    outColor = vec4(isPixelOnAnyLine * colour.x, isPixelOnAnyLine * colour.y, isPixelOnAnyLine * colour.z, colour.w);
+    }
+}
+
 void main()
 {
     int drawMode = int(fsFlags.x);
@@ -263,6 +324,7 @@ void main()
 
         case DRAW_CAM:
             draw_cam();
+            drawDiamond(vec2(222,100), vec4(64.0/256.0, 88.0/256.0, 16.0/256.0, 1));
             break;
 
         case DRAW_FG1:
