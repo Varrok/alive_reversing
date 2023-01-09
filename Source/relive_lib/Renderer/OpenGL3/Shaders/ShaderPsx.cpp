@@ -251,7 +251,7 @@ void draw_gas()
 
 //Stolen from https://www.shadertoy.com/view/4ljfRD
 #define pi 3.14159265
-float drawLine (vec2 p1, vec2 p2, vec2 uv, float a)
+float drawLine(vec2 p1, vec2 p2, vec2 uv, float a)
 {
     float r = 0.;
     float one_px = 1. / resolution.x; //not really one px
@@ -286,7 +286,7 @@ void drawDiamond(vec2 pos, vec4 colour)
     vec2 onePxOffsetY = vec2(0, one_pxX);
 
     float isPixelOnAnyLine = 0.0;
-    if(drawLine(top + onePxOffsetY, left, gl_FragCoord.xy / resolution.xy, 1.) > 0.0) //top left
+    if(drawLine(top + onePxOffsetY, left, gl_FragCoord.xy / resolution.xy, 1.) > 0.0)
     {
         isPixelOnAnyLine = 1.0;
     }
