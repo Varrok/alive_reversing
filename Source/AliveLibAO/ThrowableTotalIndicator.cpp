@@ -176,7 +176,7 @@ void ThrowableTotalIndicator::VUpdate()
 
 void ThrowableTotalIndicator::VRender(PrimHeader** ppOt)
 {
-    mNumToShow = 8; //todo hack
+    mNumToShow = mmNumToShow; //todo hack
     if (*kNumbersArray[mNumToShow] <= 0)
     {
         return;
