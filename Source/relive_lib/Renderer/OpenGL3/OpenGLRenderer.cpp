@@ -300,9 +300,9 @@ void OpenGLRenderer::Draw(Line_G2& line)
     bool isShaded = true;
     u32 blendMode = GetTPageBlendMode(mGlobalTPage);
 
-    const u8 r = R0(&line);
-    const u8 g = G0(&line);
-    const u8 b = B0(&line);
+    const f32 r = R0(&line);
+    const f32 g = G0(&line);
+    const f32 b = B0(&line);
 
     const auto minX = 0;//std::min(X0(&line), X1(&line)); //todo
     const auto minY = 0;//std::min(Y0(&line), Y1(&line));
