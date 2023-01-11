@@ -229,7 +229,7 @@ vec4 draw_line()
     float one_pxY = 1. / resolution.y;
 
     vec2 translator = vec2(one_pxX, one_pxY);
-    if(drawLine(fsLineStart * translator, fsLineEnd * translator, gl_FragCoord.xy / resolution.xy , 1.) > 0.0)
+    if(drawLine(fsLineStart * translator + vec2(one_pxX / 2, one_pxY / 2), fsLineEnd * translator + vec2(one_pxX / 2, one_pxY / 2), gl_FragCoord.xy / resolution.xy , 1.) > 0.0)
     {
         return handle_final_color(vec4(fragColor.xyz / 255.0, 1), true);
     }
