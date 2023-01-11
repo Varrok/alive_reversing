@@ -33,7 +33,7 @@ static const double* kNumbersArray[12] = {
 };
 
 
-int mmNumToShow = 0;
+s16 mmNumToShow = 0;
 
 ThrowableTotalIndicator::ThrowableTotalIndicator(FP xpos, FP ypos, Layer layer, FP /*scale*/, s32 count, bool bFade)
     : BaseGameObject(true, 0)
