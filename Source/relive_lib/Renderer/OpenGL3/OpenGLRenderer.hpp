@@ -65,6 +65,7 @@ private:
         f32 u, v;
         u32 drawMode, isSemiTrans, isShaded, blendMode;
         u32 paletteIndex, textureUnitIndex;
+        f32 line1x, line1y, line2x, line2y;
     };
 
     struct PassthruVertexData final
