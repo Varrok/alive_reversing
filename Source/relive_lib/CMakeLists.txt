@@ -774,6 +774,8 @@ SET(relive_lib_src
     Psx.cpp
     FixedPoint.hpp
     FixedPoint.cpp
+    ThrowableTotalIndicator.hpp
+    ThrowableTotalIndicator.cpp
 )
 
 add_library(relive_lib ${relive_lib_src})
