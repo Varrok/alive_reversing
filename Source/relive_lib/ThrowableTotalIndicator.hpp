@@ -21,6 +21,7 @@ public:
     virtual void VUpdate() override;
     virtual void VRender(PrimHeader** ppOt) override;
 
+
 private:
     FP mStartXPos = {};
     FP mStartYPos = {};
@@ -37,6 +38,8 @@ private:
     Prim_SetTPage mTPage[2] = {};
     ThrowableTotalIndicatorState mState = ThrowableTotalIndicatorState::eCreated;
     s16 mFade = 0;
-};
 
-extern u16 gThrowableIndicatorExists;
+public:
+    static u16 mThrowableIndicatorExists;
+    static bool IsExist() { return mThrowableIndicatorExists != 0; }
+};

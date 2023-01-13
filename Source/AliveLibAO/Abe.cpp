@@ -1824,16 +1824,17 @@ void Abe::PickUpThrowabe_Or_PressBomb(FP fpX, s32 fpY, s16 bStandToCrouch)
                 mCurrentMotion = eAbeMotions::Motion_149_PickupItem;
                 field_19C_throwable_count += static_cast<s8>(static_cast<BaseThrowable*>(field_15C_pThrowable)->VGetCount());
 
-                if (!gThrowableIndicatorExists)
+                if (!::ThrowableTotalIndicator::IsExist())
                 {
-                    const FP v16 = (GetSpriteScale() * FP_FromInteger(-30)) + mYPos;
-                    relive_new ThrowableTotalIndicator(
-                                                                          (GetSpriteScale() * FP_FromInteger(0)) + mXPos,
-                                                                               v16,
-                                                                               GetAnimation().GetRenderLayer(),
-                                                                               GetAnimation().GetSpriteScale(),
-                                                                               field_19C_throwable_count,
-                                                                               1);
+                    const FP yPos = (GetSpriteScale() * FP_FromInteger(-30)) + mYPos;
+                    relive_new ::ThrowableTotalIndicator(
+                        (GetSpriteScale() * FP_FromInteger(0)) + mXPos,
+                        yPos,
+                        GetAnimation().GetRenderLayer(),
+                        GetAnimation().GetSpriteScale(),
+                        field_19C_throwable_count,
+                        1
+                    );
                 }
                 tryToSlapOrCollect = true;
                 break;
@@ -2553,8 +2554,14 @@ void Abe::VOnTlvCollision(relive::Path_TLV* pTlv)
                 }
                 const FP indicator_ypos = mYPos + (GetSpriteScale() * FP_FromInteger(-50));
 
-                relive_new ThrowableTotalIndicator(indicator_xpos, indicator_ypos, GetAnimation().GetRenderLayer(),
-                                                                            GetAnimation().GetSpriteScale(), 11, 1);
+                relive_new ::ThrowableTotalIndicator(
+                    indicator_xpos,
+                    indicator_ypos,
+                    GetAnimation().GetRenderLayer(),
+                    GetAnimation().GetSpriteScale(),
+                    11,
+                    1
+                );
             }
         }
         else if (pTlv->mTlvType == ReliveTypes::eDeathDrop)
@@ -3455,16 +3462,18 @@ void Abe::Motion_0_Idle()
                     mYPos - FP_FromInteger(40),
                     0);
 
-                if (gThrowableIndicatorExists == 0)
+                if (!::ThrowableTotalIndicator::IsExist())
                 {
                     const FP xOffSet = GetAnimation().GetFlipX() ? FP_FromInteger(15) : FP_FromInteger(-15) * GetSpriteScale();
 
-                    relive_new ThrowableTotalIndicator(mXPos + xOffSet,
-                                                                                    mYPos + GetSpriteScale() * FP_FromInteger(-50),
-                                                                                    GetAnimation().GetRenderLayer(),
-                                                                                    GetAnimation().GetSpriteScale(),
-                                                                                    field_19C_throwable_count,
-                                                                                    true);
+                    relive_new ::ThrowableTotalIndicator(
+                        mXPos + xOffSet,
+                        mYPos + GetSpriteScale() * FP_FromInteger(-50),
+                        GetAnimation().GetRenderLayer(),
+                        GetAnimation().GetSpriteScale(),
+                        field_19C_throwable_count,
+                        true
+                    );
                 }
                 mCurrentMotion = eAbeMotions::Motion_142_RockThrowStandingHold;
 
@@ -4346,16 +4355,18 @@ void Abe::Motion_19_CrouchIdle()
                     mYPos - FP_FromInteger(40),
                     0);
 
-                if (!gThrowableIndicatorExists)
+                if (!::ThrowableTotalIndicator::IsExist())
                 {
                     const FP yOff = mYPos + (GetSpriteScale() * FP_FromInteger(-30));
                     const FP xOff = GetSpriteScale() * (GetAnimation().GetFlipX() ? FP_FromInteger(-10) : FP_FromInteger(10));
-                    relive_new ThrowableTotalIndicator(mXPos + xOff,
-                                                                             yOff,
-                                                                             GetAnimation().GetRenderLayer(),
-                                                                             GetAnimation().GetSpriteScale(),
-                                                                             field_19C_throwable_count,
-                                                                             1);
+                    relive_new ::ThrowableTotalIndicator(
+                        mXPos + xOff,
+                        yOff,
+                        GetAnimation().GetRenderLayer(),
+                        GetAnimation().GetSpriteScale(),
+                        field_19C_throwable_count,
+                        1
+                    );
                 }
 
                 mCurrentMotion = eAbeMotions::Motion_145_RockThrowCrouchingHold;

@@ -125,8 +125,6 @@ SET(AliveLibSrcAO
    ../AliveLibAO/RockSack.cpp
    ../AliveLibAO/BackgroundGlukkon.hpp
    ../AliveLibAO/BackgroundGlukkon.cpp
-   ../AliveLibAO/ThrowableTotalIndicator.hpp
-   ../AliveLibAO/ThrowableTotalIndicator.cpp
    ../AliveLibAO/CircularFade.hpp
    ../AliveLibAO/CircularFade.cpp
    ../AliveLibAO/SecurityDoor.hpp
@@ -378,8 +376,6 @@ SET(AliveLibAESrc
     ../AliveLibAE/Gibs.hpp
     ../AliveLibAE/Throwable.cpp
     ../AliveLibAE/Throwable.hpp
-    ../AliveLibAE/ThrowableTotalIndicator.hpp
-    ../AliveLibAE/ThrowableTotalIndicator.cpp
     ../AliveLibAE/AbilityRing.cpp
     ../AliveLibAE/AbilityRing.hpp
     ../AliveLibAE/OrbWhirlWind.cpp
