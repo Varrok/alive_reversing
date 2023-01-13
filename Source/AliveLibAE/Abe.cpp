@@ -2708,7 +2708,7 @@ void Abe::Motion_0_Idle_44EEB0()
                     0
                 ) -> mBaseGameObjectId;
 
-                if (!ThrowableTotalIndicator::IsExist())
+                if (!ThrowableTotalIndicator::IsExists())
                 {
                     const FP xOffSet = ((GetAnimation().GetFlipX()) ? FP_FromInteger(15) : FP_FromInteger(-15)) * GetSpriteScale();
                     relive_new ThrowableTotalIndicator(
@@ -3531,7 +3531,7 @@ void Abe::Motion_17_CrouchIdle_456BC0()
         && (mBaseThrowableCount > 0 || gInfiniteThrowables))
     {
         mThrowableId = Make_Throwable(mXPos, mYPos - FP_FromInteger(40), 0)->mBaseGameObjectId;
-        if (!ThrowableTotalIndicator::IsExist())
+        if (!ThrowableTotalIndicator::IsExists())
         {
             const FP yOff = mYPos + (GetSpriteScale() * FP_FromInteger(-30));
             const FP xOff = GetSpriteScale() * (GetAnimation().GetFlipX() ? FP_FromInteger(-10) : FP_FromInteger(10));
@@ -7718,7 +7718,7 @@ void Abe::PickUpThrowabe_Or_PressBomb_454090(FP fpX, s32 fpY, s32 bStandToCrouch
             case ReliveTypes::eRock:
                 mCurrentMotion = eAbeMotions::Motion_111_PickupItem;
                 mBaseThrowableCount += static_cast<s8>(static_cast<BaseThrowable*>(pSlappableOrCollectable)->VGetCount()); // TODO: Check types are correct.
-                if (!ThrowableTotalIndicator::IsExist())
+                if (!ThrowableTotalIndicator::IsExists())
                 {
                     const FP yoff = (GetSpriteScale() * FP_FromInteger(-30)) + mYPos;
                     const FP xoff = GetSpriteScale() * FP_FromInteger(0);

@@ -1824,7 +1824,7 @@ void Abe::PickUpThrowabe_Or_PressBomb(FP fpX, s32 fpY, s16 bStandToCrouch)
                 mCurrentMotion = eAbeMotions::Motion_149_PickupItem;
                 field_19C_throwable_count += static_cast<s8>(static_cast<BaseThrowable*>(field_15C_pThrowable)->VGetCount());
 
-                if (!::ThrowableTotalIndicator::IsExist())
+                if (!::ThrowableTotalIndicator::IsExists())
                 {
                     const FP yPos = (GetSpriteScale() * FP_FromInteger(-30)) + mYPos;
                     relive_new ::ThrowableTotalIndicator(
@@ -3462,7 +3462,7 @@ void Abe::Motion_0_Idle()
                     mYPos - FP_FromInteger(40),
                     0);
 
-                if (!::ThrowableTotalIndicator::IsExist())
+                if (!::ThrowableTotalIndicator::IsExists())
                 {
                     const FP xOffSet = GetAnimation().GetFlipX() ? FP_FromInteger(15) : FP_FromInteger(-15) * GetSpriteScale();
 
@@ -4355,7 +4355,7 @@ void Abe::Motion_19_CrouchIdle()
                     mYPos - FP_FromInteger(40),
                     0);
 
-                if (!::ThrowableTotalIndicator::IsExist())
+                if (!::ThrowableTotalIndicator::IsExists())
                 {
                     const FP yOff = mYPos + (GetSpriteScale() * FP_FromInteger(-30));
                     const FP xOff = GetSpriteScale() * (GetAnimation().GetFlipX() ? FP_FromInteger(-10) : FP_FromInteger(10));

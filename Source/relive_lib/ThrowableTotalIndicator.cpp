@@ -1,10 +1,9 @@
 #include "stdafx.h"
 #include "../relive_lib/ThrowableTotalIndicator.hpp"
-#include "Game.hpp"
 #include "../relive_lib/Events.hpp"
 #include "../relive_lib/GameObjects/ScreenManager.hpp"
 #include "../relive_lib/PsxDisplay.hpp"
-#include "stdlib.hpp"
+#include "../AliveLibAE/stdlib.hpp"
 
 struct GlyphPoint final
 {
@@ -165,7 +164,9 @@ static const Glyph sGlyphs[] = {
     {ALIVE_COUNTOF(kCheckpoint), kCheckpoint},
 };
 
-ThrowableTotalIndicator::mThrowableIndicatorExists = 0;
+u16 ThrowableTotalIndicator::mThrowableIndicatorExists = 0;
+
+bool ThrowableTotalIndicator::IsExists() { return mThrowableIndicatorExists != 0; }
 
 ThrowableTotalIndicator::ThrowableTotalIndicator(FP xpos, FP ypos, Layer layer, FP /*scale*/, s32 count, bool bFade)
     : BaseGameObject(true, 0)
@@ -208,9 +209,9 @@ ThrowableTotalIndicator::ThrowableTotalIndicator(FP xpos, FP ypos, Layer layer, 
         mState = ThrowableTotalIndicatorState::eCreated;
     }
 
-    if (count < 0 || count > 9)
+    if (count < 0 || count > 10)
     {
-        mNumToShow = 10;
+        mNumToShow = 11;
     }
     else
     {
@@ -240,6 +241,8 @@ void ThrowableTotalIndicator::VScreenChanged()
 {
     SetDead(true);
 }
+
+extern s16 gNumCamSwappers;
 
 void ThrowableTotalIndicator::VUpdate()
 {

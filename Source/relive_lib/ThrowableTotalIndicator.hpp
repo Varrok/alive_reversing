@@ -41,5 +41,5 @@ private:
 
 public:
     static u16 mThrowableIndicatorExists;
-    static bool IsExist() { return mThrowableIndicatorExists != 0; }
+    static bool IsExists();
 };
