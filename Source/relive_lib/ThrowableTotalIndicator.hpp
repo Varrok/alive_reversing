@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../relive_lib/GameObjects/BaseGameObject.hpp"
-#include "../relive_lib/Layer.hpp"
-#include "../relive_lib/Primitives.hpp"
+#include "GameObjects/BaseGameObject.hpp"
+#include "Layer.hpp"
+#include "Primitives.hpp"
 
 enum class ThrowableTotalIndicatorState : s16
 {
