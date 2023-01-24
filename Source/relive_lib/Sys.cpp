@@ -383,7 +383,7 @@ static void KeyDownEvent(VK vk, VKMOD vkMod)
     }
 }
 
-static void KeyUpEvent(VK vk, VKMOD vkMod)
+static void KeyUpEvent(VK vk)
 {
     Input_SetKeyState(vk, 0);
     sIsAKeyDown = false;
@@ -485,7 +485,7 @@ s8 Sys_PumpMessages()
                     break;
 
                 case SDL_KEYUP:
-                    KeyUpEvent(SDLKeyToVK(static_cast<SDL_Scancode>(recordedEvent.mData)), SDLModtoVKMOD(SDL_GetModState()));
+                    KeyUpEvent(SDLKeyToVK(static_cast<SDL_Scancode>(recordedEvent.mData)));
                     break;
 
                 case 0:
@@ -553,7 +553,7 @@ s8 Sys_PumpMessages()
         {
             if (!isPlaying)
             {
-                KeyUpEvent(SDLKeyToVK(event.key.keysym.scancode), SDLModtoVKMOD(SDL_GetModState()));
+                KeyUpEvent(SDLKeyToVK(event.key.keysym.scancode));
             }
 
             if (isRecording)
