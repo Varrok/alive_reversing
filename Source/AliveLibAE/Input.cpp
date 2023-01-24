@@ -1478,7 +1478,6 @@ void Input_Init()
     sKeyNames_5C9394[VK::e9] = "9";
     sKeyNames_5C9394[VK::eCOMMA] = ",";
     sKeyNames_5C9394[VK::ePERIOD] = ".";
-    // sKeyNames_5C9394[0] = "\\";
     sKeyNames_5C9394[VK::eNUMPAD0] = "0";
     sKeyNames_5C9394[VK::eNUMPAD1] = "1";
     sKeyNames_5C9394[VK::eNUMPAD2] = "2";
